@@ -1,0 +1,44 @@
+project:
+  type: book
+
+book:
+  title: "book"
+  author: "Felipe Angelim"
+  date: "10/11/2025"
+  chapters:
+  - index.qmd
+  - part: "Part I: Básico"
+    chapters:
+      - content/pt/part1/index.qmd
+      - content/pt/part1/naive.qmd
+      - content/pt/part1/components_and_diff.qmd
+      - content/pt/part1/ets_and_ar.qmd
+      - content/pt/part1/metricas.qmd
+  - part: "Part II: Intermediário"
+    chapters:
+      - content/pt/part2/exog_variables.qmd
+      - content/pt/part2/feature_engineering.qmd
+      - content/pt/part2/ml_models.qmd
+      - content/pt/part2/probabilistic_forecasting.qmd
+      - content/pt/part2/probabilistic_metrics.qmd
+  - part: "Part III: Avançado"
+    chapters:
+      - content/pt/part3/panel_data.qmd
+      - content/pt/part3/hierarchical_forecasting.qmd
+      - content/pt/part3/deep_learning.qmd
+  - part: "Part IV: Apêndices"
+    chapters:
+      - content/pt/part4/sktime_custom.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+  pdf:
+    documentclass: scrreprt
+
+
+

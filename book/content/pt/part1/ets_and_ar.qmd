@@ -1,0 +1,128 @@
+# Modelos estatísticos clássicos e diferenciação
+
+## Exponential Smoothing
+
+O Modelo Naive, que calculada a média dos últimos valores, é um modelo muito simples, mas que pode ser melhorado. Analizando o que ele faz:
+
+$$
+\hat{Y}(t) = \frac{Y(t-1) + Y(t-2) + \dots + Y(t-n)}{n}
+$$
+
+Ele basicamente atribui o mesmo peso para todas as observações passadas. Mas, intuitivamente, faz mais sentido dar mais peso para as observações mais recentes, e menos peso para as observações mais antigas.
+
+O exponential smoothing faz exatamente isso. Ele atribui pesos decrescentes para observações mais antigas. O peso da observação decresce exponencialmente segundo um fator $0 < \alpha < 1$ [@hyndman2018forecasting]:
+
+$$
+\hat{Y}(t) = \alpha Y(t-1) + \alpha(1 - \alpha)Y(t-1) + \alpha(1 - \alpha)^2 Y(t-2) + \dots
+$$
+
+
+```{python}
+
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(1, 1, figsize=(6, 4))
+alpha = 0.3
+weights = [alpha * (1 - alpha) ** i for i in range(20)]
+ax.bar(range(len(weights)), weights)
+ax.set_title("Pesos do Exponential Smoothing")
+ax.set_xlabel("Observações passadas")
+ax.set_ylabel("Peso")
+plt.show()
+
+```
+
+
+### Usando Exponential Smoothing com sktime
+
+```{python}
+
+from tsbook.datasets.retail import SyntheticRetail
+from sktime.utils.plotting import plot_series
+
+dataset = SyntheticRetail("univariate")
+y_train, y_test = dataset.load("y_train", "y_test")
+
+```
+
+
+```{python}
+from sktime.utils.plotting import plot_series
+from sktime.forecasting.exp_smoothing import ExponentialSmoothing
+
+model = ExponentialSmoothing()
+model.fit(y_train)
+```
+
+```{python}
+y_pred = model.predict(fh=y_test.index)
+plot_series(y_train, y_test, y_pred, labels=["Treino", "Teste", "Previsão Exponential Smoothing"])
+```
+
+Existem versões alternativas que consideram sazonalidade e tendências. Veja a [documentação](https://www.sktime.org/en/stable/api_reference/auto_generated/sktime.forecasting.exp_smoothing.ExponentialSmoothing.html) para mais detalhes.
+
+
+```{python}
+model = ExponentialSmoothing(trend="add", seasonal="add", sp=7)
+model.fit(y_train)
+y_pred = model.predict(fh=y_test.index)
+plot_series(
+    y_train,
+    y_test,
+    y_pred,
+    labels=["Treino", "Teste", "Previsão Exponential Smoothing"],
+)
+```
+
+
+## Modelos autoregressivos (AR)
+
+Modelos autoregressivos (AR) são modelos que prevem o valor atual de uma série temporal como uma combinação dos valores passados. O modelo AR(p) usa os últimos p valores para fazer a previsão:
+
+$$
+\hat{Y}(t) = \phi_1 Y(t-1) + \phi_2 Y(t-2) + \dots + \phi_p Y(t-p)
+$$
+
+onde $\phi_1, \phi_2, \dots, \phi_p$ são os parâmetros do modelo que precisam ser estimados a partir dos dados.
+
+```{python}
+from sktime.forecasting.auto_reg import AutoREG
+from sktime.utils.plotting import plot_series
+
+model = AutoREG(lags=31)
+model.fit(y_train)
+
+y_pred = model.predict(fh=y_test.index)
+plot_series(
+    y_train,
+    y_test,
+    y_pred,
+    labels=["Treino", "Teste", "Previsão AR"],
+)
+```
+
+
+## STL: dividir e conquistar
+
+```{python}
+from sktime.forecasting.trend import STLForecaster
+from sktime.forecasting.naive import NaiveForecaster
+
+model = STLForecaster(
+    forecaster_trend=AutoREG(lags=31),
+    forecaster_seasonal=NaiveForecaster(sp=7),
+    forecaster_resid=AutoREG(lags=31),
+    sp=7,
+)
+
+model.fit(y_train)
+y_pred = model.predict(fh=y_test.index)
+
+plot_series(
+    y_train,
+    y_test,
+    y_pred,
+    labels=["Treino", "Teste", "Previsão STL + AR"],
+)
+
+```
