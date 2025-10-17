@@ -1,0 +1,525 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "# Dados em painel (multi-series)\n",
+        "\n",
+        "Em muitas aplicações, não temos acesso a uma única série temporal, mas sim a um conjunto de séries temporais relacionadas. Isso é comum em cenários como vendas de produtos em diferentes lojas, consumo de energia em diferentes regiões, etc. Esses dados são chamados de dados em painel.\n",
+        "\n",
+        "Uma ideia poderosa é aproveitar a similaridade entre as séries para melhorar as previsões. Chamamos de **modelos globais** os modelos capazes de aprender padrões comuns entre as séries, ao contrário dos **modelos locais** que aprendem apenas com uma única série.\n",
+        "\n",
+        "A maioria dos modelos clássicos de séries temporais são locais. Modelos globais são, em geral, baseados em modelos tabulares de ML ou deep learning. Segundo competições de séries temporais, como a M5, em forecasts de painel os modelos globais são os que apresentam melhor desempenho [@makridakis2022m5].\n",
+        "\n",
+        "\n",
+        "## Acessando os dados\n",
+        "\n",
+        "Aqui, vamos usar o dataset sintético que vimos antes, mas agora teremos acesso às várias séries temporais que compõe o total.\n",
+        "\n",
+        "Esse dataset é feito para simular um caso de varejo, onde temos vendas diárias de vários produtos:\n"
+      ],
+      "id": "e137e756"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# | echo: false\n",
+        "import warnings\n",
+        "\n",
+        "warnings.filterwarnings(\"ignore\")"
+      ],
+      "id": "0c5f7df4",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# | code-fold: true\n",
+        "import pandas as pd\n",
+        "import matplotlib.pyplot as plt\n",
+        "\n",
+        "from sktime.utils.plotting import plot_series"
+      ],
+      "id": "2270a18e",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "from tsbook.datasets.retail import SyntheticRetail\n",
+        "dataset = SyntheticRetail(\"panel\")\n",
+        "y_train, X_train, y_test, X_test = dataset.load(\n",
+        "    \"y_train\", \"X_train\", \"y_test\", \"X_test\"\n",
+        ")"
+      ],
+      "id": "f493045c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Note que, para dados em painel, os dataframes possuem mais um nível de índice, que identifica a série temporal a que cada observação pertence:\n"
+      ],
+      "id": "fa5fb010"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "display(X_train)"
+      ],
+      "id": "3622dc30",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Podemos visualizar algumas séries. Vemos que há mais zeros nesse dataset, em comparação\n",
+        "ao que usamos antes.\n"
+      ],
+      "id": "95a04b79"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "from sktime.utils.plotting import plot_series\n",
+        "\n",
+        "fig, ax = plt.subplots(figsize=(10, 4))\n",
+        "y_train.unstack(level=0).droplevel(0, axis=1).iloc[:, [0,10]].plot(ax=ax, alpha=0.7)\n",
+        "plt.show()"
+      ],
+      "id": "22e2243c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Pandas e multi-índices\n",
+        "\n",
+        "Para trabalhar com essas estruturas de dados, é importante revisar algumas operações do pandas.\n"
+      ],
+      "id": "c01307ab"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "y_train.index.get_level_values(-1)"
+      ],
+      "id": "5532c93b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "As seguintes operações são bem úteis para trabalhar com multi-índices:\n"
+      ],
+      "id": "862d2e83"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "y_train.index"
+      ],
+      "id": "68266066",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Acessar valores únicos no primeiro nivel (nível 0, mais à esquerda):\n"
+      ],
+      "id": "1a649a81"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "y_train.index.get_level_values(0).unique()"
+      ],
+      "id": "59f4c74a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Selecionar uma série específica (nível 0 igual a 0):\n"
+      ],
+      "id": "19701269"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "y_train.loc[0]"
+      ],
+      "id": "854f8d35",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Aqui, podemos usar `pd.IndexSlice` para selecionar várias séries ao mesmo tempo.\n",
+        "Note que pd.IndexSlice é passado diretamente para `.loc`:\n"
+      ],
+      "id": "b786bfe5"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "y_train.loc[pd.IndexSlice[[0,2], :]]"
+      ],
+      "id": "0c12cef0",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Agora, para selecionar o horizonte de forecasting, temos que chamar `unique`:\n"
+      ],
+      "id": "39f713b9"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "fh = y_test.index.get_level_values(1).unique()\n",
+        "\n",
+        "fh"
+      ],
+      "id": "301d79e1",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Upcasting automático\n",
+        "\n",
+        "Nem todos modelos suportam nativamente dados em painel. Por exemplo, exponential smoothing.\n",
+        "Aqui, temos uma boa notícia: sem linhas extras necessárias. O sktime faz *upcasting* automático para dados em painel ao usar estimadores do `sktime`.\n"
+      ],
+      "id": "7b1a4122"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "from sktime.forecasting.naive import NaiveForecaster\n",
+        "\n",
+        "\n",
+        "naive_forecaster = NaiveForecaster(strategy=\"last\", window_length=1)\n",
+        "naive_forecaster.fit(y_train)\n",
+        "y_pred_naive = naive_forecaster.predict(fh=fh)\n",
+        "\n",
+        "y_pred_naive"
+      ],
+      "id": "6798f87d",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Internamente, o `sktime` cria um clone do estimador para cada série nos dados em painel.\n",
+        "Em seguida, cada clone é treinado com a série correspondente. Isso é feito de\n",
+        "forma transparente para usuário, mas sem exigir esforço.\n",
+        "\n",
+        "O atributo `forecasters_` armazena um DataFrame com os estimatores de cada série.\n"
+      ],
+      "id": "62a55f55"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "naive_forecaster.forecasters_.head()"
+      ],
+      "id": "46c3b021",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "É dificil explicar o quanto isso é extremamente útil para código limpo e prototipagem rápida.\n",
+        "Foi um dos motivos que me levaram a usar o `sktime`.\n",
+        "\n",
+        "\n",
+        "## Métricas\n",
+        "\n",
+        "Agora que temos várias séries, precisamos explicar como calcular métricas de avaliação.\n",
+        "O sktime oferece duas opções para isso, como argumentos na criação da métrica:\n",
+        "\n",
+        "* `multilevel=\"uniform_average_time\"` para calcular a média das séries temporais no painel.\n",
+        "* `multilevel=\"raw_values\"` para obter o erro por série.\n"
+      ],
+      "id": "af733bd6"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "from sktime.performance_metrics.forecasting import MeanSquaredScaledError\n",
+        "\n",
+        "metric = MeanSquaredScaledError(multilevel=\"uniform_average_time\")"
+      ],
+      "id": "03f8f93f",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "metric(y_true=y_test, y_pred=y_pred_naive, y_train=y_train)"
+      ],
+      "id": "a630f862",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Na prática, as métricas que a sua aplicação exige podem ser diferentes. Por exemplo,\n",
+        "as séries temporais podem ter diferentes importâncias, e você pode querer ponderar\n",
+        "as métricas de acordo. \n",
+        "\n",
+        "Para isso, é possível criar uma métrica customizada no sktime, mas não entraremos\n",
+        "nesse mérito aqui.\n",
+        "\n",
+        "## Modelos globais de Machine Learning\n",
+        "\n",
+        "Quando vimos como usar modelos de Machine Learning para forecasting, já mencionamos\n",
+        "como é necessário traduzir o problema de séries temporais para um problema de regressão tradicional.\n",
+        "\n",
+        "No caso de dados em painel, também podemos usar essa abordagem, mas agora aproveitando\n",
+        "todas as séries temporais para treinar um único modelo global.\n",
+        " \n",
+        "![](img/global_reduction.png)\n",
+        "\n",
+        "Abaixo, vamos comparar um LightGBM global com um local, e ver como o global\n",
+        "aproveita melhor os dados.\n"
+      ],
+      "id": "5c5885a4"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "from tsbook.forecasting.reduction import ReductionForecaster\n",
+        "from lightgbm import LGBMRegressor\n",
+        "\n",
+        "global_forecaster1 = ReductionForecaster(\n",
+        "    LGBMRegressor(n_estimators=100),\n",
+        "    window_length=30,\n",
+        ")\n",
+        "\n",
+        "global_forecaster1.fit(y_train, X_train)"
+      ],
+      "id": "45eacc63",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "y_pred_global1 = global_forecaster1.predict(fh=fh, X=X_test)"
+      ],
+      "id": "6c0581f9",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "fig, ax = plt.subplots(figsize=(10, 4))\n",
+        "y_train.loc[10, \"sales\"].plot(ax=ax, label=\"Treino\")\n",
+        "y_test.loc[10, \"sales\"].plot(ax=ax, label=\"Teste\")\n",
+        "y_pred_global1.loc[10, \"sales\"].plot(ax=ax, label=\"Global 1\")\n",
+        "plt.legend()\n",
+        "plt.show()"
+      ],
+      "id": "3cb544c1",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Para forçar que um modelo global funcione como um modelo local, podemos usar `ForecastByLevel`, que cria um modelo separado para cada série temporal, mesmo quando o estimador suporta dados em painel.\n"
+      ],
+      "id": "f12c3123"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "from sktime.forecasting.compose import ForecastByLevel\n",
+        "\n",
+        "local_forecaster = ForecastByLevel(global_forecaster1, groupby=\"local\")\n",
+        "\n",
+        "local_forecaster.fit(y_train, X=X_train)"
+      ],
+      "id": "cff929c3",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "y_pred_local = local_forecaster.predict(fh=fh, X=X_test)\n",
+        "\n",
+        "err_global = metric(y_true=y_test, y_pred=y_pred_global1, y_train=y_train)\n",
+        "err_local = metric(y_true=y_test, y_pred=y_pred_local, y_train=y_train)\n",
+        "\n",
+        "pd.DataFrame(\n",
+        "    {\n",
+        "        \"Global\": [err_global],\n",
+        "        \"Local\": [err_local],\n",
+        "    },\n",
+        "    index=[\"MSE\"],\n",
+        ")"
+      ],
+      "id": "c17ed417",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Preprocessamento e engenharia de features\n",
+        "\n",
+        "Sabemos como preprocessar séries temporais univariadas para melhorar o desempenho dos modelos de ML. Aplicamos da mesma maneira que fizemos anteriormente o `Differencer`, com objetivo de remover tendências.\n"
+      ],
+      "id": "f85129f1"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "from sktime.transformations.series.difference import Differencer\n",
+        "from sktime.transformations.series.boxcox import LogTransformer\n",
+        "\n",
+        "global_forecaster2 = Differencer() * global_forecaster1\n",
+        "global_forecaster2.fit(y_train, X_train)"
+      ],
+      "id": "4921f2fe",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "y_pred_global2 = global_forecaster2.predict(fh=fh, X=X_test)\n",
+        "metric(y_true=y_test, y_pred=y_pred_global3, y_train=y_train)"
+      ],
+      "id": "81461eef",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "fig, ax = plt.subplots(figsize=(10, 4))\n",
+        "y_train.loc[0].plot(ax=ax, label=\"Treino\")\n",
+        "y_test.loc[0].plot(ax=ax, label=\"Teste\")\n",
+        "y_pred_global3.loc[0].plot(ax=ax, label=\"Global 4\")\n",
+        "fig.show()"
+      ],
+      "id": "37de385b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Pipelines exógenos também para dados em painel!\n"
+      ],
+      "id": "7e61973c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "from sktime.transformations.series.fourier import FourierFeatures\n",
+        "\n",
+        "fourier_features = FourierFeatures(sp_list=[365.25, 365.25/12], fourier_terms_list=[1, 1], freq=\"D\")\n",
+        "\n",
+        "global_forecaster4 = fourier_features ** global_forecaster3\n",
+        "global_forecaster4.fit(y_train, X_train)"
+      ],
+      "id": "3b4a59d7",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "y_pred_global4 = global_forecaster4.predict(fh=fh, X=X_test)\n",
+        "metric(y_true=y_test, y_pred=y_pred_global4, y_train=y_train)"
+      ],
+      "id": "88e8b975",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "metric(y_true=y_test, y_pred=y_pred_global4, y_train=y_train)"
+      ],
+      "id": "091e328c",
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "/Users/felipeangelim/Workspace/python_brasil_2025/.venv/share/jupyter/kernels/python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

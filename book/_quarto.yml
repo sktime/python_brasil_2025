@@ -19,8 +19,7 @@ book:
       - content/pt/part2/exog_variables.qmd
       - content/pt/part2/feature_engineering.qmd
       - content/pt/part2/ml_models.qmd
-      - content/pt/part2/probabilistic_forecasting.qmd
-      - content/pt/part2/probabilistic_metrics.qmd
+      #- content/pt/part2/probabilistic_forecasting.qmd
   - part: "Part III: Avançado"
     chapters:
       - content/pt/part3/panel_data.qmd

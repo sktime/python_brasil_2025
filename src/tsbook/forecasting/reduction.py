@@ -3,50 +3,59 @@
 # copyright: (c) 2025, authored for the requesting user
 # license: BSD-3-Clause-compatible grant for this file by the author
 """
-Hybrid reduction forecaster for sktime: K-step direct + recursive continuation.
+Global hybrid reduction forecaster for sktime:
+K-step direct heads + recursive continuation, with per-row normalization.
 
-This forecaster inherits from ``sktime.forecasting.base.BaseForecaster`` and can
-train *K* inner direct models to forecast 1..K steps ahead from a shared lagged
-feature window of ``y`` (and optional *concurrent* exogenous ``X``). When asked
-to predict beyond K steps, it *recursively* rolls a 1-step model forward using
-its own past predictions. Setting ``steps_ahead=1`` recovers pure recursive
-reduction. In that sense, **DirectReduction is a subcase of RecursiveReduction
-with steps_ahead=1**; larger ``steps_ahead`` simply adds direct heads for the
-first K steps before recursion continues them.
+Now supports BOTH:
+- pooled multi-series/hierarchical data (y/X with MultiIndex where last level is time)
+- a single time series (y/X with a single time index)
 
-New: per-window normalization via a lightweight strategy callback
------------------------------------------------------------------
-Pass ``normalization_strategy`` as a **callable** that receives the y-lag window
-vector (1D ndarray, ordered as features are fed to the model: [y_t, y_{t-1}, ...])
-and returns a pair of functions ``(transform, inverse_transform)``. These functions
-must each accept and return a 1D ndarray. The same transform is applied to the
-lag window **and** the scalar target for that row; predictions are immediately
-inverse-transformed back to the original scale. Exogenous ``X`` is never normalized.
+Training (global):
+- Builds K supervised datasets (one per step_ahead = 1..K).
+- Each row uses a lag window of y (length L = window_length) and optional
+  *concurrent* exogenous X at the target timestamp.
+- A row-wise normalization *strategy* can be supplied to map each (lags, target)
+  into a normalized space before model fitting. The same strategy is applied
+  at prediction time (per step), with inverse-transform to the original scale.
 
-Example strategy (provided below): :func:`meanvar_window_normalizer`, which centers
-and scales by the window's mean and standard deviation.
+Prediction (for requested horizon H):
+- For steps 1..min(K, H): use the corresponding direct model h on the **observed**
+  lag window (no predicted values fed back yet).
+- For steps K+1..H: continue recursively with the trained 1-step model, rolling
+  the window forward with its own predictions.
+- Accepts either:
+    * An absolute MultiIndex fh (matching y’s id+time), or a simple time Index
+      if the training data was a single series.
+    * A relative FH/array of positive ints (applied to every series id).
 
-Highlights
-----------
-- Works with any scikit-learn style regressor (fit/predict).
-- Univariate ``y``; optional *concurrent* exogenous ``X`` (values at the *target*
-  timestamps). If used in ``fit``, you must provide future ``X`` rows in ``predict``.
-- Handles arbitrary forecasting horizons (not necessarily consecutive). Internally
-  computes predictions for steps 1..H where H=max requested step, then subselects.
+Normalization strategy API (efficient & flexible):
+- Pass either:
+    1) a **strategy**: a callable taking a `lags` vector and returning
+       `(transform, inverse)` functions; or
+    2) a **factory**: a zero-arg callable that returns such a strategy.
+     3) a **string** shortcut: one of {"divide_mean", "subtract_mean",
+         "normalize", "minmax"}.
+- `transform(lags, target) -> (lags_n, target_n)`; `inverse(y_n) -> y`.
+
+Includes `mean_window_normalizer()` factory: divides by the lag-window mean.
 
 Notes
 -----
-- This is a brand-new implementation authored from scratch and not copied from
-  sktime or other libraries. It follows the sktime extension template.
-- Scope is intentionally minimal: single series (no panel/global), point forecasts.
+- Univariate target only (one column series per id).
+- If X is used in fit, you must pass **future X rows** at all required timestamps
+  for prediction (for each id, and each requested timestamp).
+- This is a from-scratch implementation; not copied from sktime or other libs.
 """
 
 from __future__ import annotations
 
-from typing import Callable, Iterable, List, Optional, Sequence, Tuple, Union
+from functools import partial
+from typing import Callable, Dict, Iterable, List, Optional, Sequence, Tuple, Union
 
 import numpy as np
 import pandas as pd
+from pandas.api.types import is_integer_dtype
+from pandas.tseries.frequencies import to_offset
 from sklearn.base import clone, RegressorMixin
 from sktime.forecasting.base import BaseForecaster, ForecastingHorizon
 
@@ -54,34 +63,213 @@ from sktime.forecasting.base import BaseForecaster, ForecastingHorizon
 __all__ = [
     "ReductionForecaster",
     "make_reduction",
-    "meanvar_window_normalizer",
+    "mean_window_normalizer",
+    "subtract_mean_normalizer",
+    "zscore_normalizer",
+    "minmax_normalizer",
 ]
+
+
+# ---------------------------------------------------------------------------
+# Normalization strategy helpers
+# ---------------------------------------------------------------------------
+
+
+def _mean_window_transform(
+    lags_in: np.ndarray, target: Optional[float], m: float
+) -> Tuple[np.ndarray, Optional[float]]:
+    lags_arr = np.asarray(lags_in, dtype=float)
+    lags_n = lags_arr / m
+    tgt_n = None if target is None else float(target) / m
+    return lags_n, tgt_n
+
+
+def _mean_window_inverse(y_n: float, m: float) -> float:
+    return float(y_n) * m
+
+
+class MeanWindowNormalizer:
+    """Callable strategy that scales by the mean of each lag window."""
+
+    def __call__(self, lags: np.ndarray) -> Tuple[Callable, Callable]:
+        lags_arr = np.asarray(lags, dtype=float)
+        m = float(np.nanmean(lags_arr)) if lags_arr.size else 1.0
+        if not np.isfinite(m) or abs(m) < 1e-12:
+            m = 1.0
+
+        transform = partial(_mean_window_transform, m=m)
+        inverse = partial(_mean_window_inverse, m=m)
+        return transform, inverse
+
+
+def mean_window_normalizer() -> Callable[[np.ndarray], Tuple[Callable, Callable]]:
+    """Factory for a simple per-row normalizer: divide by window mean."""
+
+    return MeanWindowNormalizer()
+
+
+def _subtract_mean_transform(
+    lags_in: np.ndarray, target: Optional[float], m: float
+) -> Tuple[np.ndarray, Optional[float]]:
+    lags_arr = np.asarray(lags_in, dtype=float)
+    lags_n = lags_arr - m
+    tgt_n = None if target is None else float(target) - m
+    return lags_n, tgt_n
+
+
+def _subtract_mean_inverse(y_n: float, m: float) -> float:
+    return float(y_n) + m
+
+
+class SubtractMeanNormalizer:
+    """Center lag windows by subtracting the mean (per row)."""
+
+    def __call__(self, lags: np.ndarray) -> Tuple[Callable, Callable]:
+        lags_arr = np.asarray(lags, dtype=float)
+        m = float(np.nanmean(lags_arr)) if lags_arr.size else 0.0
+        if not np.isfinite(m):
+            m = 0.0
+
+        transform = partial(_subtract_mean_transform, m=m)
+        inverse = partial(_subtract_mean_inverse, m=m)
+        return transform, inverse
+
+
+def subtract_mean_normalizer() -> Callable[[np.ndarray], Tuple[Callable, Callable]]:
+    """Factory for per-row mean subtraction."""
+
+    return SubtractMeanNormalizer()
+
+
+def _zscore_transform(
+    lags_in: np.ndarray, target: Optional[float], m: float, s: float
+) -> Tuple[np.ndarray, Optional[float]]:
+    lags_arr = np.asarray(lags_in, dtype=float)
+    lags_n = (lags_arr - m) / s
+    if target is None:
+        tgt_n = None
+    else:
+        tgt_n = (float(target) - m) / s
+    return lags_n, tgt_n
+
+
+def _zscore_inverse(y_n: float, m: float, s: float) -> float:
+    return float(y_n) * s + m
+
+
+class ZScoreNormalizer:
+    """Standardize lag windows using per-row mean and std."""
+
+    def __call__(self, lags: np.ndarray) -> Tuple[Callable, Callable]:
+        lags_arr = np.asarray(lags, dtype=float)
+        m = float(np.nanmean(lags_arr)) if lags_arr.size else 0.0
+        if not np.isfinite(m):
+            m = 0.0
+        s = float(np.nanstd(lags_arr, ddof=0)) if lags_arr.size else 1.0
+        if not np.isfinite(s) or abs(s) < 1e-12:
+            s = 1.0
+
+        transform = partial(_zscore_transform, m=m, s=s)
+        inverse = partial(_zscore_inverse, m=m, s=s)
+        return transform, inverse
+
+
+def zscore_normalizer() -> Callable[[np.ndarray], Tuple[Callable, Callable]]:
+    """Factory for per-row z-score standardization."""
+
+    return ZScoreNormalizer()
+
+
+def _minmax_transform(
+    lags_in: np.ndarray, target: Optional[float], lo: float, hi: float, scale: float
+) -> Tuple[np.ndarray, Optional[float]]:
+    lags_arr = np.asarray(lags_in, dtype=float)
+    lags_n = (lags_arr - lo) / scale
+    if target is None:
+        tgt_n = None
+    else:
+        tgt_n = (float(target) - lo) / scale
+    return lags_n, tgt_n
+
+
+def _minmax_inverse(y_n: float, lo: float, scale: float) -> float:
+    return float(y_n) * scale + lo
+
+
+class MinMaxNormalizer:
+    """Scale lag windows to [0, 1] range per row."""
+
+    def __call__(self, lags: np.ndarray) -> Tuple[Callable, Callable]:
+        lags_arr = np.asarray(lags, dtype=float)
+        if lags_arr.size:
+            lo = float(np.nanmin(lags_arr))
+            hi = float(np.nanmax(lags_arr))
+        else:
+            lo = 0.0
+            hi = 1.0
+        if not np.isfinite(lo):
+            lo = 0.0
+        if not np.isfinite(hi):
+            hi = lo + 1.0
+
+        scale = hi - lo
+        if not np.isfinite(scale) or abs(scale) < 1e-12:
+            scale = 1.0
+
+        transform = partial(_minmax_transform, lo=lo, hi=hi, scale=scale)
+        inverse = partial(_minmax_inverse, lo=lo, scale=scale)
+        return transform, inverse
+
+
+def minmax_normalizer() -> Callable[[np.ndarray], Tuple[Callable, Callable]]:
+    """Factory for per-row min-max scaling."""
+
+    return MinMaxNormalizer()
+
+
+_NORMALIZATION_STRATEGY_REGISTRY = {
+    "divide_mean": mean_window_normalizer,
+    "subtract_mean": subtract_mean_normalizer,
+    "normalize": zscore_normalizer,
+    "minmax": minmax_normalizer,
+}
+
+
+def _resolve_normalization_strategy(ns):
+    """Accept either a factory (zero-arg) or a strategy (lags->(transform, inverse))."""
+    if ns is None:
+        return None
+    if isinstance(ns, str):
+        key = ns.lower()
+        if key not in _NORMALIZATION_STRATEGY_REGISTRY:
+            options = sorted(_NORMALIZATION_STRATEGY_REGISTRY)
+            raise ValueError(
+                "Unknown normalization_strategy string. "
+                f"Expected one of {options}, got '{ns}'."
+            )
+        ns = _NORMALIZATION_STRATEGY_REGISTRY[key]
+    try:
+        import inspect
+
+        sig = inspect.signature(ns)
+        required = [
+            p
+            for p in sig.parameters.values()
+            if p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD)
+            and p.default is p.empty
+        ]
+        if len(required) == 0:
+            # zero-arg factory -> call it once to get the strategy
+            return ns()
+    except Exception:
+        # if introspection fails, just treat as already-a-strategy
+        pass
+    return ns
 
 
 # ---------------------------------------------------------------------------
 # utils (pure-python; no sktime private imports)
 # ---------------------------------------------------------------------------
-
-# Type alias for normalization strategy:
-# given a 1D window vector (lags), return (transform, inverse_transform) pair
-# both functions operate on 1D ndarrays and must be shape-preserving.
-NormStrategy = Optional[
-    Callable[
-        [np.ndarray],
-        Tuple[Callable[[np.ndarray], np.ndarray], Callable[[np.ndarray], np.ndarray]],
-    ]
-]
-
-
-def _ensure_series(y: Union[pd.Series, pd.DataFrame]) -> pd.Series:
-    """Coerce y to a univariate Series (first column if DataFrame)."""
-    if isinstance(y, pd.Series):
-        return y
-    if isinstance(y, pd.DataFrame):
-        if y.shape[1] == 0:
-            raise ValueError("y DataFrame has no columns.")
-        return y.iloc[:, 0]
-    raise TypeError("y must be a pandas Series or DataFrame.")
 
 
 def _check_regressor(estimator: RegressorMixin) -> None:
@@ -128,11 +316,23 @@ def _future_index_like(idx: pd.Index, horizon: int) -> Tuple[pd.Index, bool]:
         raise ValueError("horizon must be >= 1.")
 
     if isinstance(idx, pd.DatetimeIndex):
-        freq = idx.freq or _infer_freq_from_index(idx)
-        if freq is not None:
-            start = idx[-1] + freq
+        raw_freq = idx.freq or _infer_freq_from_index(idx)
+        offset = None
+        if raw_freq is not None:
+            try:
+                offset = to_offset(raw_freq)
+            except (TypeError, ValueError):
+                offset = None
+        if offset is None and len(idx) >= 2:
+            step = idx[-1] - idx[-2]
+            try:
+                offset = to_offset(step)
+            except (TypeError, ValueError):
+                offset = None
+        if offset is not None:
+            start = idx[-1] + offset
             return (
-                pd.date_range(start=start, periods=horizon, freq=freq, tz=idx.tz),
+                pd.date_range(start=start, periods=horizon, freq=offset, tz=idx.tz),
                 True,
             )
         return pd.RangeIndex(1, horizon + 1), False
@@ -144,35 +344,77 @@ def _future_index_like(idx: pd.Index, horizon: int) -> Tuple[pd.Index, bool]:
             return pd.period_range(start=start, periods=horizon, freq=freq), True
         return pd.RangeIndex(1, horizon + 1), False
 
-    if isinstance(
-        idx, (pd.RangeIndex, pd.Int64Index, pd.UInt64Index, pd.Index)
-    ) and np.issubdtype(idx.dtype, np.integer):
+    if isinstance(idx, (pd.RangeIndex, pd.Index)) and is_integer_dtype(idx.dtype):
         start = idx[-1] + 1
         return pd.RangeIndex(start, start + horizon), True
 
     return pd.RangeIndex(1, horizon + 1), False
 
 
-def _build_supervised_table(
+def _select_future_rows(
+    X_future: pd.DataFrame, idx: Union[pd.Index, pd.MultiIndex], allow_fill: bool = True
+) -> pd.DataFrame:
+    """Select rows of X_future at index `idx`, optionally imputing missing rows."""
+    if not isinstance(idx, (pd.Index, pd.MultiIndex)):
+        idx = pd.Index(idx)
+
+    if not allow_fill:
+        missing = idx.difference(X_future.index)
+        if len(missing) > 0:
+            sample = list(missing[:3])
+            raise ValueError(
+                "Missing required rows in X for forecast timestamps. "
+                f"Examples: {sample} (total missing: {len(missing)})."
+            )
+        return X_future.loc[idx]
+
+    X_aligned = X_future.reindex(idx)
+    if X_aligned.isnull().values.any():
+        X_aligned = X_aligned.ffill().bfill()
+
+    if X_aligned.isnull().values.any():
+        missing_rows = X_aligned.index[X_aligned.isnull().any(axis=1)]
+        sample = list(missing_rows[:3])
+        raise ValueError(
+            "Missing required rows in X for forecast timestamps even after fill. "
+            f"Examples: {sample} (total missing: {len(missing_rows)})."
+        )
+
+    return X_aligned
+
+
+def _flatten_multiindex_to_time(
+    y_or_X: Union[pd.Series, pd.DataFrame], ids
+) -> Union[pd.Series, pd.DataFrame]:
+    """Return object with *time-only* index for a specific ids tuple."""
+    if isinstance(ids, tuple):
+        key = ids
+    else:
+        key = (ids,)
+    return y_or_X.xs(key, level=list(range(y_or_X.index.nlevels - 1)))
+
+
+def _iter_series_groups(y: pd.Series):
+    """Yield (ids_tuple, y_single_series_with_time_index)."""
+    nlvls = y.index.nlevels
+    id_lvls = list(range(nlvls - 1))
+    # keep order stable
+    group_level = id_lvls if len(id_lvls) != 1 else id_lvls[0]
+    for ids, y_g in y.groupby(level=group_level, sort=False):
+        if not isinstance(ids, tuple):
+            ids = (ids,)
+        y_flat = y_g.droplevel(id_lvls)
+        yield ids, y_flat
+
+
+def _build_supervised_table_single(
     y: pd.Series,
     X: Optional[pd.DataFrame],
     window_length: int,
     steps_ahead: int,
     x_mode: str,
-    normalization_strategy: NormStrategy = None,
 ) -> Tuple[pd.DataFrame, pd.Series]:
-    """
-    Turn (y, X) into (Xt, yt) for supervised learning for a single horizon.
-
-    - Features: y lags [t, t-1, ..., t - window_length + 1]  (most recent first)
-    - Target:   y[t + steps_ahead]
-    - Exogenous concurrent: X at time t + steps_ahead (if used)
-    - Normalization: if `normalization_strategy` is provided, for each row:
-        * obtain (transform, inverse_transform) = normalization_strategy(y_lag_vector)
-        * replace lag features by transform(y_lag_vector)
-        * replace scalar target by transform([target])[0]
-      Note: X is *not* normalized.
-    """
+    """Turn (y, X) into (Xt, yt) for one series and one horizon."""
     if window_length < 1:
         raise ValueError("window_length must be >= 1.")
     if not isinstance(steps_ahead, int) or steps_ahead < 1:
@@ -181,13 +423,6 @@ def _build_supervised_table(
         raise ValueError("x_mode must be one of {'none', 'concurrent', 'auto'}.")
 
     use_X = (X is not None) and (x_mode in ("concurrent", "auto"))
-    if use_X:
-        if not isinstance(X, pd.DataFrame):
-            raise TypeError("X must be a pandas DataFrame when provided.")
-        if not X.index.is_monotonic_increasing:
-            X = X.sort_index()
-        if not y.index.is_monotonic_increasing:
-            y = y.sort_index()
 
     values = y.to_numpy()
     n = len(values)
@@ -204,43 +439,28 @@ def _build_supervised_table(
     targets = []
     t_index = []
 
-    x_cols = []
-    if use_X:
-        x_cols = list(X.columns)
-
     for t in range(window_length - 1, max_anchor + 1):
-        # y lags vector in the same order as features will be fed: [y_t, y_{t-1}, ...]
+        # lags y[t], y[t-1], ..., y[t-window_length+1]  (newest first)
         lag_block = values[t : t - window_length : -1]
         if lag_block.shape[0] != window_length:
-            # safety for very early slices (rarely hit)
             lag_block = np.asarray(
                 [values[t - i] for i in range(window_length)], dtype=float
             )
-        y_feats = lag_block.astype(float).copy()
 
-        # target scalar at t + h
+        row = {f"y_lag_{i+1}": lag_block[i] for i in range(window_length)}
         target_time = y.index[t + steps_ahead]
-        y_target = float(values[t + steps_ahead])
+        y_target = values[t + steps_ahead]
 
-        # apply per-row normalization if requested
-        if normalization_strategy is not None:
-            tr, _inv = normalization_strategy(y_feats.copy())
-            y_feats = np.asarray(tr(y_feats), dtype=float)
-            y_target = float(np.asarray(tr(np.array([y_target], dtype=float)))[0])
-
-        # build row dict
-        row = {f"y_lag_{i+1}": y_feats[i] for i in range(window_length)}
-
-        # append X (concurrent at target_time) without normalization
         if use_X:
             if target_time not in X.index:
-                for c in x_cols:
+                # Feature placeholder; user should ensure X completeness
+                for c in X.columns:
                     row[f"X_{c}"] = np.nan
             else:
                 xrow = X.loc[target_time]
                 if isinstance(xrow, pd.DataFrame):
                     xrow = xrow.iloc[0]
-                for c in x_cols:
+                for c in X.columns:
                     row[f"X_{c}"] = xrow[c]
 
         rows.append(row)
@@ -252,167 +472,223 @@ def _build_supervised_table(
     return Xt, yt
 
 
-def _select_future_rows(X_future: pd.DataFrame, idx: pd.Index) -> pd.DataFrame:
-    """Select rows of X_future at index `idx`, raising error if any missing."""
-    idx = pd.Index(idx)
-    missing = idx.difference(X_future.index)
-    if len(missing) > 0:
-        sample = list(missing[:3])
-        raise ValueError(
-            "Missing required rows in X for forecast timestamps. "
-            f"Examples: {sample} (total missing: {len(missing)})."
+def _build_supervised_table_global(
+    y: pd.Series,
+    X: Optional[pd.DataFrame],
+    window_length: int,
+    steps_ahead: int,
+    x_mode: str,
+) -> Tuple[pd.DataFrame, pd.Series]:
+    """Supervised table across all ids for one horizon, stacked with MultiIndex index."""
+    nlvls = y.index.nlevels
+    id_lvls = list(range(nlvls - 1))
+    id_names = list(y.index.names[:-1])
+    time_name = y.index.names[-1]
+
+    Xt_list = []
+    yt_list = []
+    idx_list = []
+
+    # iterate ids
+    for ids, y_flat in _iter_series_groups(y):
+        X_flat = None
+        if X is not None:
+            X_flat = _flatten_multiindex_to_time(X, ids)
+            if not X_flat.index.is_monotonic_increasing:
+                X_flat = X_flat.sort_index()
+        if not y_flat.index.is_monotonic_increasing:
+            y_flat = y_flat.sort_index()
+
+        Xt_g, yt_g = _build_supervised_table_single(
+            y=y_flat,
+            X=X_flat,
+            window_length=window_length,
+            steps_ahead=steps_ahead,
+            x_mode=x_mode,
         )
-    return X_future.loc[idx]
+
+        # attach ids to index -> MultiIndex (ids..., time)
+        if len(ids) == 1:
+            new_index = pd.MultiIndex.from_arrays(
+                [[ids[0]] * len(Xt_g), Xt_g.index],
+                names=id_names + [time_name],
+            )
+        else:
+            arrays = [[ids[j]] * len(Xt_g) for j in range(len(ids))]
+            arrays.append(list(Xt_g.index))
+            new_index = pd.MultiIndex.from_arrays(arrays, names=id_names + [time_name])
+
+        Xt_g.index = new_index
+        yt_g.index = new_index
+
+        Xt_list.append(Xt_g)
+        yt_list.append(yt_g)
+
+    Xt_all = pd.concat(Xt_list, axis=0)
+    yt_all = pd.concat(yt_list, axis=0)
+
+    return Xt_all.sort_index(), yt_all.sort_index()
 
 
-def _fh_to_absolute_index(
-    fh_like: Union[ForecastingHorizon, Sequence, pd.Index],
-    cutoff,
-    y_index: pd.Index,
-    steps: Optional[Sequence[int]] = None,
-    H: Optional[int] = None,
-) -> pd.Index:
-    """
-    Robustly coerce a forecasting horizon (absolute or relative) to a pandas Index.
+def _normalize_supervised_rowwise(
+    Xt: pd.DataFrame,
+    yt: pd.Series,
+    L: int,
+    normalization_strategy: Optional[Callable[[np.ndarray], Tuple[Callable, Callable]]],
+) -> Tuple[pd.DataFrame, pd.Series]:
+    """Apply per-row normalization to (y-lags, target)."""
+    if normalization_strategy is None:
+        return Xt, yt
 
-    Tries multiple sktime FH APIs across versions, then falls back to constructing
-    a "future index like y_index".
-    """
-    # If it's already a pandas Index, return it
-    if isinstance(fh_like, pd.Index):
-        return fh_like
+    Xt_out = Xt.copy()
+    yt_out = yt.astype(float, copy=True)
+    lag_cols = [f"y_lag_{i+1}" for i in range(L)]
+    lag_idx = [Xt_out.columns.get_loc(col) for col in lag_cols]
 
-    # If it's not an FH, try to coerce directly
-    if not isinstance(fh_like, ForecastingHorizon):
-        try:
-            return pd.Index(fh_like)
-        except Exception:
-            pass  # fall through to robust fallback
+    for i in range(len(Xt_out)):
+        lags = Xt_out.iloc[i, lag_idx].to_numpy(dtype=float)
+        target_value = yt_out.iloc[i]
+        transform, _ = normalization_strategy(lags)  # per-window
+        lags_n, tgt_n = transform(lags, target_value)
+        Xt_out.iloc[i, lag_idx] = lags_n
+        if tgt_n is not None:
+            yt_out.iloc[i] = float(tgt_n)
 
-    # From here treat as ForecastingHorizon
-    fh_obj = (
-        fh_like
-        if isinstance(fh_like, ForecastingHorizon)
-        else ForecastingHorizon(fh_like)
-    )
+    return Xt_out, yt_out
 
-    # 1) Preferred: to_absolute_index(cutoff)
-    m = getattr(fh_obj, "to_absolute_index", None)
-    if callable(m):
-        try:
-            return m(cutoff)
-        except Exception:
-            pass
 
-    # 2) Some versions: to_pandas_index() if already absolute
-    m = getattr(fh_obj, "to_pandas_index", None)
-    if callable(m):
-        try:
-            idx = m()
-            if isinstance(idx, pd.Index):
-                return idx
-        except Exception:
-            pass
+def _make_group_future_multiindex(
+    ids: Tuple, future_time_index: pd.Index, id_names: List[str], time_name: str
+) -> pd.MultiIndex:
+    """Build a MultiIndex combining ids (tuple) and per-group future time index."""
+    arrays = [[ids[j]] * len(future_time_index) for j in range(len(ids))]
+    arrays.append(list(future_time_index))
+    return pd.MultiIndex.from_arrays(arrays, names=id_names + [time_name])
 
-    # 3) Try going to absolute first, then 1) and 2)
-    try:
-        abs_fh = fh_obj.to_absolute(cutoff)
-        m = getattr(abs_fh, "to_absolute_index", None)
-        if callable(m):
-            try:
-                return m(cutoff)
-            except Exception:
-                pass
-        m = getattr(abs_fh, "to_pandas_index", None)
-        if callable(m):
-            try:
-                idx = m()
-                if isinstance(idx, pd.Index):
-                    return idx
-            except Exception:
-                pass
-        # If abs_fh itself is index-like
-        if not isinstance(abs_fh, ForecastingHorizon):
-            try:
-                return pd.Index(abs_fh)
-            except Exception:
-                pass
-    except Exception:
-        pass
 
-    # 4) Last resort: synthesize using y_index's cadence
-    if steps is not None:
-        steps = np.asarray(steps, dtype=int).reshape(-1)
-        H_ = int(np.max(steps))
-    else:
-        H_ = int(H if H is not None else len(fh_obj))
-        steps = np.arange(1, H_ + 1, dtype=int)
+def _steps_and_full_future_for_group(
+    train_time_index: pd.Index,
+    req_times: Optional[pd.Index] = None,
+    rel_steps: Optional[np.ndarray] = None,
+) -> Tuple[pd.Index, Optional[np.ndarray]]:
+    """Return full future index for the group, and (if req_times) positions for them."""
+    if req_times is not None:
+        last_t = train_time_index[-1]
+        max_t = pd.Index(req_times).max()
 
-    full_future, _ = _future_index_like(y_index, H_)
-    return pd.Index([full_future[h - 1] for h in steps])
+        if isinstance(train_time_index, pd.DatetimeIndex):
+            raw_freq = train_time_index.freq or _infer_freq_from_index(train_time_index)
+            offset = None
+            if raw_freq is not None:
+                try:
+                    offset = to_offset(raw_freq)
+                except (TypeError, ValueError):
+                    offset = None
+            if offset is None:
+                inferred = pd.infer_freq(train_time_index)
+                try:
+                    offset = to_offset(inferred)
+                except (TypeError, ValueError):
+                    offset = None
+            if offset is None:
+                if len(train_time_index) >= 2:
+                    step = train_time_index[-1] - train_time_index[-2]
+                    try:
+                        offset = to_offset(step)
+                    except (TypeError, ValueError):
+                        offset = None
+            if offset is None:
+                return pd.Index([]), np.array([], dtype=int)
+            rng = pd.date_range(
+                start=last_t + offset,
+                end=max_t,
+                freq=offset,
+                tz=train_time_index.tz,
+            )
+            H = len(rng)
+            full_future = pd.date_range(
+                start=last_t + offset,
+                periods=H if H > 0 else 0,
+                freq=offset,
+                tz=train_time_index.tz,
+            )
+        elif isinstance(train_time_index, pd.PeriodIndex):
+            freq = train_time_index.freq
+            rng = pd.period_range(start=last_t + 1, end=max_t, freq=freq)
+            H = len(rng)
+            full_future = pd.period_range(
+                start=last_t + 1, periods=H if H > 0 else 0, freq=freq
+            )
+        elif is_integer_dtype(train_time_index.dtype):
+            H = int(max_t - last_t)
+            full_future = pd.RangeIndex(last_t + 1, last_t + 1 + max(H, 0))
+        else:
+            req_times_sorted = pd.Index(req_times).sort_values()
+            H = len(req_times_sorted)
+            full_future = pd.RangeIndex(1, H + 1)
+
+        if H == 0:
+            return pd.Index([]), np.array([], dtype=int)
+
+        if isinstance(full_future, pd.RangeIndex) and not np.issubdtype(
+            train_time_index.dtype, np.integer
+        ):
+            req_sorted = pd.Index(req_times).sort_values()
+            pos_map = {req_sorted[i]: i + 1 for i in range(len(req_sorted))}
+            steps = np.asarray([pos_map[t] for t in req_times], dtype=int)
+        else:
+            pos = pd.Index(full_future).get_indexer(pd.Index(req_times))
+            if np.any(pos < 0):
+                bad = list(pd.Index(req_times)[pos < 0][:3])
+                raise ValueError(
+                    "Requested times are not aligned with training frequency for a group. "
+                    f"Examples: {bad}"
+                )
+            steps = pos.astype(int) + 1  # 1-based
+
+        return full_future, steps
+
+    # relative steps path
+    if rel_steps is None or len(rel_steps) == 0:
+        raise ValueError("Either req_times or rel_steps must be provided.")
+    H = int(np.max(rel_steps))
+    full_future, _ = _future_index_like(train_time_index, H)
+    return pd.Index(full_future), None
+
+
+def _union_indices(indices: List[pd.Index]) -> pd.Index:
+    """Safe union for both Index and MultiIndex without relying on union_many."""
+    if not indices:
+        return pd.Index([])
+    u = indices[0]
+    for ix in indices[1:]:
+        u = u.union(ix)
+    return u
 
 
 # ---------------------------------------------------------------------------
-# The forecaster
+# The global forecaster
 # ---------------------------------------------------------------------------
 
 
 class ReductionForecaster(BaseForecaster):
-    """Hybrid reduction forecaster: K-step direct + recursive continuation.
+    """Global hybrid reduction forecaster: K-step direct + recursive continuation.
 
-    Trains **steps_ahead = K** separate direct models for horizons 1..K using a
-    lag window from ``y`` (and optional *concurrent* exogenous ``X`` at each
-    target timestamp). For a requested forecast horizon H:
+    Trains **steps_ahead = K** separate direct models for horizons 1..K on pooled
+    (possibly hierarchical) data, using a lag window from ``y`` (and optional
+    *concurrent* exogenous ``X`` at each target timestamp). For each series id,
+    requested predictions beyond K steps are produced recursively using the
+    1-step model.
 
-    - For steps 1..min(K, H): use the corresponding direct model h to predict y[h]
-      from the *same observed* lag window (no predicted values fed back here).
-    - If H > K: continue with **recursive** one-step predictions, starting from the
-      observed lag window rolled forward by the K *direct* predictions, and use the
-      trained 1-step model repeatedly.
-
-    Normalization strategy
-    ----------------------
-    The optional ``normalization_strategy`` is a callable that receives the
-    **current y-lag window** (1D ndarray in feature order: [y_t, y_{t-1}, ...]) and
-    returns a pair of functions ``(transform, inverse_transform)``, both operating on
-    1D ndarrays. In training, for each supervised row, we fit this per-window
-    normalizer on the y-lag vector, transform the lags **and** the scalar target,
-    train models in the normalized space, and in prediction we inverse-transform each
-    predicted scalar immediately back to the original y-scale.
-
-    Parameters
-    ----------
-    estimator : sklearn-style regressor
-        Any object with `fit(X, y)` and `predict(X)` methods.
-    window_length : int, default=10
-        Number of past observations to use as lags.
-    steps_ahead : int, default=1
-        Number of direct heads (K). K=1 recovers pure recursive reduction.
-    x_mode : {"auto","none","concurrent"}, default="auto"
-        - "none": ignore X even if provided
-        - "concurrent": use X at the **target** timestamps in `fit`, and the
-          future timestamps in `predict`
-        - "auto": behaves like "concurrent" if X is provided else "none"
-    impute_missing : {"ffill","bfill",None}, default="bfill"
-        Optional imputation applied to `y` **before** windowing.
-        If None, NaNs are left as-is (your estimator must handle them).
-    normalization_strategy : callable or None, default=None
-        Function ``f(window_1d) -> (transform, inverse_transform)``. If None, no
-        normalization is applied.
-
-    Notes
-    -----
-    - Univariate series only (single variable).
-    - If X is used in fit, you must pass future X at *all* required forecast
-      timestamps to `predict`.
+    This class works with **either** a single time series (simple time index) **or**
+    MultiIndex/Hierarchical data (id levels + time).
     """
 
-    # -------------------- sktime estimator tags --------------------
     _tags = {
-        # inner mtypes
-        "y_inner_mtype": "pd.Series",
-        "X_inner_mtype": "pd.DataFrame",
-        # univariate only
+        # accept single series AND hierarchical / multiindex series
+        "y_inner_mtype": ["pd.Series", "pd-multiindex", "pd_multiindex_hier"],
+        "X_inner_mtype": ["pd.DataFrame", "pd-multiindex", "pd_multiindex_hier"],
+        # univariate target
         "scitype:y": "univariate",
         # exogenous supported
         "capability:exogenous": True,
@@ -422,66 +698,140 @@ class ReductionForecaster(BaseForecaster):
         "X-y-must-have-same-index": True,
         # index type unrestricted
         "enforce_index_type": None,
-        # we don't guarantee missing handling in general (y can be imputed)
+        # missing values: we don't guarantee generic handling (y can be imputed)
         "capability:missing_values": False,
-        # only strictly out-of-sample fh supported (positive relative steps)
+        # strictly oos steps
         "capability:insample": False,
-        # no probabilistic output
+        # no probabilistic output in this implementation
         "capability:pred_int": False,
-        # soft dependency on sklearn (sktime tag uses the import name)
+        # soft dependency on scikit-learn
         "python_dependencies": "scikit-learn",
     }
 
-    # -------------------- constructor signature --------------------
     def __init__(
         self,
         estimator: RegressorMixin,
         window_length: int = 10,
         steps_ahead: int = 1,
+        normalization_strategy: Optional[
+            Union[str, Callable[[np.ndarray], Tuple[Callable, Callable]]]
+        ] = None,
         x_mode: str = "auto",
         impute_missing: Optional[str] = "bfill",
-        normalization_strategy: NormStrategy = None,
     ):
-        # components / hyper-params
+        # hyper-params
         self.estimator = estimator
         self.window_length = int(window_length)
         self.steps_ahead = int(steps_ahead)
+        self.normalization_strategy = normalization_strategy
         self.x_mode = x_mode
         self.impute_missing = impute_missing
-        self.normalization_strategy = normalization_strategy
 
         super().__init__()
 
         if self.steps_ahead < 1:
             raise ValueError("steps_ahead must be a positive integer.")
-        if (self.normalization_strategy is not None) and (
-            not callable(self.normalization_strategy)
-        ):
-            raise TypeError("normalization_strategy must be a callable or None.")
 
-        # learned attributes (set in _fit)
+        # learned attributes
         self._dir_estimators_: Optional[List[RegressorMixin]] = None
-        self._estimator_: Optional[RegressorMixin] = None  # alias: 1-step model
+        self._estimator_: Optional[RegressorMixin] = None  # 1-step model shortcut
         self._x_used_: bool = False
         self._x_columns_: Optional[List[str]] = None
-        self._last_window_: Optional[np.ndarray] = None
-        self._y_train_index_: Optional[pd.Index] = None
-        self._y_name_: Optional[str] = None
+
+        # per-group rolling state
+        self._last_windows_: Optional[Dict[Tuple, np.ndarray]] = (
+            None  # ids -> window (old..new)
+        )
+        self._train_time_index_: Optional[Dict[Tuple, pd.Index]] = (
+            None  # ids -> time index
+        )
+        self._ids_: Optional[List[Tuple]] = None  # list of ids tuples in fit order
+
+        # index naming
+        self._id_names_: Optional[List[str]] = None
+        self._time_name_: Optional[str] = None
+        self._was_single_series_: bool = False
+        self._single_id_value_: str = "__singleton__"
+        self._single_id_name_: str = "id"
+
+        # for update/refit bookkeeping
         self._y_train_: Optional[pd.Series] = None
         self._X_train_: Optional[pd.DataFrame] = None
+        self._norm_strategy_: Optional[
+            Callable[[np.ndarray], Tuple[Callable, Callable]]
+        ] = None
+        self._y_name_: Optional[str] = None
+        self._y_is_dataframe_: bool = False
+        self._y_column_name_: Optional[str] = None
 
-    # -------------------- fit logic --------------------
+    # -------------------- fit --------------------
     def _fit(
         self, y: pd.Series, X: Optional[pd.DataFrame], fh: Optional[ForecastingHorizon]
     ):
-        """Fit forecaster to training data (private core, called by BaseForecaster)."""
+        """Fit the global forecaster to (possibly hierarchical or single) training data."""
         _check_regressor(self.estimator)
 
-        y = _ensure_series(y).copy()
+        self._y_is_dataframe_ = isinstance(y, pd.DataFrame)
+        if isinstance(y, pd.DataFrame):
+            if y.shape[1] != 1:
+                raise ValueError(
+                    "ReductionForecaster supports univariate targets only."
+                )
+            col_name = y.columns[0]
+            y = y.iloc[:, 0].copy()
+            y.name = col_name
+            self._y_column_name_ = col_name
+        else:
+            self._y_column_name_ = y.name
+
+        # detect single series and coerce to MultiIndex internally
+        if isinstance(y.index, pd.MultiIndex) and y.index.nlevels >= 2:
+            self._was_single_series_ = False
+            y_mi = y.copy()
+            if X is not None:
+                if isinstance(X.index, pd.MultiIndex):
+                    X_mi = X.copy()
+                else:
+                    raise TypeError(
+                        "X must have a MultiIndex to match y's MultiIndex in fit."
+                    )
+            else:
+                X_mi = None
+        else:
+            # single series -> wrap to MultiIndex with one id level
+            self._was_single_series_ = True
+            time_name = y.index.name if y.index.name is not None else "time"
+            id_name = self._single_id_name_
+            id_val = self._single_id_value_
+            y_mi = y.copy()
+            y_mi.index = pd.MultiIndex.from_arrays(
+                [[id_val] * len(y_mi), y_mi.index], names=[id_name, time_name]
+            )
+            if X is not None:
+                if isinstance(X.index, pd.MultiIndex):
+                    raise TypeError(
+                        "For single-series fit, X should have a simple time index."
+                    )
+                X_mi = X.copy()
+                X_mi.index = pd.MultiIndex.from_arrays(
+                    [[id_val] * len(X_mi), X_mi.index], names=[id_name, time_name]
+                )
+            else:
+                X_mi = None
+
+        y = y_mi
+        X = X_mi
+
+        # store names
+        self._id_names_ = list(y.index.names[:-1])
+        self._time_name_ = y.index.names[-1]
+        self._y_name_ = y.name
 
         # basic imputation on y
-        if self.impute_missing in ("ffill", "bfill"):
-            y = y.fillna(method=self.impute_missing)
+        if self.impute_missing == "ffill":
+            y = y.ffill()
+        elif self.impute_missing == "bfill":
+            y = y.bfill()
         elif self.impute_missing is not None:
             raise ValueError("impute_missing must be 'ffill', 'bfill', or None.")
 
@@ -490,275 +840,445 @@ class ReductionForecaster(BaseForecaster):
         if x_mode == "auto":
             x_mode = "concurrent" if X is not None else "none"
 
-        # fit K direct heads (1..steps_ahead)
+        # resolve normalization strategy (allow factory or strategy)
+        self._norm_strategy_ = _resolve_normalization_strategy(
+            self.normalization_strategy
+        )
+
+        # fit K direct heads using pooled data
         dir_estimators: List[RegressorMixin] = []
         for h in range(1, self.steps_ahead + 1):
-            Xt_h, yt_h = _build_supervised_table(
+            Xt_h_all, yt_h_all = _build_supervised_table_global(
                 y=y,
                 X=X,
                 window_length=self.window_length,
                 steps_ahead=h,
                 x_mode=x_mode,
-                normalization_strategy=self.normalization_strategy,
             )
+            # remember X columns (consistency check at predict)
+            if self._x_columns_ is None and X is not None and X.shape[1] > 0:
+                self._x_columns_ = list(X.columns)
+
+            # row-wise normalization on lags & target
+            Xt_h_all_n, yt_h_all_n = _normalize_supervised_rowwise(
+                Xt_h_all, yt_h_all, self.window_length, self._norm_strategy_
+            )
+
             est_h = clone(self.estimator)
-            est_h.fit(Xt_h.values, yt_h.values)
+            est_h.fit(Xt_h_all_n.values, yt_h_all_n.values)
             dir_estimators.append(est_h)
 
         # learned state
         self._dir_estimators_ = dir_estimators
-        self._estimator_ = dir_estimators[0]  # 1-step model
+        self._estimator_ = dir_estimators[0]
         self._x_used_ = (x_mode == "concurrent") and (X is not None)
-        self._x_columns_ = list(X.columns) if (X is not None) else None
-        self._y_train_index_ = y.index
-        self._y_name_ = y.name
 
-        # bootstrap last window for recursion (stored oldest->newest, as y.iloc preserves)
-        last = y.iloc[-self.window_length :].to_numpy()
-        if len(last) != self.window_length:
-            raise ValueError(
-                "Not enough observations to form last window. "
-                f"Need window_length={self.window_length}, got {len(y)}."
-            )
-        self._last_window_ = last.astype(float).reshape(-1)
+        # store per-group last window and time indices
+        last_windows = {}
+        time_idx_map = {}
+        ids_list = []
+        for ids, y_flat in _iter_series_groups(y):
+            ids_list.append(ids)
+            if not y_flat.index.is_monotonic_increasing:
+                y_flat = y_flat.sort_index()
+            time_idx_map[ids] = y_flat.index
+            last = y_flat.iloc[-self.window_length :].to_numpy()
+            if len(last) != self.window_length:
+                raise ValueError(
+                    f"Group {ids}: not enough observations for last window. "
+                    f"Need window_length={self.window_length}, got {len(y_flat)}."
+                )
+            last_windows[ids] = last.astype(float).reshape(-1)
 
-        # store training series for optional updates
+        self._last_windows_ = last_windows
+        self._train_time_index_ = time_idx_map
+        self._ids_ = ids_list
+
+        # store training for potential refit in update
         self._y_train_ = y.copy()
         self._X_train_ = X.copy() if X is not None else None
 
         return self
 
-    # -------------------- predict logic --------------------
+    # -------------------- predict --------------------
     def _predict(
-        self, fh: ForecastingHorizon, X: Optional[pd.DataFrame] = None
+        self,
+        fh: Union[ForecastingHorizon, Sequence, pd.Index, pd.MultiIndex],
+        X: Optional[pd.DataFrame] = None,
     ) -> pd.Series:
-        """Forecast time series at future horizon (private core, called by BaseForecaster)."""
+        """Forecast pooled multi-series or a single series at future horizon."""
         if (
             self._estimator_ is None
-            or self._last_window_ is None
+            or self._last_windows_ is None
             or self._dir_estimators_ is None
+            or self._train_time_index_ is None
+            or self._ids_ is None
         ):
             raise RuntimeError("Call fit(...) before predict(...).")
 
-        # relative steps (strictly positive due to tag capability:insample=False)
-        rel = fh.to_relative(self.cutoff)
-        rel_steps = np.asarray(rel, dtype=int).reshape(-1)
-        pos_steps = _as_positive_int_fh(rel_steps)
-        H = int(pos_steps.max())
+        # determine fh mode
+        mode_abs_multi = isinstance(fh, pd.MultiIndex)
+        mode_abs_single = isinstance(fh, pd.Index) and not isinstance(fh, pd.MultiIndex)
+        mode_rel = False
 
-        # build absolute indexes robustly (supports various sktime versions)
-        all_rel = ForecastingHorizon(np.arange(1, H + 1, dtype=int), is_relative=True)
-        abs_all_like = all_rel.to_absolute(self.cutoff)
-        abs_all_idx = _fh_to_absolute_index(
-            abs_all_like, cutoff=self.cutoff, y_index=self._y_train_index_, H=H
-        )
+        req_steps_all: Optional[np.ndarray] = None
+        if not (mode_abs_multi or mode_abs_single):
+            # FH object or array-like of relative ints
+            if isinstance(fh, ForecastingHorizon):
+                rel = fh.to_relative(self.cutoff)
+                req_steps_all = _as_positive_int_fh(np.asarray(rel, dtype=int))
+            else:
+                # try array-like relative ints
+                arr = np.asarray(fh)
+                req_steps_all = _as_positive_int_fh(arr)
+            mode_rel = True
 
-        abs_req_like = fh.to_absolute(self.cutoff)
-        abs_req_idx = _fh_to_absolute_index(
-            abs_req_like,
-            cutoff=self.cutoff,
-            y_index=self._y_train_index_,
-            steps=rel_steps,
-            H=H,
-        )
+        if mode_abs_single and not self._was_single_series_:
+            raise TypeError(
+                "Absolute fh as a simple Index is only valid when the model was fit "
+                "on a single series. For multi-series, pass a MultiIndex fh."
+            )
 
-        # if X was used in fit, we need concurrent X for *all* 1..H steps
+        # prepare exogenous usage
         if self._x_used_:
             if X is None:
                 raise ValueError(
                     "This model was fit with exogenous variables. "
                     "Provide X with rows for all required forecast timestamps."
                 )
-            if not isinstance(X, pd.DataFrame):
-                raise TypeError(
-                    "X must be a pandas DataFrame when provided to predict."
-                )
-            if not X.index.is_monotonic_increasing:
-                X = X.sort_index()
-
-            X_all = _select_future_rows(X, abs_all_idx)
             if self._x_columns_ is not None:
-                missing_cols = [c for c in self._x_columns_ if c not in X_all.columns]
-                if missing_cols:
+                missing = [c for c in self._x_columns_ if c not in X.columns]
+                if missing:
                     raise ValueError(
-                        f"X is missing columns seen in training: {missing_cols}"
+                        f"X is missing columns seen in training: {missing}"
                     )
-                X_all = X_all[self._x_columns_]
-            X_block = X_all.to_numpy()
-        else:
+            # shape validation
+            if self._was_single_series_:
+                if isinstance(X.index, pd.MultiIndex):
+                    raise TypeError(
+                        "For single-series prediction, X should have a simple time index."
+                    )
+            else:
+                if not isinstance(X.index, pd.MultiIndex):
+                    raise TypeError(
+                        "For multi-series prediction, X must have a MultiIndex index."
+                    )
+            # order X columns to match training
+            if self._x_columns_ is not None:
+                X = X[self._x_columns_]
+
+        out_series: List[pd.Series] = []
+
+        K = self.steps_ahead
+
+        for ids in self._ids_:
+            time_idx_train = self._train_time_index_[ids]
+
+            # determine requested times/steps for this ids
+            if mode_abs_multi:
+                try:
+                    req_times = fh.xs(ids, level=list(range(fh.nlevels - 1)))
+                    req_times = pd.Index(req_times)
+                except Exception:
+                    req_times = pd.Index([])
+                full_future, steps_for_req = _steps_and_full_future_for_group(
+                    time_idx_train, req_times=req_times
+                )
+                if len(full_future) == 0 and len(req_times) == 0:
+                    continue
+                H = len(full_future)
+                pos_req = steps_for_req  # 1-based
+            elif mode_abs_single:
+                # single series: use the provided absolute time Index for the lone ids
+                req_times = pd.Index(fh)
+                full_future, steps_for_req = _steps_and_full_future_for_group(
+                    time_idx_train, req_times=req_times
+                )
+                if len(full_future) == 0 and len(req_times) == 0:
+                    continue
+                H = len(full_future)
+                pos_req = steps_for_req
+            else:
+                # relative steps (common to all ids)
+                assert req_steps_all is not None
+                H = int(np.max(req_steps_all))
+                full_future, _ = _steps_and_full_future_for_group(
+                    time_idx_train, rel_steps=req_steps_all
+                )
+                pos_req = req_steps_all
+
+            # prepare exogenous block for this group's full future horizon
             X_block = None
+            if self._x_used_:
+                if self._was_single_series_:
+                    X_needed = _select_future_rows(X, full_future)
+                    X_block = X_needed.to_numpy()
+                else:
+                    group_future_index = _make_group_future_multiindex(
+                        ids, full_future, self._id_names_, self._time_name_
+                    )
+                    X_needed = _select_future_rows(X, group_future_index)
+                    X_block = X_needed.to_numpy()
 
-        preds = np.zeros(H, dtype=float)
+            # predictions for steps 1..H
+            preds = np.zeros(H, dtype=float)
 
-        # ----- Direct part (1..min(K, H)) using *observed* window only -----
-        K = min(self.steps_ahead, H)
-        last_obs = self._last_window_.copy()  # oldest -> newest
-        for i in range(1, K + 1):
-            # features in model order: most recent first
-            y_feats = last_obs[::-1]  # y_lag_1 := most recent true observation
+            # direct part
+            last_obs = self._last_windows_[ids].copy()  # chronological old..new
+            for i in range(1, min(K, H) + 1):
+                y_feats = last_obs[::-1]  # newest first to match training
+                if self._norm_strategy_ is not None:
+                    transform, inv = self._norm_strategy_(y_feats)
+                    y_feats_n, _ = transform(y_feats, None)
+                else:
+                    y_feats_n = y_feats
+                    inv = lambda v: float(v)
 
-            # per-step normalization (fit on current window)
-            if self.normalization_strategy is not None:
-                tr, inv = self.normalization_strategy(y_feats.copy())
-                y_feats_n = np.asarray(tr(y_feats), dtype=float)
+                if X_block is not None:
+                    row = np.concatenate([y_feats_n, X_block[i - 1]])
+                else:
+                    row = y_feats_n
+
+                yhat_n = float(
+                    np.asarray(
+                        self._dir_estimators_[i - 1].predict(row.reshape(1, -1))
+                    ).ravel()[0]
+                )
+                yhat = inv(yhat_n)
+                preds[i - 1] = yhat
+
+            # rolling state after K direct preds
+            last_roll = self._last_windows_[ids].copy()
+            for i in range(1, min(K, H) + 1):
+                last_roll = np.roll(last_roll, -1)
+                last_roll[-1] = preds[i - 1]
+
+            # recursive part
+            for i in range(K + 1, H + 1):
+                y_feats = last_roll[::-1]
+                if self._norm_strategy_ is not None:
+                    transform, inv = self._norm_strategy_(y_feats)
+                    y_feats_n, _ = transform(y_feats, None)
+                else:
+                    y_feats_n = y_feats
+                    inv = lambda v: float(v)
+
+                if X_block is not None:
+                    row = np.concatenate([y_feats_n, X_block[i - 1]])
+                else:
+                    row = y_feats_n
+
+                yhat_n = float(
+                    np.asarray(self._estimator_.predict(row.reshape(1, -1))).ravel()[0]
+                )
+                yhat = inv(yhat_n)
+                preds[i - 1] = yhat
+
+                # roll forward with *original-scale* prediction
+                last_roll = np.roll(last_roll, -1)
+                last_roll[-1] = yhat
+
+            # subset to requested steps for this ids and append to output
+            steps = np.asarray(pos_req, dtype=int)
+            sel = preds[steps - 1]
+
+            if mode_abs_multi:
+                idx = _make_group_future_multiindex(
+                    ids, full_future[steps - 1], self._id_names_, self._time_name_
+                )
+            elif mode_abs_single or (mode_rel and self._was_single_series_):
+                idx = pd.Index(full_future[steps - 1], name=self._time_name_)
             else:
-                # identity mapping
-                y_feats_n = y_feats
-                inv = lambda a: a  # noqa: E731
+                idx = _make_group_future_multiindex(
+                    ids, full_future[steps - 1], self._id_names_, self._time_name_
+                )
 
-            if X_block is not None:
-                row = np.concatenate([y_feats_n, X_block[i - 1]])
-            else:
-                row = y_feats_n
+            out_series.append(pd.Series(sel, index=idx, name=self._y_name_))
 
-            yhat_norm = float(
-                np.asarray(
-                    self._dir_estimators_[i - 1].predict(row.reshape(1, -1))
-                ).ravel()[0]
-            )
-            # map back to original scale
-            yhat = float(np.asarray(inv(np.array([yhat_norm], dtype=float)))[0])
-            preds[i - 1] = yhat
+        if len(out_series) == 0:
+            # No requested rows (e.g., fh had no times beyond training) -> empty series
+            return pd.Series([], dtype=float, name=self._y_name_)
 
-        # ----- Prepare rolling state after K direct steps -----
-        last_roll = self._last_window_.copy()
-        for i in range(1, K + 1):
-            last_roll = np.roll(last_roll, -1)
-            last_roll[-1] = preds[i - 1]
+        # Assemble output
+        y_pred = pd.concat(out_series)
 
-        # ----- Recursive continuation (K+1..H) using 1-step model -----
-        for i in range(K + 1, H + 1):
-            y_feats = last_roll[::-1]
+        # preserve the order of the provided absolute fh if given
+        if mode_abs_multi:
+            y_pred = y_pred.reindex(fh)
+        elif mode_abs_single:
+            y_pred = y_pred.reindex(pd.Index(fh))
+        else:
+            y_pred = y_pred.sort_index()
 
-            if self.normalization_strategy is not None:
-                tr, inv = self.normalization_strategy(y_feats.copy())
-                y_feats_n = np.asarray(tr(y_feats), dtype=float)
-            else:
-                y_feats_n = y_feats
-                inv = lambda a: a  # noqa: E731
+        if self._y_is_dataframe_:
+            col_name = self._y_column_name_ or self._y_name_ or "y"
+            return y_pred.to_frame(name=col_name)
 
-            if X_block is not None:
-                row = np.concatenate([y_feats_n, X_block[i - 1]])
-            else:
-                row = y_feats_n
+        return y_pred
 
-            yhat_norm = float(
-                np.asarray(self._estimator_.predict(row.reshape(1, -1))).ravel()[0]
-            )
-            yhat = float(np.asarray(inv(np.array([yhat_norm], dtype=float)))[0])
-
-            preds[i - 1] = yhat
-            last_roll = np.roll(last_roll, -1)
-            last_roll[-1] = yhat
-
-        # assemble Series for all 1..H steps, then subset to requested fh
-        y_all = pd.Series(
-            preds,
-            index=abs_all_idx,
-            name=self._y_name_ if self._y_name_ is not None else "y",
-        )
-        y_req = y_all.reindex(abs_req_idx)
-        return y_req
-
-    # -------------------- optional: update logic --------------------
+    # -------------------- update --------------------
     def _update(
         self, y: pd.Series, X: Optional[pd.DataFrame] = None, update_params: bool = True
     ):
-        """Update forecaster with new data. If update_params=True, refit; else only roll window."""
+        """Update rolling windows; refit on appended data if `update_params=True`."""
         if (
             self._estimator_ is None
-            or self._last_window_ is None
+            or self._last_windows_ is None
             or self._dir_estimators_ is None
+            or self._train_time_index_ is None
+            or self._ids_ is None
         ):
             raise RuntimeError("Call fit(...) before update(...).")
 
-        y = _ensure_series(y)
-        if len(y) == 0:
+        if y is None or len(y) == 0:
             return self
 
-        # roll last window with the new y values
-        new_vals = y.to_numpy().astype(float).reshape(-1)
-        if len(new_vals) >= self.window_length:
-            self._last_window_ = new_vals[-self.window_length :]
-        else:
-            rolled = np.roll(self._last_window_, -len(new_vals))
-            rolled[-len(new_vals) :] = new_vals
-            self._last_window_ = rolled
-
-        # refit if requested
-        if update_params:
-            # append to stored training data and refit from scratch (simple & robust)
-            y_full = pd.concat([self._y_train_, y])
-            X_full = None
-            if self._X_train_ is not None:
-                if X is None:
-                    raise ValueError(
-                        "This model was originally fit with X; update with matching X."
-                    )
-                X_full = pd.concat([self._X_train_, X]).sort_index()
-
-            _check_regressor(self.estimator)
-
-            # impute like in fit
-            if self.impute_missing in ("ffill", "bfill"):
-                y_imp = y_full.fillna(method=self.impute_missing)
-            else:
-                y_imp = y_full.copy()
-
-            x_mode = self.x_mode
-            if x_mode == "auto":
-                x_mode = "concurrent" if X_full is not None else "none"
-
-            # refit K heads
-            dir_estimators: List[RegressorMixin] = []
-            for h in range(1, self.steps_ahead + 1):
-                Xt_h, yt_h = _build_supervised_table(
-                    y=y_imp,
-                    X=X_full,
-                    window_length=self.window_length,
-                    steps_ahead=h,
-                    x_mode=x_mode,
-                    normalization_strategy=self.normalization_strategy,
+        if isinstance(y, pd.DataFrame):
+            if y.shape[1] != 1:
+                raise ValueError(
+                    "ReductionForecaster update expects a single target column."
                 )
-                est_h = clone(self.estimator)
-                est_h.fit(Xt_h.values, yt_h.values)
-                dir_estimators.append(est_h)
+            col_name = y.columns[0]
+            y = y.iloc[:, 0].copy()
+            y.name = col_name
 
-            # update learned state
-            self._dir_estimators_ = dir_estimators
-            self._estimator_ = dir_estimators[0]
-            self._x_used_ = (x_mode == "concurrent") and (X_full is not None)
-            self._x_columns_ = list(X_full.columns) if (X_full is not None) else None
-            self._y_train_index_ = y_full.index
-            self._y_name_ = y_full.name
-            self._y_train_ = y_full.copy()
-            self._X_train_ = X_full.copy() if X_full is not None else None
+        # Coerce y (and X) to the internal MultiIndex shape if needed
+        if self._was_single_series_:
+            time_name = self._time_name_ or "time"
+            id_name = self._id_names_[0] if self._id_names_ else self._single_id_name_
+            id_val = self._single_id_value_
+            if not isinstance(y.index, pd.MultiIndex):
+                y = y.copy()
+                y.index = pd.MultiIndex.from_arrays(
+                    [[id_val] * len(y), y.index], names=[id_name, time_name]
+                )
+            if X is not None and not isinstance(X.index, pd.MultiIndex):
+                X = X.copy()
+                X.index = pd.MultiIndex.from_arrays(
+                    [[id_val] * len(X), X.index], names=[id_name, time_name]
+                )
 
-            # refresh last window from y_full
-            last = y_imp.iloc[-self.window_length :].to_numpy()
-            self._last_window_ = last.astype(float).reshape(-1)
+        # roll last windows for groups present in y
+        for ids, y_flat in _iter_series_groups(y):
+            new_vals = y_flat.to_numpy(dtype=float).reshape(-1)
+            if len(new_vals) == 0:
+                continue
+            if len(new_vals) >= self.window_length:
+                self._last_windows_[ids] = new_vals[-self.window_length :]
+            else:
+                rolled = np.roll(self._last_windows_[ids], -len(new_vals))
+                rolled[-len(new_vals) :] = new_vals
+                self._last_windows_[ids] = rolled
+            # update stored time index for the group
+            existing_index = self._train_time_index_[ids]
+            new_index = y_flat.index
+            if isinstance(existing_index, pd.DatetimeIndex):
+                combined = existing_index.append(pd.DatetimeIndex(new_index))
+            elif isinstance(existing_index, pd.PeriodIndex):
+                combined = existing_index.append(
+                    pd.PeriodIndex(new_index, freq=existing_index.freq)
+                )
+            else:
+                combined = existing_index.append(pd.Index(new_index))
+
+            if not combined.is_monotonic_increasing:
+                combined = combined.sort_values()
+
+            self._train_time_index_[ids] = combined
+
+        if not update_params:
+            return self
+
+        # Refit from scratch on concatenated data (simple & robust)
+        y_full = pd.concat([self._y_train_, y]).sort_index()
+        X_full = None
+        if self._X_train_ is not None or X is not None:
+            if (self._X_train_ is not None) and (X is None):
+                raise ValueError(
+                    "This model was originally fit with X; update requires matching X."
+                )
+            X_full = pd.concat([self._X_train_, X]).sort_index()
+
+        _check_regressor(self.estimator)
+
+        # impute like in fit
+        if self.impute_missing == "ffill":
+            y_imp = y_full.ffill()
+        elif self.impute_missing == "bfill":
+            y_imp = y_full.bfill()
+        else:
+            y_imp = y_full.copy()
+
+        x_mode = self.x_mode
+        if x_mode == "auto":
+            x_mode = "concurrent" if X_full is not None else "none"
+
+        dir_estimators: List[RegressorMixin] = []
+        for h in range(1, self.steps_ahead + 1):
+            Xt_h_all, yt_h_all = _build_supervised_table_global(
+                y=y_imp,
+                X=X_full,
+                window_length=self.window_length,
+                steps_ahead=h,
+                x_mode=x_mode,
+            )
+            Xt_h_all_n, yt_h_all_n = _normalize_supervised_rowwise(
+                Xt_h_all, yt_h_all, self.window_length, self._norm_strategy_
+            )
+            est_h = clone(self.estimator)
+            est_h.fit(Xt_h_all_n.values, yt_h_all_n.values)
+            dir_estimators.append(est_h)
+
+        # update learned state
+        self._dir_estimators_ = dir_estimators
+        self._estimator_ = dir_estimators[0]
+        self._x_used_ = (x_mode == "concurrent") and (X_full is not None)
+        self._x_columns_ = (
+            list(X_full.columns) if (X_full is not None) else self._x_columns_
+        )
+
+        # refresh per-group windows and time index maps from y_imp
+        last_windows = {}
+        time_idx_map = {}
+        ids_list = []
+        for ids, y_flat in _iter_series_groups(y_imp):
+            ids_list.append(ids)
+            if not y_flat.index.is_monotonic_increasing:
+                y_flat = y_flat.sort_index()
+            time_idx_map[ids] = y_flat.index
+            last = y_flat.iloc[-self.window_length :].to_numpy()
+            last_windows[ids] = last.astype(float).reshape(-1)
+        self._last_windows_ = last_windows
+        self._train_time_index_ = time_idx_map
+        self._ids_ = ids_list
+
+        # store full data for potential next update
+        self._y_train_ = y_full.copy()
+        self._X_train_ = X_full.copy() if X_full is not None else None
 
         return self
 
-    # -------------------- fitted params exposure (optional) --------------------
+    # -------------------- fitted params --------------------
     def _get_fitted_params(self):
-        """Return fitted parameters."""
+        """Expose fitted parameters and learned state."""
         return {
             "x_used": self._x_used_,
             "x_columns": self._x_columns_,
-            "last_window": (
-                None if self._last_window_ is None else self._last_window_.copy()
-            ),
-            "one_step_estimator": self._estimator_,
             "direct_estimators": self._dir_estimators_,
-            "y_train_index": self._y_train_index_,
+            "one_step_estimator": self._estimator_,
+            "last_windows": {
+                k: v.copy() for k, v in (self._last_windows_ or {}).items()
+            },
+            "id_names": self._id_names_,
+            "time_name": self._time_name_,
+            "was_single_series": self._was_single_series_,
+            "y_was_dataframe": self._y_is_dataframe_,
         }
 
-    # -------------------- test params for sktime test suite --------------------
+    # -------------------- test params --------------------
     @classmethod
     def get_test_params(cls, parameter_set: str = "default"):
         """Return parameter settings for the estimator tests."""
-        # import inside to keep soft deps contained in tests
         from sklearn.linear_model import LinearRegression, Ridge
 
         if parameter_set == "fast":
@@ -766,7 +1286,7 @@ class ReductionForecaster(BaseForecaster):
                 "estimator": LinearRegression(),
                 "window_length": 4,
                 "steps_ahead": 2,
-                "normalization_strategy": meanvar_window_normalizer,
+                "normalization_strategy": mean_window_normalizer,  # factory form
             }
 
         return [
@@ -774,19 +1294,19 @@ class ReductionForecaster(BaseForecaster):
                 "estimator": LinearRegression(),
                 "window_length": 5,
                 "steps_ahead": 1,
-                "normalization_strategy": None,
+                "normalization_strategy": mean_window_normalizer(),  # strategy form
             },
             {
                 "estimator": Ridge(alpha=0.1),
                 "window_length": 3,
                 "steps_ahead": 3,
-                "normalization_strategy": meanvar_window_normalizer,
+                "normalization_strategy": None,
             },
         ]
 
 
 # ---------------------------------------------------------------------------
-# Convenience factory (matching the earlier API idea; optional)
+# Convenience factory
 # ---------------------------------------------------------------------------
 
 
@@ -795,35 +1315,20 @@ def make_reduction(
     strategy: str = "recursive",
     window_length: int = 10,
     steps_ahead: Optional[int] = None,
+    normalization_strategy: Optional[
+        Union[str, Callable[[np.ndarray], Tuple[Callable, Callable]]]
+    ] = None,
     x_mode: str = "auto",
     impute_missing: Optional[str] = "bfill",
-    normalization_strategy: NormStrategy = None,
 ) -> ReductionForecaster:
     """
     Construct a ReductionForecaster.
 
     In this unified design:
-    - If ``strategy='recursive'`` and ``steps_ahead is None``, you'll get K=1 (pure recursive).
+    - If ``strategy='recursive'`` and ``steps_ahead is None``, you'll get K=1.
     - If ``strategy='direct'`` and you pass ``steps_ahead=K``, you'll get K direct heads
       for 1..K and recursive continuation beyond K.
     - Any other combination behaves the same as setting K=max(1, steps_ahead).
-    - ``normalization_strategy`` may be provided either way and is applied per-window.
-
-    Parameters
-    ----------
-    estimator : sklearn-style regressor
-    strategy : {"recursive", "direct"}, default="recursive"
-    window_length : int, default=10
-    steps_ahead : int or None, default=None
-        Number of direct heads (K). If None, K=1 for "recursive" and K=1 for "direct"
-        unless explicitly provided.
-    x_mode : {"auto","none","concurrent"}, default="auto"
-    impute_missing : {"ffill","bfill",None}, default="bfill"
-    normalization_strategy : callable or None, default=None
-
-    Returns
-    -------
-    ReductionForecaster
     """
     strategy = (strategy or "recursive").lower()
     if strategy not in ("recursive", "direct"):
@@ -840,85 +1345,87 @@ def make_reduction(
         estimator=estimator,
         window_length=window_length,
         steps_ahead=K,
+        normalization_strategy=normalization_strategy,
         x_mode=x_mode,
         impute_missing=impute_missing,
-        normalization_strategy=normalization_strategy,
     )
 
 
 # ---------------------------------------------------------------------------
-# Example normalization strategy
-# ---------------------------------------------------------------------------
-
-
-def meanvar_window_normalizer(
-    window: np.ndarray,
-) -> Tuple[Callable[[np.ndarray], np.ndarray], Callable[[np.ndarray], np.ndarray]]:
-    """
-    Return (transform, inverse_transform) based on the window's mean and std.
-
-    Parameters
-    ----------
-    window : 1D ndarray
-        The y-lag window in feature order (most recent first). Only its statistics
-        are used; it is NOT modified in-place.
-
-    Returns
-    -------
-    transform : f(arr_1d) -> arr_1d
-        Applies (arr - mean) / max(std, eps)
-    inverse_transform : f(arr_1d) -> arr_1d
-        Applies arr * max(std, eps) + mean
-    """
-    w = np.asarray(window, dtype=float).ravel()
-    mu = float(np.mean(w)) if w.size else 0.0
-    sigma = float(np.std(w)) if w.size else 1.0
-    # avoid division by zero
-    scale = sigma if sigma > 0.0 else 1.0
-
-    def transform(arr: np.ndarray) -> np.ndarray:
-        a = np.asarray(arr, dtype=float).ravel()
-        return (a - mu) / scale
-
-    def inverse_transform(arr: np.ndarray) -> np.ndarray:
-        a = np.asarray(arr, dtype=float).ravel()
-        return a * scale + mu
-
-    return transform, inverse_transform
-
-
-# ---------------------------------------------------------------------------
-# Minimal self-check (optional)
+# Minimal smoke test (optional)
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    # tiny smoke test if run directly
     from sklearn.linear_model import LinearRegression
 
     rng = np.random.default_rng(0)
-    n = 80
-    t = pd.date_range("2023-01-01", periods=n, freq="D")
-    y = pd.Series(
-        np.sin(np.linspace(0, 6, n)) + 0.1 * rng.standard_normal(n), index=t, name="y"
-    )
-    X = pd.DataFrame({"cos": np.cos(np.linspace(0, 6, n))}, index=t)
 
-    f = make_reduction(
+    # -------- Single series example --------
+    n = 50
+    t = pd.date_range("2024-01-01", periods=n, freq="D")
+    y_single = pd.Series(
+        np.sin(np.linspace(0, 4, n)) + 0.1 * rng.standard_normal(n),
+        index=t,
+        name="y",
+    )
+    X_single = pd.DataFrame({"cos": np.cos(np.linspace(0, 4, n))}, index=t)
+
+    f_single = make_reduction(
         LinearRegression(),
         strategy="direct",
         window_length=7,
         steps_ahead=3,
-        normalization_strategy=meanvar_window_normalizer,
+        normalization_strategy=mean_window_normalizer,  # factory OR mean_window_normalizer()
     )
-    f.fit(y, X=X)
+    f_single.fit(y_single, X=X_single)
 
-    # make a future X for next H days
-    H = 10
-    fh = ForecastingHorizon(np.arange(1, H + 1), is_relative=True)
-    # construct X rows for absolute fh timestamps
-    abs_idx = _fh_to_absolute_index(
-        fh.to_absolute(f.cutoff), cutoff=f.cutoff, y_index=y.index, H=H
+    H = 5
+    future_times = pd.date_range(t[-1] + pd.Timedelta(days=1), periods=H, freq="D")
+    Xf_single = pd.DataFrame(
+        {"cos": np.cos(np.linspace(4, 4 + 0.05 * H, H))}, index=future_times
     )
-    Xf = pd.DataFrame({"cos": np.cos(np.linspace(6, 6 + 0.1 * H, H))}, index=abs_idx)
+    print("Single-series forecast:")
+    print(f_single.predict(fh=future_times, X=Xf_single))
 
-    print(f.predict(fh, X=Xf))
+    # -------- Multi-series example --------
+    ids = ["A", "B"]
+    ys = []
+    Xs = []
+    for i, s in enumerate(ids):
+        y = pd.Series(
+            np.sin(np.linspace(0, 4, n)) + 0.1 * rng.standard_normal(n) + i,
+            index=t,
+            name="y",
+        )
+        y.index = pd.MultiIndex.from_product([[s], y.index], names=["id", "time"])
+        ys.append(y)
+
+        X = pd.DataFrame({"cos": np.cos(np.linspace(0, 4, n))}, index=t)
+        X.index = pd.MultiIndex.from_product([[s], X.index], names=["id", "time"])
+        Xs.append(X)
+
+    y_all = pd.concat(ys)
+    X_all = pd.concat(Xs)
+
+    f_multi = make_reduction(
+        LinearRegression(),
+        strategy="direct",
+        window_length=7,
+        steps_ahead=3,
+        normalization_strategy=mean_window_normalizer,
+    )
+    f_multi.fit(y_all, X=X_all)
+
+    future_times = pd.date_range(t[-1] + pd.Timedelta(days=1), periods=H, freq="D")
+    fh_abs = pd.MultiIndex.from_product([ids, future_times], names=["id", "time"])
+    Xf = []
+    for s in ids:
+        Xs_f = pd.DataFrame(
+            {"cos": np.cos(np.linspace(4, 4 + 0.05 * H, H))}, index=future_times
+        )
+        Xs_f.index = pd.MultiIndex.from_product([[s], Xs_f.index], names=["id", "time"])
+        Xf.append(Xs_f)
+    Xf = pd.concat(Xf)
+
+    print("\nMulti-series forecast:")
+    print(f_multi.predict(fh=fh_abs, X=Xf))
