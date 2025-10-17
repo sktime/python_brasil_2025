@@ -1,1 +1,247 @@
-# Séries hierarquicas
+# Forecasting Hierárquico
+
+Muitas vezes, não apenas temos múltiplas séries temporais, mas essas séries também estão organizadas em uma hierarquia. Por exemplo, vendas de produtos podem ser organizadas por SKU, categoria, departamento e total da loja.
+
+Vamos usar o mesmo dataset sintético, mas agora com uma hierarquia de produtos.
+
+```{mermaid}
+
+graph TD
+  root["__total"]
+
+  %% group -1
+  root --> g_minus1["-1"]
+  g_minus1 --> sku20["20"]
+  g_minus1 --> sku21["21"]
+  g_minus1 --> sku22["22"]
+  g_minus1 --> sku23["23"]
+  g_minus1 --> sku24["24"]
+
+  %% group 0
+  root --> g0["0"]
+  g0 --> sku0["0"]
+  g0 --> sku1["1"]
+  g0 --> sku2["2"]
+  g0 --> sku3["3"]
+  g0 --> sku4["4"]
+
+  %% group 1
+  root --> g1["..."]
+
+  
+  %% group 3
+  root --> g3["3"]
+  g3 --> sku15["15"]
+  g3 --> sku16["16"]
+  g3 --> sku17["17"]
+  g3 --> sku18["18"]
+  g3 --> sku19["19"]
+```
+
+
+Ao mesmo tempo que dados hierarárquicos são interessantes pois nos trazem mais informação, eles também trazem desafios adicionais. Imagine que queremos prever as vendas futuras de cada produto. Se fizermos previsões independetes para cada produto, não há garantia que a soma das previsões dos produtos será igual à previsão do total da loja. Isso é chamado de incoerência nas previsões hierárquicas. O processo de ajustar as previsões para garantir coerência é chamado de **reconciliação**.
+
+## Carregando dados
+
+Vamos usar os dados sintéticos, agora com sua versao hierárquica.
+```{python}
+# | echo: false
+
+import warnings
+import pandas as pd
+import matplotlib.pyplot as plt
+
+warnings.filterwarnings("ignore")
+```
+
+```{python}
+from tsbook.datasets.retail import SyntheticRetail
+
+dataset = SyntheticRetail("hierarchical")
+y_train, X_train, y_test, X_test = dataset.load("y_train", "X_train", "y_test", "X_test")
+```
+
+## Uso de pandas e dados hierárquicos
+
+Agora, os dataframes possuem mais de 2 ou mais índices, representando a hierarquia.
+
+```{python}
+y_train
+```
+
+Para obter o número de pontos de série únicos (séries temporais individuais), podemos fazer o seguinte:
+
+```{python}
+y_train.index.droplevel(-1).nunique()
+```
+
+Note que existem algumas séries com um identificador `__total`. Esse identificador representa o total para aquele nível da hierarquia. Por exemplo, se o id completo é `(-1, "__total")`, isso representa o total do grupo -1.
+
+```{python}
+y_train.loc[(-1, "__total")].head()
+```
+
+O total de todas as séries é representado por `("__total", "__total")`.
+
+```{python}
+y_train.loc[("__total", "__total")]
+```
+
+Para contabilizar o número de séries temporais individuais, podemos fazer o seguinte:
+```{python}
+y_train.index.droplevel(-1).nunique()
+```
+
+## Previsão sem reconciliação
+
+Vamos fazer uma previsão e entender o problema da incoerência.
+
+```{python}
+fh = y_test.index.get_level_values(-1).unique()
+```
+
+```{python}
+from tsbook.forecasting.reduction import ReductionForecaster
+from lightgbm import LGBMRegressor
+
+forecaster = ReductionForecaster(
+    LGBMRegressor(n_estimators=100, verbose=-1),
+    window_length=30,
+    normalization_strategy="divide_mean",
+)
+forecaster.fit(y_train, X=X_train)
+y_pred = forecaster.predict(fh, X=X_test)
+
+```
+
+Para somar as previsões de baixo para cima, podemos usar o transformador `Aggregator`. Vamos ver que,
+quando somarmos as previsões das séries filhas, o resultado não é igual à previsão da série total.
+
+```{python}
+from sktime.transformations.hierarchical.aggregate import Aggregator
+
+Aggregator().fit_transform(y_pred) - y_pred
+```
+
+Imagine o impacto de levar previsões incoerentes para a tomada de decisão em uma empresa?
+A raiz do problema é que temos mais modelos que graus de liberdade. Para ilustrar, suponha que temos 3 séries: $A$, $B$ e $C$, onde:
+
+$$
+C(t) = A(t) + B(t)
+$$
+
+Aqui, temos 3 séries, mas apenas 2 graus de liberdade, pois $C$ é completamente determinado por $A$ e $B$. Se fizermos previsões independentes para $A$, $B$ e $C$, não há garantia de que a relação acima será mantida nas previsões.
+
+## Reconciliação de previsões hierárquicas
+
+![](imgs/hierarchical_reconciled_vs_not.png)
+
+### Methods
+
+There are different methods to reconcile forecasts in hierarchical time series.
+There is no silver bullet, and the best method depends on the data and the context.
+
+#### Bottom-up
+
+<img src="imgs/hierarchical_bottomup.png" alt="Hierarchical Bottom-up" width="450">
+
+#### Top-down (forecast proportions)
+
+<img src="imgs/hierarchical_td_fcst.png" alt="Topdown Forecast" width="900">
+
+#### Optimal reconciliation
+
+The coherence can be translated as linear constraints on the forecasts:
+
+$$
+y_{total} = \sum_{i=1}^{n} y_i
+$$
+
+This is mathematically equivalent to saying that the coherent forecasts lie in a hyperplane defined by the linear constraints.
+
+![](imgs/coherent_plane.png)
+
+* **OLS** : project the base forecasts into the reconciliation space.
+* **Weighted OLS**: project all base forecasts into the reconciliation space, but with different weights.
+* **Minimum trace (MinT)**: use the error covariance matrix to find the optimal reconciled forecasts. Called "optimal".
+
+
+```{python}
+from sktime.transformations.hierarchical.reconcile import (
+    BottomUpReconciler,
+    TopdownReconciler,
+    OptimalReconciler
+)
+
+bottom_up = BottomUpReconciler() * forecaster
+top_down_fcst = TopdownReconciler() * forecaster
+optimal = OptimalReconciler("ols") * forecaster
+```
+
+```{python}
+bottom_up.fit(y_train)
+top_down_fcst.fit(y_train)
+optimal.fit(y_train)
+```
+
+```{python}
+y_pred_bottomup = bottom_up.predict(fh=fh)
+y_pred_topdown = top_down_fcst.predict(fh=fh)
+y_pred_optimal = optimal.predict(fh=fh)
+```
+
+```{python}
+Aggregator().fit_transform(y_pred_bottomup) - y_pred_bottomup
+```
+
+In this case, there's not a lot of difference between the reconciliation outputs.
+But we will see that the bottom-up approach is the most accurate one.
+
+```{python}
+from sktime.utils.plotting import plot_series
+import matplotlib.pyplot as plt
+import pandas as pd
+
+
+idx = y_train.index.droplevel(-1).unique()[10]
+
+plot_series(
+    y_train.loc[idx,], y_test.loc[idx,], y_pred.loc[idx,], y_pred_optimal.loc[idx,],
+    labels=["Train", "Test", "Predicted", "Predicted Optimal"],
+)
+plt.xlim(pd.to_datetime("2024-05-01"), None)
+plt.show()
+```
+
+```{python}
+from sktime.forecasting.reconcile import ReconcilerForecaster
+
+
+mint_forecaster = ReconcilerForecaster(
+    forecaster=forecaster,
+    method="mint_shrink")
+
+mint_forecaster.fit(y_train)
+```
+
+```{python}
+y_pred_mint = mint_forecaster.predict(fh=fh)
+```
+
+```{python}
+from sktime.performance_metrics.forecasting import MeanSquaredScaledError
+
+metric = MeanSquaredScaledError(multilevel="uniform_average_time")
+
+pd.DataFrame(
+    {   
+        "Baseline": metric(y_test, y_pred, y_train=y_train),
+        "BottomUpReconciler": metric(y_test, y_pred_bottomup, y_train=y_train),
+        "TopDownReconciler": metric(y_test, y_pred_topdown, y_train=y_train),
+        "OptimalReconciler (ols)": metric(y_test, y_pred_optimal, y_train=y_train),
+        "Mint Reconciler": metric(y_test, y_pred_mint, y_train=y_train),
+    },
+    index=["Mean Absolute Scaled Error"]
+)
+```
+
