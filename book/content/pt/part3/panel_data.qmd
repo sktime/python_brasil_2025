@@ -291,32 +291,43 @@ global_forecaster3 = global_forecaster1.clone().set_params(
 )
 
 global_forecaster3.fit(y_train, X_train)
+```
 
+```{python}
 # Predict
 y_pred_global3 = global_forecaster3.predict(fh=fh, X=X_test)
 
 # Métrica
-metric(y_true=y_test, y_pred=y_pred_global3, y_train=y_train)
+metric_global3 = metric(y_true=y_test, y_pred=y_pred_global3, y_train=y_train)
+
+errors["Global 3 (window norm)"] = metric_global3
+
+display(errors)
 ```
 
 Vemos que resultados são ainda melhores!
 
-### Pipelines exógenos também para dados em painel!
+### Pipelines de features exógenas
+
+Podemos ajudar o modelo a capturar sazonalidades adicionando features de Fourier como features exógenas.
+
+Usamos `**` para criar um pipeline aplicado sobre as features exógenas:
 
 ```{python}
 from sktime.transformations.series.fourier import FourierFeatures
 
-fourier_features = FourierFeatures(sp_list=[365.25, 365.25/12], fourier_terms_list=[1, 1], freq="D")
+fourier_features = FourierFeatures(
+    sp_list=[365.25, 365.25 / 12], fourier_terms_list=[1, 1], freq="D"
+)
 
-global_forecaster4 = fourier_features ** global_forecaster3
+global_forecaster4 = fourier_features**global_forecaster3
 global_forecaster4.fit(y_train, X_train)
 ```
 
 ```{python}
 y_pred_global4 = global_forecaster4.predict(fh=fh, X=X_test)
-metric(y_true=y_test, y_pred=y_pred_global4, y_train=y_train)
-```
+metric_global4 = metric(y_true=y_test, y_pred=y_pred_global4, y_train=y_train)
 
-```{python}
-metric(y_true=y_test, y_pred=y_pred_global4, y_train=y_train)
+errors["Global 4 (fourier)"] = metric_global4
+errors
 ```
