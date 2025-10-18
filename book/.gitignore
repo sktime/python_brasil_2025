@@ -1,3 +1,5 @@
 /.quarto/
 
 _book/
+
+**/lightning_logs/**

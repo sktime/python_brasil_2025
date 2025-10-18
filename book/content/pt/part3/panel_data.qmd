@@ -252,34 +252,6 @@ errors
 Note como já superamos o modelo global incial, e o modelo local. Isso é para
 destacar que é **essencial** realizar um bom preprocessamento e engenharia de features para que modelos de Machine Learning tenham bom desempenho em dados em painel.
 
-### Ainda está faltando uma peça
-
-Note que, quando diferenciamos as séries, elas ainda continuam com escalas diferentes. Por exemplo, uma série pode variar entre 0 e 10, enquanto outra varia entre 0 e 1000. Isso pode dificultar o aprendizado do modelo global, que precisa lidar com essas diferentes escalas ao mesmo tempo.
-
-Vamos adicionar o `StandardScaler` do sklearn ao pipeline para normalizar as séries:
-
-```{python}
-from sklearn.preprocessing import StandardScaler
-
-global_forecaster2_scaled =  Differencer() * StandardScaler() * global_forecaster1
-global_forecaster2_scaled.fit(y_train, X_train)
-
-```
-
-```{python}
-
-# Prevemos
-y_pred_global2_scaled = global_forecaster2_scaled.predict(fh=fh, X=X_test)
-
-# Calculamos a métrica
-metric_global2_scaled = metric(y_true=y_test, y_pred=y_pred_global2_scaled, y_train=y_train)
-
-errors["Global (2 + scaled)"] = metric_global2_scaled
-errors
-```
-
-
-
 ### Normalização por janela
 
 Agora, vamos usar a normalização por janela, que é especialmente útil em dados em painel, onde as séries podem ter diferentes escalas.
@@ -306,6 +278,7 @@ display(errors)
 ```
 
 Vemos que resultados são ainda melhores!
+
 
 ### Pipelines de features exógenas
 

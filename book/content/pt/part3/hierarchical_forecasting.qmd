@@ -105,7 +105,7 @@ from tsbook.forecasting.reduction import ReductionForecaster
 from lightgbm import LGBMRegressor
 
 forecaster = ReductionForecaster(
-    LGBMRegressor(n_estimators=100, verbose=-1),
+    LGBMRegressor(n_estimators=50, verbose=-1),
     window_length=30,
     normalization_strategy="divide_mean",
 )
@@ -123,6 +123,7 @@ from sktime.transformations.hierarchical.aggregate import Aggregator
 Aggregator().fit_transform(y_pred) - y_pred
 ```
 
+Existe uma diferença... ou seja, os valores não batem.
 Imagine o impacto de levar previsões incoerentes para a tomada de decisão em uma empresa?
 A raiz do problema é que temos mais modelos que graus de liberdade. Para ilustrar, suponha que temos 3 séries: $A$, $B$ e $C$, onde:
 
@@ -134,70 +135,121 @@ Aqui, temos 3 séries, mas apenas 2 graus de liberdade, pois $C$ é completament
 
 ## Reconciliação de previsões hierárquicas
 
-![](imgs/hierarchical_reconciled_vs_not.png)
+![](img/hierarchical_reconciled_vs_not.png)
 
-### Methods
+Existem diferentes métodos para reconciliar previsões em séries temporais hierárquicas. Não existe uma solução única, e o melhor método depende dos dados e do contexto.
 
-There are different methods to reconcile forecasts in hierarchical time series.
-There is no silver bullet, and the best method depends on the data and the context.
+## Bottom-up
 
-#### Bottom-up
+A maneira mais simples de reconcialiar previsões hierárquicas é a abordagem **bottom-up**. Nessa abordagem, fazemos previsões apenas para as séries mais baixas na hierarquia (as séries filhas) e depois somamos essas previsões para obter as previsões das séries superiores (as séries pais).
 
-<img src="imgs/hierarchical_bottomup.png" alt="Hierarchical Bottom-up" width="450">
+<img src="img/hierarchical_bottomup.png" alt="Hierarchical Bottom-up" width="450">
 
-#### Top-down (forecast proportions)
+Lados positivos:
 
-<img src="imgs/hierarchical_td_fcst.png" alt="Topdown Forecast" width="900">
+* Simplicidade: fácil de entender e implementar.
+* Coerência garantida: a soma das previsões das séries filhas sempre será igual à previsão da série pai.
+* Sérias filhas podem capturar detalhes específicos que podem ser perdidos em níveis superiores.
 
-#### Optimal reconciliation
-
-The coherence can be translated as linear constraints on the forecasts:
-
-$$
-y_{total} = \sum_{i=1}^{n} y_i
-$$
-
-This is mathematically equivalent to saying that the coherent forecasts lie in a hyperplane defined by the linear constraints.
-
-![](imgs/coherent_plane.png)
-
-* **OLS** : project the base forecasts into the reconciliation space.
-* **Weighted OLS**: project all base forecasts into the reconciliation space, but with different weights.
-* **Minimum trace (MinT)**: use the error covariance matrix to find the optimal reconciled forecasts. Called "optimal".
-
+No entanto, essa abordagem também tem desvantagens: é sucetível ao ruído nas séries filhas, e se as séries filhas tiverem pouca informação, as previsões podem ser ruins. Por exemplo, muitos zeros nas séries de níveis baixos pode levar a previsões ruins a niveis agregados.
 
 ```{python}
-from sktime.transformations.hierarchical.reconcile import (
-    BottomUpReconciler,
-    TopdownReconciler,
-    OptimalReconciler
-)
+from sktime.transformations.hierarchical.reconcile import BottomUpReconciler
 
 bottom_up = BottomUpReconciler() * forecaster
-top_down_fcst = TopdownReconciler() * forecaster
-optimal = OptimalReconciler("ols") * forecaster
-```
-
-```{python}
 bottom_up.fit(y_train)
-top_down_fcst.fit(y_train)
-optimal.fit(y_train)
+
+y_pred_bottomup = bottom_up.predict(fh=fh)
 ```
 
-```{python}
-y_pred_bottomup = bottom_up.predict(fh=fh)
-y_pred_topdown = top_down_fcst.predict(fh=fh)
-y_pred_optimal = optimal.predict(fh=fh)
-```
+
+Agora vemos que as previsões são coerentes:
 
 ```{python}
 Aggregator().fit_transform(y_pred_bottomup) - y_pred_bottomup
 ```
 
-In this case, there's not a lot of difference between the reconciliation outputs.
-But we will see that the bottom-up approach is the most accurate one.
+## Top-down (forecast proportions)
+
+Outra abordagem é a **top-down**. Nessa abordagem, fazemos previsões apenas para as séries superiores na hierarquia (as séries pais) e depois distribuímos essas previsões para as séries filhas com base em proporções previstas.
+
+Suponha que temos a seguinte hierarquia $C(t) = A(t) + B(t)$. Considere $\hat{C}(t)$, $\hat{A}(t)$ e $\hat{B}(t)$ como as previsões para $C$, $A$ e $B$, respectivamente. Na abordagem top-down, faríamos o seguinte:
+
+1. Prever $\hat{C}(t)$, $\hat{A}(t)$ e $\hat{B}(t)$ independentemente.
+2. Calcular as proporções previstas para os níveis mais baixos:
+$$
+p_A(t) = \frac{\hat{A}(t)}{\hat{A}(t) + \hat{B}(t)}
+$$
+
+$$
+p_B(t) = \frac{\hat{B}(t)}{\hat{A}(t) + \hat{B}(t)}
+$$
+
+3. Distribuir a previsão de $C$ para $A$ e $B$ usando essas proporções:
+$$
+\tilde{A}(t) = p_A(t) \cdot \hat{C}(t)
+$$
+
+$$
+\tilde{B}(t) = p_B(t) \cdot \hat{C}(t)
+$$
+
+Essa abordagem é capaz de usufruir da qualidade do forecast total, e ainda consegue distribuir para as séries filhas baseadas no histórico.
+
+<img src="img/hierarchical_td_fcst.png" alt="Topdown Forecast" width="900">
+
+
+O que chamam de "Proporções históricas" é equivalente a esse método, mas com um modelo Naive para prever as proporções.
+
+Esse método pode ser bom quando o forecast total é de boa qualidade. No entanto,
+dependemos profundamente da qualidade do forecast total e das proporções.
 
 ```{python}
+from sktime.transformations.hierarchical.reconcile import TopdownReconciler
+
+top_down_fcst = TopdownReconciler() * forecaster
+top_down_fcst.fit(y_train)
+
+y_pred_topdown = top_down_fcst.predict(fh=fh)
+```
+
+## Reconciliação ótima
+
+Existe uma abordagem mais sofisticada, com uma intuição geométrica interessante.
+A ideia é ajustar as previsões iniciais para que elas satisfaçam as restrições de soma da hierarquia. Por exemplo, para a hierarquia $C(t) = A(t) + B(t)$, queremos garantir que:
+
+$$
+\hat{C}(t) = \hat{A}(t) + \hat{B}(t)
+$$
+
+Se consideramos nosso espaço 3D de observações $(\hat{A}, \hat{B}, \hat{C})$, a 
+condição acima é satisfeita para um plano 2D nesse universo.
+
+
+![](img/coherent_plane.png)
+
+
+Podemos então projetar nossas previsões iniciais nesse plano para obter previsões coerentes. Essa projeção pode ser feita de várias maneiras, levando a diferentes métodos de reconciliação ótima. Os métodos levam o nome "OLS" pois a projeção é feita minimizando o erro quadrático (Ordinary Least Squares).
+
+* **OLS** : projetar ortogonalmente todas as previsões base na espaço de reconciliação, tratando todas as séries igualmente.
+* **Weighted OLS**: projetar obliquamente, ou seja, considerando pesos diferentes para cada série, permitindo dar mais importância a certas séries na reconciliação. A projeção não faz mais uma perpendicular, mas sim uma oblíqua.
+* **Minimum trace (MinT)**: use a matriz de covariância do erro para encontrar as previsões reconciliadas ótimas. Chamado de "ótimo".
+
+
+Para a reconciliação ótima com OLS, podemos usar o `OptimalReconciler` do sktime:
+
+```{python}
+from sktime.transformations.hierarchical.reconcile import (
+    OptimalReconciler
+)
+
+optimal = OptimalReconciler("ols") * forecaster
+y_pred_optimal = optimal.predict(fh=fh)
+```
+
+
+```{python}
+# | code-fold: true
 from sktime.utils.plotting import plot_series
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -206,12 +258,17 @@ import pandas as pd
 idx = y_train.index.droplevel(-1).unique()[10]
 
 plot_series(
-    y_train.loc[idx,], y_test.loc[idx,], y_pred.loc[idx,], y_pred_optimal.loc[idx,],
-    labels=["Train", "Test", "Predicted", "Predicted Optimal"],
+    y_train.loc[idx,],
+    y_test.loc[idx,],
+    y_pred.loc[idx,],
+    y_pred_optimal.loc[idx,],
+    labels=["Train", "Test", "Predicted (sem reconciliação)", "Predicted (ótimo)"],
 )
 plt.xlim(pd.to_datetime("2024-05-01"), None)
 plt.show()
 ```
+
+Para reconciliações ótimas (que usam a covariância do erro), podemos usar o `ReconcilerForecaster` do sktime, que internamente já faz o cálculo da covariância do erro:
 
 ```{python}
 from sktime.forecasting.reconcile import ReconcilerForecaster
@@ -222,11 +279,10 @@ mint_forecaster = ReconcilerForecaster(
     method="mint_shrink")
 
 mint_forecaster.fit(y_train)
-```
-
-```{python}
 y_pred_mint = mint_forecaster.predict(fh=fh)
 ```
+
+## Comparando resultados
 
 ```{python}
 from sktime.performance_metrics.forecasting import MeanSquaredScaledError

@@ -61,7 +61,7 @@
         "\n",
         "Vamos usar os dados sintéticos, agora com sua versao hierárquica.\n"
       ],
-      "id": "a56f6588"
+      "id": "27e87536"
     },
     {
       "cell_type": "code",
@@ -75,7 +75,7 @@
         "\n",
         "warnings.filterwarnings(\"ignore\")"
       ],
-      "id": "a93e790c",
+      "id": "29aab82e",
       "execution_count": null,
       "outputs": []
     },
@@ -88,7 +88,7 @@
         "dataset = SyntheticRetail(\"hierarchical\")\n",
         "y_train, X_train, y_test, X_test = dataset.load(\"y_train\", \"X_train\", \"y_test\", \"X_test\")"
       ],
-      "id": "ca69738e",
+      "id": "ba69a95f",
       "execution_count": null,
       "outputs": []
     },
@@ -100,7 +100,7 @@
         "\n",
         "Agora, os dataframes possuem mais de 2 ou mais índices, representando a hierarquia.\n"
       ],
-      "id": "2f0209cc"
+      "id": "44c0e139"
     },
     {
       "cell_type": "code",
@@ -108,7 +108,7 @@
       "source": [
         "y_train"
       ],
-      "id": "cf0e8f33",
+      "id": "72d9f5ba",
       "execution_count": null,
       "outputs": []
     },
@@ -118,7 +118,7 @@
       "source": [
         "Para obter o número de pontos de série únicos (séries temporais individuais), podemos fazer o seguinte:\n"
       ],
-      "id": "95fdfe18"
+      "id": "ac4b6e5d"
     },
     {
       "cell_type": "code",
@@ -126,7 +126,7 @@
       "source": [
         "y_train.index.droplevel(-1).nunique()"
       ],
-      "id": "4485399d",
+      "id": "0500b976",
       "execution_count": null,
       "outputs": []
     },
@@ -136,7 +136,7 @@
       "source": [
         "Note que existem algumas séries com um identificador `__total`. Esse identificador representa o total para aquele nível da hierarquia. Por exemplo, se o id completo é `(-1, \"__total\")`, isso representa o total do grupo -1.\n"
       ],
-      "id": "b5f9cd08"
+      "id": "14700f01"
     },
     {
       "cell_type": "code",
@@ -144,7 +144,7 @@
       "source": [
         "y_train.loc[(-1, \"__total\")].head()"
       ],
-      "id": "d6238e8b",
+      "id": "7922cf8c",
       "execution_count": null,
       "outputs": []
     },
@@ -154,7 +154,7 @@
       "source": [
         "O total de todas as séries é representado por `(\"__total\", \"__total\")`.\n"
       ],
-      "id": "cb327a09"
+      "id": "ef5bfb5e"
     },
     {
       "cell_type": "code",
@@ -162,7 +162,7 @@
       "source": [
         "y_train.loc[(\"__total\", \"__total\")]"
       ],
-      "id": "f67a021c",
+      "id": "e2eaf63b",
       "execution_count": null,
       "outputs": []
     },
@@ -172,7 +172,7 @@
       "source": [
         "Para contabilizar o número de séries temporais individuais, podemos fazer o seguinte:\n"
       ],
-      "id": "c9b4bcef"
+      "id": "e0afe3ae"
     },
     {
       "cell_type": "code",
@@ -180,7 +180,7 @@
       "source": [
         "y_train.index.droplevel(-1).nunique()"
       ],
-      "id": "13f08f44",
+      "id": "0f87a4dd",
       "execution_count": null,
       "outputs": []
     },
@@ -192,7 +192,7 @@
         "\n",
         "Vamos fazer uma previsão e entender o problema da incoerência.\n"
       ],
-      "id": "153d992b"
+      "id": "e841678e"
     },
     {
       "cell_type": "code",
@@ -200,7 +200,7 @@
       "source": [
         "fh = y_test.index.get_level_values(-1).unique()"
       ],
-      "id": "cb35740e",
+      "id": "0ad04cf5",
       "execution_count": null,
       "outputs": []
     },
@@ -212,14 +212,14 @@
         "from lightgbm import LGBMRegressor\n",
         "\n",
         "forecaster = ReductionForecaster(\n",
-        "    LGBMRegressor(n_estimators=100, verbose=-1),\n",
+        "    LGBMRegressor(n_estimators=50, verbose=-1),\n",
         "    window_length=30,\n",
         "    normalization_strategy=\"divide_mean\",\n",
         ")\n",
         "forecaster.fit(y_train, X=X_train)\n",
         "y_pred = forecaster.predict(fh, X=X_test)"
       ],
-      "id": "1113b227",
+      "id": "a8696897",
       "execution_count": null,
       "outputs": []
     },
@@ -230,7 +230,7 @@
         "Para somar as previsões de baixo para cima, podemos usar o transformador `Aggregator`. Vamos ver que,\n",
         "quando somarmos as previsões das séries filhas, o resultado não é igual à previsão da série total.\n"
       ],
-      "id": "6f7994b3"
+      "id": "8137ba42"
     },
     {
       "cell_type": "code",
@@ -240,7 +240,7 @@
         "\n",
         "Aggregator().fit_transform(y_pred) - y_pred"
       ],
-      "id": "eaf3fda7",
+      "id": "a3fde02b",
       "execution_count": null,
       "outputs": []
     },
@@ -248,6 +248,7 @@
       "cell_type": "markdown",
       "metadata": {},
       "source": [
+        "Existe uma diferença... ou seja, os valores não batem.\n",
         "Imagine o impacto de levar previsões incoerentes para a tomada de decisão em uma empresa?\n",
         "A raiz do problema é que temos mais modelos que graus de liberdade. Para ilustrar, suponha que temos 3 séries: $A$, $B$ e $C$, onde:\n",
         "\n",
@@ -259,88 +260,38 @@
         "\n",
         "## Reconciliação de previsões hierárquicas\n",
         "\n",
-        "![](imgs/hierarchical_reconciled_vs_not.png)\n",
+        "![](img/hierarchical_reconciled_vs_not.png)\n",
         "\n",
-        "### Methods\n",
+        "Existem diferentes métodos para reconciliar previsões em séries temporais hierárquicas. Não existe uma solução única, e o melhor método depende dos dados e do contexto.\n",
         "\n",
-        "There are different methods to reconcile forecasts in hierarchical time series.\n",
-        "There is no silver bullet, and the best method depends on the data and the context.\n",
+        "## Bottom-up\n",
         "\n",
-        "#### Bottom-up\n",
+        "A maneira mais simples de reconcialiar previsões hierárquicas é a abordagem **bottom-up**. Nessa abordagem, fazemos previsões apenas para as séries mais baixas na hierarquia (as séries filhas) e depois somamos essas previsões para obter as previsões das séries superiores (as séries pais).\n",
         "\n",
-        "<img src=\"imgs/hierarchical_bottomup.png\" alt=\"Hierarchical Bottom-up\" width=\"450\">\n",
+        "<img src=\"img/hierarchical_bottomup.png\" alt=\"Hierarchical Bottom-up\" width=\"450\">\n",
         "\n",
-        "#### Top-down (forecast proportions)\n",
+        "Lados positivos:\n",
         "\n",
-        "<img src=\"imgs/hierarchical_td_fcst.png\" alt=\"Topdown Forecast\" width=\"900\">\n",
+        "* Simplicidade: fácil de entender e implementar.\n",
+        "* Coerência garantida: a soma das previsões das séries filhas sempre será igual à previsão da série pai.\n",
+        "* Sérias filhas podem capturar detalhes específicos que podem ser perdidos em níveis superiores.\n",
         "\n",
-        "#### Optimal reconciliation\n",
-        "\n",
-        "The coherence can be translated as linear constraints on the forecasts:\n",
-        "\n",
-        "$$\n",
-        "y_{total} = \\sum_{i=1}^{n} y_i\n",
-        "$$\n",
-        "\n",
-        "This is mathematically equivalent to saying that the coherent forecasts lie in a hyperplane defined by the linear constraints.\n",
-        "\n",
-        "![](imgs/coherent_plane.png)\n",
-        "\n",
-        "* **OLS** : project the base forecasts into the reconciliation space.\n",
-        "* **Weighted OLS**: project all base forecasts into the reconciliation space, but with different weights.\n",
-        "* **Minimum trace (MinT)**: use the error covariance matrix to find the optimal reconciled forecasts. Called \"optimal\".\n"
+        "No entanto, essa abordagem também tem desvantagens: é sucetível ao ruído nas séries filhas, e se as séries filhas tiverem pouca informação, as previsões podem ser ruins. Por exemplo, muitos zeros nas séries de níveis baixos pode levar a previsões ruins a niveis agregados.\n"
       ],
-      "id": "a1f585b1"
+      "id": "85e3fc0a"
     },
     {
       "cell_type": "code",
       "metadata": {},
       "source": [
-        "from sktime.transformations.hierarchical.reconcile import (\n",
-        "    BottomUpReconciler,\n",
-        "    TopdownReconciler,\n",
-        "    OptimalReconciler\n",
-        ")\n",
+        "from sktime.transformations.hierarchical.reconcile import BottomUpReconciler\n",
         "\n",
         "bottom_up = BottomUpReconciler() * forecaster\n",
-        "top_down_fcst = TopdownReconciler() * forecaster\n",
-        "optimal = OptimalReconciler(\"ols\") * forecaster"
-      ],
-      "id": "551e8242",
-      "execution_count": null,
-      "outputs": []
-    },
-    {
-      "cell_type": "code",
-      "metadata": {},
-      "source": [
         "bottom_up.fit(y_train)\n",
-        "top_down_fcst.fit(y_train)\n",
-        "optimal.fit(y_train)"
+        "\n",
+        "y_pred_bottomup = bottom_up.predict(fh=fh)"
       ],
-      "id": "9d46dae7",
-      "execution_count": null,
-      "outputs": []
-    },
-    {
-      "cell_type": "code",
-      "metadata": {},
-      "source": [
-        "y_pred_bottomup = bottom_up.predict(fh=fh)\n",
-        "y_pred_topdown = top_down_fcst.predict(fh=fh)\n",
-        "y_pred_optimal = optimal.predict(fh=fh)"
-      ],
-      "id": "9371d870",
-      "execution_count": null,
-      "outputs": []
-    },
-    {
-      "cell_type": "code",
-      "metadata": {},
-      "source": [
-        "Aggregator().fit_transform(y_pred_bottomup) - y_pred_bottomup"
-      ],
-      "id": "10aa0778",
+      "id": "c5a81d47",
       "execution_count": null,
       "outputs": []
     },
@@ -348,15 +299,124 @@
       "cell_type": "markdown",
       "metadata": {},
       "source": [
-        "In this case, there's not a lot of difference between the reconciliation outputs.\n",
-        "But we will see that the bottom-up approach is the most accurate one.\n"
+        "Agora vemos que as previsões são coerentes:\n"
       ],
-      "id": "63dd147b"
+      "id": "861b8606"
     },
     {
       "cell_type": "code",
       "metadata": {},
       "source": [
+        "Aggregator().fit_transform(y_pred_bottomup) - y_pred_bottomup"
+      ],
+      "id": "81e049eb",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "#### Top-down (forecast proportions)\n",
+        "\n",
+        "Outra abordagem é a **top-down**. Nessa abordagem, fazemos previsões apenas para as séries superiores na hierarquia (as séries pais) e depois distribuímos essas previsões para as séries filhas com base em proporções previstas.\n",
+        "\n",
+        "Suponha que temos a seguinte hierarquia $C(t) = A(t) + B(t)$. Considere $\\hat{C}(t)$, $\\hat{A}(t)$ e $\\hat{B}(t)$ como as previsões para $C$, $A$ e $B$, respectivamente. Na abordagem top-down, faríamos o seguinte:\n",
+        "\n",
+        "1. Prever $\\hat{C}(t)$, $\\hat{A}(t)$ e $\\hat{B}(t)$ independentemente.\n",
+        "2. Calcular as proporções previstas para os níveis mais baixos:\n",
+        "$$\n",
+        "p_A(t) = \\frac{\\hat{A}(t)}{\\hat{A}(t) + \\hat{B}(t)}\n",
+        "$$\n",
+        "\n",
+        "$$\n",
+        "p_B(t) = \\frac{\\hat{B}(t)}{\\hat{A}(t) + \\hat{B}(t)}\n",
+        "$$\n",
+        "\n",
+        "3. Distribuir a previsão de $C$ para $A$ e $B$ usando essas proporções:\n",
+        "$$\n",
+        "\\tilde{A}(t) = p_A(t) \\cdot \\hat{C}(t)\n",
+        "$$\n",
+        "\n",
+        "$$\n",
+        "\\tilde{B}(t) = p_B(t) \\cdot \\hat{C}(t)\n",
+        "$$\n",
+        "\n",
+        "Essa abordagem é capaz de usufruir da qualidade do forecast total, e ainda consegue distribuir para as séries filhas baseadas no histórico.\n",
+        "\n",
+        "<img src=\"img/hierarchical_td_fcst.png\" alt=\"Topdown Forecast\" width=\"900\">\n",
+        "\n",
+        "\n",
+        "O que chamam de \"Proporções históricas\" é equivalente a esse método, mas com um modelo Naive para prever as proporções.\n",
+        "\n",
+        "Esse método pode ser bom quando o forecast total é de boa qualidade. No entanto,\n",
+        "dependemos profundamente da qualidade do forecast total e das proporções.\n"
+      ],
+      "id": "6bd8bf8f"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "from sktime.transformations.hierarchical.reconcile import TopdownReconciler\n",
+        "\n",
+        "top_down_fcst = TopdownReconciler() * forecaster\n",
+        "top_down_fcst.fit(y_train)\n",
+        "\n",
+        "y_pred_topdown = top_down_fcst.predict(fh=fh)"
+      ],
+      "id": "b44ec948",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "#### Reconciliação ótima\n",
+        "\n",
+        "Existe uma abordagem mais sofisticada, com uma intuição geométrica interessante.\n",
+        "A ideia é ajustar as previsões iniciais para que elas satisfaçam as restrições de soma da hierarquia. Por exemplo, para a hierarquia $C(t) = A(t) + B(t)$, queremos garantir que:\n",
+        "\n",
+        "$$\n",
+        "\\hat{C}(t) = \\hat{A}(t) + \\hat{B}(t)\n",
+        "$$\n",
+        "\n",
+        "Se consideramos nosso espaço 3D de observações $(\\hat{A}, \\hat{B}, \\hat{C})$, a \n",
+        "condição acima é satisfeita para um plano 2D nesse universo.\n",
+        "\n",
+        "\n",
+        "![](img/coherent_plane.png)\n",
+        "\n",
+        "\n",
+        "Podemos então projetar nossas previsões iniciais nesse plano para obter previsões coerentes. Essa projeção pode ser feita de várias maneiras, levando a diferentes métodos de reconciliação ótima. Os métodos levam o nome \"OLS\" pois a projeção é feita minimizando o erro quadrático (Ordinary Least Squares).\n",
+        "\n",
+        "* **OLS** : projetar ortogonalmente todas as previsões base na espaço de reconciliação, tratando todas as séries igualmente.\n",
+        "* **Weighted OLS**: projetar obliquamente, ou seja, considerando pesos diferentes para cada série, permitindo dar mais importância a certas séries na reconciliação. A projeção não faz mais uma perpendicular, mas sim uma oblíqua.\n",
+        "* **Minimum trace (MinT)**: use a matriz de covariância do erro para encontrar as previsões reconciliadas ótimas. Chamado de \"ótimo\".\n"
+      ],
+      "id": "1fa2b89a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "from sktime.transformations.hierarchical.reconcile import (\n",
+        "    OptimalReconciler\n",
+        ")\n",
+        "\n",
+        "optimal = OptimalReconciler(\"ols\") * forecaster\n",
+        "y_pred_optimal = optimal.predict(fh=fh)"
+      ],
+      "id": "9da2146b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# | code-fold: true\n",
         "from sktime.utils.plotting import plot_series\n",
         "import matplotlib.pyplot as plt\n",
         "import pandas as pd\n",
@@ -365,13 +425,16 @@
         "idx = y_train.index.droplevel(-1).unique()[10]\n",
         "\n",
         "plot_series(\n",
-        "    y_train.loc[idx,], y_test.loc[idx,], y_pred.loc[idx,], y_pred_optimal.loc[idx,],\n",
-        "    labels=[\"Train\", \"Test\", \"Predicted\", \"Predicted Optimal\"],\n",
+        "    y_train.loc[idx,],\n",
+        "    y_test.loc[idx,],\n",
+        "    y_pred.loc[idx,],\n",
+        "    y_pred_optimal.loc[idx,],\n",
+        "    labels=[\"Train\", \"Test\", \"Predicted (sem reconciliação)\", \"Predicted (ótimo)\"],\n",
         ")\n",
         "plt.xlim(pd.to_datetime(\"2024-05-01\"), None)\n",
         "plt.show()"
       ],
-      "id": "4557f36e",
+      "id": "215b42d8",
       "execution_count": null,
       "outputs": []
     },
@@ -388,7 +451,7 @@
         "\n",
         "mint_forecaster.fit(y_train)"
       ],
-      "id": "6516c46a",
+      "id": "a0a619e3",
       "execution_count": null,
       "outputs": []
     },
@@ -398,7 +461,7 @@
       "source": [
         "y_pred_mint = mint_forecaster.predict(fh=fh)"
       ],
-      "id": "fa2a17d7",
+      "id": "c31dd1bc",
       "execution_count": null,
       "outputs": []
     },
@@ -421,7 +484,7 @@
         "    index=[\"Mean Absolute Scaled Error\"]\n",
         ")"
       ],
-      "id": "a500c8ef",
+      "id": "a65a4c8f",
       "execution_count": null,
       "outputs": []
     }

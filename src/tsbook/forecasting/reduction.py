@@ -50,7 +50,7 @@ Notes
 from __future__ import annotations
 
 from functools import partial
-from typing import Callable, Dict, Iterable, List, Optional, Sequence, Tuple, Union
+from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -292,6 +292,19 @@ def _as_positive_int_fh(
     if np.any(arr < 1):
         raise ValueError("All steps in fh must be >= 1 (strictly out-of-sample).")
     return np.unique(np.sort(arr))
+
+
+def _as_int_fh(arr_like: Union[Iterable[int], np.ndarray, List[int]]) -> np.ndarray:
+    """Return integer steps (can include non-positive values)."""
+    arr = np.asarray(list(arr_like)).reshape(-1)
+    if arr.size == 0:
+        raise ValueError("fh must contain at least one step.")
+    if not np.issubdtype(arr.dtype, np.integer):
+        if np.issubdtype(arr.dtype, np.floating) and np.all(np.mod(arr, 1) == 0):
+            arr = arr.astype(int)
+        else:
+            raise ValueError("fh must be an iterable of integers.")
+    return arr.astype(int)
 
 
 def _infer_freq_from_index(idx: pd.Index):
@@ -700,8 +713,8 @@ class ReductionForecaster(BaseForecaster):
         "enforce_index_type": None,
         # missing values: we don't guarantee generic handling (y can be imputed)
         "capability:missing_values": False,
-        # strictly oos steps
-        "capability:insample": False,
+        # supports both out-of-sample and in-sample forecasts
+        "capability:insample": True,
         # no probabilistic output in this implementation
         "capability:pred_int": False,
         # soft dependency on scikit-learn
@@ -916,21 +929,17 @@ class ReductionForecaster(BaseForecaster):
         ):
             raise RuntimeError("Call fit(...) before predict(...).")
 
-        # determine fh mode
         mode_abs_multi = isinstance(fh, pd.MultiIndex)
         mode_abs_single = isinstance(fh, pd.Index) and not isinstance(fh, pd.MultiIndex)
         mode_rel = False
-
         req_steps_all: Optional[np.ndarray] = None
+
         if not (mode_abs_multi or mode_abs_single):
-            # FH object or array-like of relative ints
             if isinstance(fh, ForecastingHorizon):
                 rel = fh.to_relative(self.cutoff)
-                req_steps_all = _as_positive_int_fh(np.asarray(rel, dtype=int))
+                req_steps_all = _as_int_fh(np.asarray(rel, dtype=int))
             else:
-                # try array-like relative ints
-                arr = np.asarray(fh)
-                req_steps_all = _as_positive_int_fh(arr)
+                req_steps_all = _as_int_fh(np.asarray(fh))
             mode_rel = True
 
         if mode_abs_single and not self._was_single_series_:
@@ -939,7 +948,6 @@ class ReductionForecaster(BaseForecaster):
                 "on a single series. For multi-series, pass a MultiIndex fh."
             )
 
-        # prepare exogenous usage
         if self._x_used_:
             if X is None:
                 raise ValueError(
@@ -952,7 +960,6 @@ class ReductionForecaster(BaseForecaster):
                     raise ValueError(
                         f"X is missing columns seen in training: {missing}"
                     )
-            # shape validation
             if self._was_single_series_:
                 if isinstance(X.index, pd.MultiIndex):
                     raise TypeError(
@@ -963,146 +970,172 @@ class ReductionForecaster(BaseForecaster):
                     raise TypeError(
                         "For multi-series prediction, X must have a MultiIndex index."
                     )
-            # order X columns to match training
             if self._x_columns_ is not None:
                 X = X[self._x_columns_]
 
         out_series: List[pd.Series] = []
 
-        K = self.steps_ahead
-
         for ids in self._ids_:
             time_idx_train = self._train_time_index_[ids]
+            y_group_train, X_group_train = self._prepare_group_training_views(ids)
 
-            # determine requested times/steps for this ids
             if mode_abs_multi:
                 try:
-                    req_times = fh.xs(ids, level=list(range(fh.nlevels - 1)))
-                    req_times = pd.Index(req_times)
-                except Exception:
-                    req_times = pd.Index([])
-                full_future, steps_for_req = _steps_and_full_future_for_group(
-                    time_idx_train, req_times=req_times
-                )
-                if len(full_future) == 0 and len(req_times) == 0:
-                    continue
-                H = len(full_future)
-                pos_req = steps_for_req  # 1-based
-            elif mode_abs_single:
-                # single series: use the provided absolute time Index for the lone ids
-                req_times = pd.Index(fh)
-                full_future, steps_for_req = _steps_and_full_future_for_group(
-                    time_idx_train, req_times=req_times
-                )
-                if len(full_future) == 0 and len(req_times) == 0:
-                    continue
-                H = len(full_future)
-                pos_req = steps_for_req
-            else:
-                # relative steps (common to all ids)
-                assert req_steps_all is not None
-                H = int(np.max(req_steps_all))
-                full_future, _ = _steps_and_full_future_for_group(
-                    time_idx_train, rel_steps=req_steps_all
-                )
-                pos_req = req_steps_all
-
-            # prepare exogenous block for this group's full future horizon
-            X_block = None
-            if self._x_used_:
-                if self._was_single_series_:
-                    X_needed = _select_future_rows(X, full_future)
-                    X_block = X_needed.to_numpy()
-                else:
-                    group_future_index = _make_group_future_multiindex(
-                        ids, full_future, self._id_names_, self._time_name_
+                    req_times_all = pd.Index(
+                        fh.xs(ids, level=list(range(fh.nlevels - 1)))
                     )
-                    X_needed = _select_future_rows(X, group_future_index)
-                    X_block = X_needed.to_numpy()
+                except Exception:
+                    req_times_all = pd.Index([])
+                if len(req_times_all) == 0:
+                    continue
 
-            # predictions for steps 1..H
-            preds = np.zeros(H, dtype=float)
+                mask_in = req_times_all.isin(time_idx_train)
+                ins_times_req = req_times_all[mask_in]
+                fut_times_req = req_times_all[~mask_in]
 
-            # direct part
-            last_obs = self._last_windows_[ids].copy()  # chronological old..new
-            for i in range(1, min(K, H) + 1):
-                y_feats = last_obs[::-1]  # newest first to match training
-                if self._norm_strategy_ is not None:
-                    transform, inv = self._norm_strategy_(y_feats)
-                    y_feats_n, _ = transform(y_feats, None)
-                else:
-                    y_feats_n = y_feats
-                    inv = lambda v: float(v)
+                series_parts: List[pd.Series] = []
 
-                if X_block is not None:
-                    row = np.concatenate([y_feats_n, X_block[i - 1]])
-                else:
-                    row = y_feats_n
+                if len(ins_times_req) > 0:
+                    ins_vals = self._predict_insample_sequence(
+                        ids, y_group_train, X_group_train, ins_times_req
+                    )
+                    series_parts.append(
+                        self._build_output_series(ids, ins_times_req, ins_vals)
+                    )
 
-                yhat_n = float(
-                    np.asarray(
-                        self._dir_estimators_[i - 1].predict(row.reshape(1, -1))
-                    ).ravel()[0]
-                )
-                yhat = inv(yhat_n)
-                preds[i - 1] = yhat
+                if len(fut_times_req) > 0:
+                    full_future, steps_for_req = _steps_and_full_future_for_group(
+                        time_idx_train, req_times=fut_times_req
+                    )
+                    if len(full_future) > 0:
+                        if steps_for_req is None:
+                            raise RuntimeError(
+                                "Internal error: expected absolute-step mapping."
+                            )
+                        preds_full = self._forecast_future_for_group(
+                            ids, full_future, X
+                        )
+                        fut_vals = preds_full[steps_for_req - 1]
+                        series_parts.append(
+                            self._build_output_series(ids, fut_times_req, fut_vals)
+                        )
 
-            # rolling state after K direct preds
-            last_roll = self._last_windows_[ids].copy()
-            for i in range(1, min(K, H) + 1):
-                last_roll = np.roll(last_roll, -1)
-                last_roll[-1] = preds[i - 1]
+                if not series_parts:
+                    continue
 
-            # recursive part
-            for i in range(K + 1, H + 1):
-                y_feats = last_roll[::-1]
-                if self._norm_strategy_ is not None:
-                    transform, inv = self._norm_strategy_(y_feats)
-                    y_feats_n, _ = transform(y_feats, None)
-                else:
-                    y_feats_n = y_feats
-                    inv = lambda v: float(v)
+                combined = pd.concat(series_parts)
+                target_index = self._build_output_index(ids, req_times_all)
+                combined = combined.reindex(target_index)
+                out_series.append(combined)
 
-                if X_block is not None:
-                    row = np.concatenate([y_feats_n, X_block[i - 1]])
-                else:
-                    row = y_feats_n
+            elif mode_abs_single:
+                req_times_all = pd.Index(fh)
+                if len(req_times_all) == 0:
+                    continue
 
-                yhat_n = float(
-                    np.asarray(self._estimator_.predict(row.reshape(1, -1))).ravel()[0]
-                )
-                yhat = inv(yhat_n)
-                preds[i - 1] = yhat
+                mask_in = req_times_all.isin(time_idx_train)
+                ins_times_req = req_times_all[mask_in]
+                fut_times_req = req_times_all[~mask_in]
 
-                # roll forward with *original-scale* prediction
-                last_roll = np.roll(last_roll, -1)
-                last_roll[-1] = yhat
+                series_parts = []
 
-            # subset to requested steps for this ids and append to output
-            steps = np.asarray(pos_req, dtype=int)
-            sel = preds[steps - 1]
+                if len(ins_times_req) > 0:
+                    ins_vals = self._predict_insample_sequence(
+                        ids, y_group_train, X_group_train, ins_times_req
+                    )
+                    series_parts.append(
+                        self._build_output_series(ids, ins_times_req, ins_vals)
+                    )
 
-            if mode_abs_multi:
-                idx = _make_group_future_multiindex(
-                    ids, full_future[steps - 1], self._id_names_, self._time_name_
-                )
-            elif mode_abs_single or (mode_rel and self._was_single_series_):
-                idx = pd.Index(full_future[steps - 1], name=self._time_name_)
+                if len(fut_times_req) > 0:
+                    full_future, steps_for_req = _steps_and_full_future_for_group(
+                        time_idx_train, req_times=fut_times_req
+                    )
+                    if len(full_future) > 0:
+                        if steps_for_req is None:
+                            raise RuntimeError(
+                                "Internal error: expected absolute-step mapping."
+                            )
+                        preds_full = self._forecast_future_for_group(
+                            ids, full_future, X
+                        )
+                        fut_vals = preds_full[steps_for_req - 1]
+                        series_parts.append(
+                            self._build_output_series(ids, fut_times_req, fut_vals)
+                        )
+
+                if not series_parts:
+                    continue
+
+                combined = pd.concat(series_parts)
+                target_index = self._build_output_index(ids, req_times_all)
+                combined = combined.reindex(target_index)
+                out_series.append(combined)
+
             else:
-                idx = _make_group_future_multiindex(
-                    ids, full_future[steps - 1], self._id_names_, self._time_name_
-                )
+                assert req_steps_all is not None
+                if req_steps_all.size == 0:
+                    continue
 
-            out_series.append(pd.Series(sel, index=idx, name=self._y_name_))
+                pos_steps = sorted({int(s) for s in req_steps_all if s > 0})
+                ins_steps = [int(s) for s in req_steps_all if s <= 0]
+
+                ins_step_to_time: Dict[int, Any] = {}
+                insample_times_order: List[Any] = []
+                n_train = len(time_idx_train)
+                for step in ins_steps:
+                    pos = n_train - 1 + step
+                    if pos < 0:
+                        raise ValueError(
+                            "Requested in-sample step extends before available data."
+                        )
+                    target_time = time_idx_train[pos]
+                    ins_step_to_time[step] = target_time
+                    if target_time not in insample_times_order:
+                        insample_times_order.append(target_time)
+
+                insample_pred_map: Dict[Any, float] = {}
+                if insample_times_order:
+                    ins_vals_unique = self._predict_insample_sequence(
+                        ids, y_group_train, X_group_train, insample_times_order
+                    )
+                    insample_pred_map = dict(zip(insample_times_order, ins_vals_unique))
+
+                full_future = pd.Index([])
+                preds_full = np.array([], dtype=float)
+                if pos_steps:
+                    full_future, _ = _steps_and_full_future_for_group(
+                        time_idx_train, rel_steps=np.asarray(pos_steps, dtype=int)
+                    )
+                    if len(full_future) > 0:
+                        preds_full = self._forecast_future_for_group(
+                            ids, full_future, X
+                        )
+
+                out_times: List[Any] = []
+                out_values: List[float] = []
+                for step in req_steps_all:
+                    if step > 0:
+                        if step - 1 >= len(preds_full):
+                            raise ValueError(
+                                "Requested relative step exceeds computed horizon."
+                            )
+                        target_time = full_future[step - 1]
+                        value = preds_full[step - 1]
+                    else:
+                        target_time = ins_step_to_time[step]
+                        value = insample_pred_map.get(target_time, np.nan)
+                    out_times.append(target_time)
+                    out_values.append(float(value))
+
+                series_rel = self._build_output_series(ids, out_times, out_values)
+                out_series.append(series_rel)
 
         if len(out_series) == 0:
-            # No requested rows (e.g., fh had no times beyond training) -> empty series
             return pd.Series([], dtype=float, name=self._y_name_)
 
-        # Assemble output
         y_pred = pd.concat(out_series)
 
-        # preserve the order of the provided absolute fh if given
         if mode_abs_multi:
             y_pred = y_pred.reindex(fh)
         elif mode_abs_single:
@@ -1115,6 +1148,197 @@ class ReductionForecaster(BaseForecaster):
             return y_pred.to_frame(name=col_name)
 
         return y_pred
+
+    def _prepare_group_training_views(
+        self, ids: Tuple
+    ) -> Tuple[pd.Series, Optional[pd.DataFrame]]:
+        """Return training y/X slices for the given group ids."""
+        if self._y_train_ is None:
+            raise RuntimeError(
+                "Training data is not available for in-sample prediction."
+            )
+
+        y_group = _flatten_multiindex_to_time(self._y_train_, ids)
+        if not y_group.index.is_monotonic_increasing:
+            y_group = y_group.sort_index()
+
+        X_group = None
+        if self._x_used_ and self._X_train_ is not None:
+            X_group = _flatten_multiindex_to_time(self._X_train_, ids)
+            if not X_group.index.is_monotonic_increasing:
+                X_group = X_group.sort_index()
+
+        return y_group, X_group
+
+    def _predict_insample_single(
+        self,
+        ids: Tuple,
+        y_group: pd.Series,
+        X_group: Optional[pd.DataFrame],
+        target_time,
+    ) -> float:
+        """Predict a single in-sample timestamp for a specific group."""
+        positions = y_group.index.get_indexer([target_time])
+        if positions.size == 0 or positions[0] == -1:
+            raise ValueError(
+                f"Timestamp {target_time} not found in training data for group {ids}."
+            )
+        pos = int(positions[0])
+
+        if pos < self.window_length:
+            return float("nan")
+
+        history = y_group.iloc[pos - self.window_length : pos]
+        if len(history) != self.window_length:
+            return float("nan")
+
+        lag_feats = history.to_numpy(dtype=float)[::-1]
+
+        if self._norm_strategy_ is not None:
+            transform, inv = self._norm_strategy_(lag_feats)
+            lag_feats_n, _ = transform(lag_feats, None)
+        else:
+            lag_feats_n = lag_feats
+            inv = lambda v: float(v)
+
+        if self._x_used_:
+            if X_group is None:
+                raise ValueError(
+                    "Stored exogenous features are required for in-sample prediction."
+                )
+            if target_time not in X_group.index:
+                raise ValueError(
+                    "Missing exogenous data for in-sample timestamp "
+                    f"{target_time} in group {ids}."
+                )
+            xrow = X_group.loc[target_time]
+            if isinstance(xrow, pd.DataFrame):
+                xrow = xrow.iloc[0]
+            if self._x_columns_ is not None:
+                x_values = xrow[self._x_columns_].to_numpy(dtype=float)
+            else:
+                x_values = xrow.to_numpy(dtype=float)
+            row = np.concatenate([lag_feats_n, x_values])
+        else:
+            row = lag_feats_n
+
+        yhat_n = float(
+            np.asarray(self._estimator_.predict(row.reshape(1, -1))).ravel()[0]
+        )
+        return float(inv(yhat_n))
+
+    def _predict_insample_sequence(
+        self,
+        ids: Tuple,
+        y_group: pd.Series,
+        X_group: Optional[pd.DataFrame],
+        target_times: Sequence,
+    ) -> np.ndarray:
+        """Predict multiple in-sample timestamps for a specific group."""
+        times = list(target_times)
+        preds = [self._predict_insample_single(ids, y_group, X_group, t) for t in times]
+        return np.asarray(preds, dtype=float)
+
+    def _build_output_index(self, ids: Tuple, times: Sequence) -> pd.Index:
+        """Construct the output index for a group's predictions."""
+        times_index = pd.Index(times)
+        if self._was_single_series_:
+            return pd.Index(times_index, name=self._time_name_)
+        return _make_group_future_multiindex(
+            ids, times_index, self._id_names_, self._time_name_
+        )
+
+    def _build_output_series(
+        self, ids: Tuple, times: Sequence, values: Sequence[float]
+    ) -> pd.Series:
+        """Helper to build a Series with the correct index for a group's output."""
+        idx = self._build_output_index(ids, times)
+        values_arr = np.asarray(values, dtype=float)
+        if len(idx) != len(values_arr):
+            raise ValueError("Mismatched lengths for forecast times and values.")
+        return pd.Series(values_arr, index=idx, name=self._y_name_)
+
+    def _forecast_future_for_group(
+        self,
+        ids: Tuple,
+        full_future: pd.Index,
+        X: Optional[pd.DataFrame],
+    ) -> np.ndarray:
+        """Produce out-of-sample predictions for a group over a horizon."""
+        H = len(full_future)
+        if H == 0:
+            return np.array([], dtype=float)
+
+        X_block = None
+        if self._x_used_:
+            if X is None:
+                raise ValueError(
+                    "Exogenous data X must be provided for out-of-sample forecasts."
+                )
+            if self._was_single_series_:
+                X_needed = _select_future_rows(X, full_future)
+                X_block = X_needed.to_numpy()
+            else:
+                group_future_index = _make_group_future_multiindex(
+                    ids, full_future, self._id_names_, self._time_name_
+                )
+                X_needed = _select_future_rows(X, group_future_index)
+                X_block = X_needed.to_numpy()
+
+        preds = np.zeros(H, dtype=float)
+        K = self.steps_ahead
+
+        last_obs = self._last_windows_[ids].copy()
+        for i in range(1, min(K, H) + 1):
+            y_feats = last_obs[::-1]
+            if self._norm_strategy_ is not None:
+                transform, inv = self._norm_strategy_(y_feats)
+                y_feats_n, _ = transform(y_feats, None)
+            else:
+                y_feats_n = y_feats
+                inv = lambda v: float(v)
+
+            if X_block is not None:
+                row = np.concatenate([y_feats_n, X_block[i - 1]])
+            else:
+                row = y_feats_n
+
+            yhat_n = float(
+                np.asarray(
+                    self._dir_estimators_[i - 1].predict(row.reshape(1, -1))
+                ).ravel()[0]
+            )
+            preds[i - 1] = inv(yhat_n)
+
+        last_roll = self._last_windows_[ids].copy()
+        for i in range(1, min(K, H) + 1):
+            last_roll = np.roll(last_roll, -1)
+            last_roll[-1] = preds[i - 1]
+
+        for i in range(K + 1, H + 1):
+            y_feats = last_roll[::-1]
+            if self._norm_strategy_ is not None:
+                transform, inv = self._norm_strategy_(y_feats)
+                y_feats_n, _ = transform(y_feats, None)
+            else:
+                y_feats_n = y_feats
+                inv = lambda v: float(v)
+
+            if X_block is not None:
+                row = np.concatenate([y_feats_n, X_block[i - 1]])
+            else:
+                row = y_feats_n
+
+            yhat_n = float(
+                np.asarray(self._estimator_.predict(row.reshape(1, -1))).ravel()[0]
+            )
+            yhat = inv(yhat_n)
+            preds[i - 1] = yhat
+
+            last_roll = np.roll(last_roll, -1)
+            last_roll[-1] = yhat
+
+        return preds
 
     # -------------------- update --------------------
     def _update(
