@@ -105,7 +105,7 @@ from tsbook.forecasting.reduction import ReductionForecaster
 from lightgbm import LGBMRegressor
 
 forecaster = ReductionForecaster(
-    LGBMRegressor(n_estimators=50, verbose=-1),
+    LGBMRegressor(n_estimators=50, verbose=-1, normalization_strategy="divide_mean"),
     window_length=30,
     normalization_strategy="divide_mean",
 )
@@ -239,11 +239,10 @@ Podemos então projetar nossas previsões iniciais nesse plano para obter previs
 Para a reconciliação ótima com OLS, podemos usar o `OptimalReconciler` do sktime:
 
 ```{python}
-from sktime.transformations.hierarchical.reconcile import (
-    OptimalReconciler
-)
+from sktime.transformations.hierarchical.reconcile import OptimalReconciler
 
 optimal = OptimalReconciler("ols") * forecaster
+optimal.fit(y_train)
 y_pred_optimal = optimal.predict(fh=fh)
 ```
 
