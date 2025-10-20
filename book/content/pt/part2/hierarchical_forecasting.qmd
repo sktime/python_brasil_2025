@@ -105,7 +105,7 @@ from tsbook.forecasting.reduction import ReductionForecaster
 from lightgbm import LGBMRegressor
 
 forecaster = ReductionForecaster(
-    LGBMRegressor(n_estimators=50, verbose=-1, normalization_strategy="divide_mean"),
+    LGBMRegressor(n_estimators=50, verbose=-1, objective="tweedie"),
     window_length=30,
     normalization_strategy="divide_mean",
 )
@@ -289,14 +289,14 @@ from sktime.performance_metrics.forecasting import MeanSquaredScaledError
 metric = MeanSquaredScaledError(multilevel="uniform_average_time")
 
 pd.DataFrame(
-    {   
+    {
         "Baseline": metric(y_test, y_pred, y_train=y_train),
         "BottomUpReconciler": metric(y_test, y_pred_bottomup, y_train=y_train),
         "TopDownReconciler": metric(y_test, y_pred_topdown, y_train=y_train),
         "OptimalReconciler (ols)": metric(y_test, y_pred_optimal, y_train=y_train),
         "Mint Reconciler": metric(y_test, y_pred_mint, y_train=y_train),
     },
-    index=["Mean Absolute Scaled Error"]
+    index=["Mean Absolute Scaled Error"],
 )
 ```
 

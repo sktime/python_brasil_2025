@@ -17,15 +17,13 @@ book:
   - part: "Part II: Intermediário"
     chapters:
       - content/pt/part2/exog_variables.qmd
-      - content/pt/part2/feature_engineering.qmd
       - content/pt/part2/ml_models.qmd
       #- content/pt/part2/probabilistic_forecasting.qmd
-  - part: "Part III: Avançado"
-    chapters:
-      - content/pt/part3/panel_data.qmd
-      - content/pt/part3/hierarchical_forecasting.qmd
-      - content/pt/part3/deep_learning.qmd
-  - part: "Part IV: Apêndices"
+      - content/pt/part2/panel_data.qmd
+      - content/pt/part2/hierarchical_forecasting.qmd
+      - content/pt/part2/deep_learning.qmd
+      - content/pt/part2/probabilistic_forecasting.qmd
+  - part: "Part III: Apêndices"
     chapters:
       - content/pt/part4/sktime_custom.qmd
 
