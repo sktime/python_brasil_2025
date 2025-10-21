@@ -105,7 +105,7 @@ from tsbook.forecasting.reduction import ReductionForecaster
 from lightgbm import LGBMRegressor
 
 forecaster = ReductionForecaster(
-    LGBMRegressor(n_estimators=50, verbose=-1, objective="tweedie"),
+    LGBMRegressor(n_estimators=100, verbose=-1, objective="tweedie", random_state=42),
     window_length=30,
     normalization_strategy="divide_mean",
 )
@@ -296,7 +296,7 @@ pd.DataFrame(
         "OptimalReconciler (ols)": metric(y_test, y_pred_optimal, y_train=y_train),
         "Mint Reconciler": metric(y_test, y_pred_mint, y_train=y_train),
     },
-    index=["Mean Absolute Scaled Error"],
+    index=["Mean Absolute Squared Error"],
 )
 ```
 
