@@ -5,6 +5,13 @@ book:
   title: "Previsão de Séries temporais com Python: um pequeno guia"
   author: "Felipe Angelim"
   date: "10/11/2025"
+  favicon: "logo.jpeg"
+  search: true
+  repo-url: https://github.com/sktime/python_brasil_2025/
+  repo-actions: [edit]
+  sharing: [twitter, facebook]
+  cover-image: "logo.jpeg"
+  cover-image-alt: "Uma ilustração de séries temporais"
   chapters:
   - index.qmd
   - part: "Part I: Básico"
