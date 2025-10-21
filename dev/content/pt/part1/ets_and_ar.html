@@ -375,7 +375,7 @@ window.Quarto = {
 <p><span class="math display">\[
 \hat{Y}(t) = \alpha Y(t-1) + \alpha(1 - \alpha)Y(t-1) + \alpha(1 - \alpha)^2 Y(t-2) + \dots
 \]</span></p>
-<div id="d16334c6" class="cell" data-execution_count="1">
+<div id="ed56c819" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
@@ -396,21 +396,21 @@ window.Quarto = {
 </div>
 <section id="usando-exponential-smoothing-com-sktime" class="level3" data-number="4.1.1">
 <h3 data-number="4.1.1" class="anchored" data-anchor-id="usando-exponential-smoothing-com-sktime"><span class="header-section-number">4.1.1</span> Usando Exponential Smoothing com sktime</h3>
-<div id="d45bb456" class="cell" data-execution_count="2">
+<div id="c007472b" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tsbook.datasets.retail <span class="im">import</span> SyntheticRetail</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.utils.plotting <span class="im">import</span> plot_series</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> SyntheticRetail(<span class="st">"univariate"</span>)</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>y_train, y_test <span class="op">=</span> dataset.load(<span class="st">"y_train"</span>, <span class="st">"y_test"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="e8490cac" class="cell" data-execution_count="3">
+<div id="a45f868a" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.utils.plotting <span class="im">import</span> plot_series</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.forecasting.exp_smoothing <span class="im">import</span> ExponentialSmoothing</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> ExponentialSmoothing()</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>model.fit(y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
-<style>#sk-6bb68f72-2e19-43c0-9866-36abdce56fcf {
+<style>#sk-d6a70171-1abc-415d-853d-dec83df45a7c {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -435,15 +435,15 @@ window.Quarto = {
     }
   }
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c {
     color: var(--sklearn-color-text);
   }
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf pre {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c pre {
     padding: 0;
   }
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf input.sk-hidden--visually {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -455,7 +455,7 @@ window.Quarto = {
     width: 1px;
   }
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-dashed-wrapped {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -463,7 +463,7 @@ window.Quarto = {
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-container {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -473,7 +473,7 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-text-repr-fallback {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -489,14 +489,14 @@ window.Quarto = {
 
   /* Parallel-specific style estimator block */
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-parallel-item::after {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-parallel {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -504,28 +504,28 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-parallel-item {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-parallel-item:first-child::after {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-parallel-item:last-child::after {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-parallel-item:only-child::after {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-serial {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -543,14 +543,14 @@ window.Quarto = {
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-toggleable {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf label.sk-toggleable__label {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -560,7 +560,7 @@ window.Quarto = {
     text-align: center;
   }
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf label.sk-toggleable__label-arrow:before {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -568,13 +568,13 @@ window.Quarto = {
     color: var(--sklearn-color-icon);
   }
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf label.sk-toggleable__label-arrow:hover:before {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-toggleable__content {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -582,27 +582,27 @@ window.Quarto = {
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-toggleable__content pre {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -610,38 +610,38 @@ window.Quarto = {
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-label label.sk-toggleable__label,
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-label label {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-label label.sk-toggleable__label,
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-label:hover label.sk-toggleable__label {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-label label {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-label-container {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-estimator {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -651,7 +651,7 @@ window.Quarto = {
   }
 
   /* on hover */
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf div.sk-estimator:hover {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -708,7 +708,7 @@ window.Quarto = {
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf a.estimator_doc_link {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -723,15 +723,15 @@ window.Quarto = {
   }
 
   /* On hover */
-  #sk-6bb68f72-2e19-43c0-9866-36abdce56fcf a.estimator_doc_link:hover {
+  #sk-d6a70171-1abc-415d-853d-dec83df45a7c a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-6bb68f72-2e19-43c0-9866-36abdce56fcf" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ExponentialSmoothing()</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('6794ab38-75e8-42b8-a6eb-a5237fd13ffd')" type="checkbox" checked=""><label for="UUID('6794ab38-75e8-42b8-a6eb-a5237fd13ffd')" class="sk-toggleable__label sk-toggleable__label-arrow">ExponentialSmoothing<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.exp_smoothing.ExponentialSmoothing.html">?<span>Documentation for ExponentialSmoothing</span></a></label><div class="sk-toggleable__content"><pre>ExponentialSmoothing()</pre></div></div></div></div></div>
+</style><div id="sk-d6a70171-1abc-415d-853d-dec83df45a7c" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ExponentialSmoothing()</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('13a17013-488d-4123-9b0a-4076d38f4cce')" type="checkbox" checked=""><label for="UUID('13a17013-488d-4123-9b0a-4076d38f4cce')" class="sk-toggleable__label sk-toggleable__label-arrow">ExponentialSmoothing<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.exp_smoothing.ExponentialSmoothing.html">?<span>Documentation for ExponentialSmoothing</span></a></label><div class="sk-toggleable__content"><pre>ExponentialSmoothing()</pre></div></div></div></div></div>
 </div>
 </div>
-<div id="f5594edf" class="cell" data-execution_count="4">
+<div id="2eaff74e" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> model.predict(fh<span class="op">=</span>y_test.index)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>plot_series(y_train, y_test, y_pred, labels<span class="op">=</span>[<span class="st">"Treino"</span>, <span class="st">"Teste"</span>, <span class="st">"Previsão Exponential Smoothing"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
@@ -743,7 +743,7 @@ window.Quarto = {
 </div>
 </div>
 <p>Existem versões alternativas que consideram sazonalidade e tendências. Veja a <a href="https://www.sktime.org/en/stable/api_reference/auto_generated/sktime.forecasting.exp_smoothing.ExponentialSmoothing.html">documentação</a> para mais detalhes.</p>
-<div id="5d660bef" class="cell" data-execution_count="5">
+<div id="8082e9fd" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> ExponentialSmoothing(trend<span class="op">=</span><span class="st">"add"</span>, seasonal<span class="op">=</span><span class="st">"add"</span>, sp<span class="op">=</span><span class="dv">7</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>model.fit(y_train)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> model.predict(fh<span class="op">=</span>y_test.index)</span>
@@ -770,7 +770,7 @@ window.Quarto = {
 \hat{Y}(t) = \phi_1 Y(t-1) + \phi_2 Y(t-2) + \dots + \phi_p Y(t-p)
 \]</span></p>
 <p>onde <span class="math inline">\(\phi_1, \phi_2, \dots, \phi_p\)</span> são os parâmetros do modelo que precisam ser estimados a partir dos dados.</p>
-<div id="d24ec106" class="cell" data-execution_count="6">
+<div id="ea8bfe4b" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.forecasting.auto_reg <span class="im">import</span> AutoREG</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.utils.plotting <span class="im">import</span> plot_series</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -798,13 +798,13 @@ window.Quarto = {
 <h2 data-number="4.3" class="anchored" data-anchor-id="stl-dividir-e-conquistar"><span class="header-section-number">4.3</span> STL: dividir e conquistar</h2>
 <p>Sabemos que séries temporais podem ser decompostas em componentes de tendência, sazonalidade e resíduos. O modelo STL (Seasonal and Trend decomposition using Loess) é uma técnica que permite fazer essa decomposição de forma robusta.</p>
 <p>Temos no sktime o <code>STLTransformer</code>, que permite fazer a decomposição STL:</p>
-<div id="62150c95" class="cell" data-execution_count="7">
+<div id="ae1f648a" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.series.detrend <span class="im">import</span> STLTransformer</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>stl <span class="op">=</span> STLTransformer(sp<span class="op">=</span><span class="dv">365</span>)</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>stl.fit(y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
-<style>#sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf {
+<style>#sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -829,15 +829,15 @@ window.Quarto = {
     }
   }
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e {
     color: var(--sklearn-color-text);
   }
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf pre {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e pre {
     padding: 0;
   }
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf input.sk-hidden--visually {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -849,7 +849,7 @@ window.Quarto = {
     width: 1px;
   }
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-dashed-wrapped {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -857,7 +857,7 @@ window.Quarto = {
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-container {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -867,7 +867,7 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-text-repr-fallback {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -883,14 +883,14 @@ window.Quarto = {
 
   /* Parallel-specific style estimator block */
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-parallel-item::after {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-parallel {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -898,28 +898,28 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-parallel-item {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-parallel-item:first-child::after {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-parallel-item:last-child::after {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-parallel-item:only-child::after {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-serial {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -937,14 +937,14 @@ window.Quarto = {
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-toggleable {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf label.sk-toggleable__label {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -954,7 +954,7 @@ window.Quarto = {
     text-align: center;
   }
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf label.sk-toggleable__label-arrow:before {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -962,13 +962,13 @@ window.Quarto = {
     color: var(--sklearn-color-icon);
   }
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf label.sk-toggleable__label-arrow:hover:before {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-toggleable__content {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -976,27 +976,27 @@ window.Quarto = {
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-toggleable__content pre {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -1004,38 +1004,38 @@ window.Quarto = {
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-label label.sk-toggleable__label,
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-label label {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-label label.sk-toggleable__label,
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-label:hover label.sk-toggleable__label {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-label label {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-label-container {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-estimator {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -1045,7 +1045,7 @@ window.Quarto = {
   }
 
   /* on hover */
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf div.sk-estimator:hover {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -1102,7 +1102,7 @@ window.Quarto = {
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf a.estimator_doc_link {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -1117,16 +1117,16 @@ window.Quarto = {
   }
 
   /* On hover */
-  #sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf a.estimator_doc_link:hover {
+  #sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-a3d5cd0a-b6ca-496f-88c7-7ee75846d0bf" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>STLTransformer(sp=365)</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('aa164589-c4c2-4f50-9c71-8578f03ac812')" type="checkbox" checked=""><label for="UUID('aa164589-c4c2-4f50-9c71-8578f03ac812')" class="sk-toggleable__label sk-toggleable__label-arrow">STLTransformer<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.detrend.STLTransformer.html">?<span>Documentation for STLTransformer</span></a></label><div class="sk-toggleable__content"><pre>STLTransformer(sp=365)</pre></div></div></div></div></div>
+</style><div id="sk-5668ec65-4ea2-4f9f-9d73-bea297256b7e" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>STLTransformer(sp=365)</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('3abc615b-bbe1-4992-92c1-49bbcebf651c')" type="checkbox" checked=""><label for="UUID('3abc615b-bbe1-4992-92c1-49bbcebf651c')" class="sk-toggleable__label sk-toggleable__label-arrow">STLTransformer<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.detrend.STLTransformer.html">?<span>Documentation for STLTransformer</span></a></label><div class="sk-toggleable__content"><pre>STLTransformer(sp=365)</pre></div></div></div></div></div>
 </div>
 </div>
 <p>E agora podemos inspecionar os componentes:</p>
-<div id="9d4469ee" class="cell" data-execution_count="8">
+<div id="fba8fdd1" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">3</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>), sharex<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>stl.trend_.plot.line(ax<span class="op">=</span>ax[<span class="dv">0</span>])</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_title(<span class="st">"Tendência"</span>)</span>
@@ -1144,7 +1144,7 @@ window.Quarto = {
 </div>
 </div>
 <p>Uma possibilidade, uma vez que temos os diferentes componentes, é modelar cada componente separadamente e depois combinar as previsões. O sktime tem o <code>STLForecaster</code>, que faz exatamente isso:</p>
-<div id="af152211" class="cell" data-execution_count="9">
+<div id="1f5b50ef" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.forecasting.trend <span class="im">import</span> STLForecaster</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.forecasting.naive <span class="im">import</span> NaiveForecaster</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1173,7 +1173,7 @@ window.Quarto = {
 </div>
 </div>
 <p>Para fins de demonstração, podemos complicar um pouco mais o modelo, modelando os resíduos com outro <code>STLForecaster</code>:</p>
-<div id="3bcde6b3" class="cell" data-execution_count="10">
+<div id="4352b4a4" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> STLForecaster(</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    forecaster_trend<span class="op">=</span>AutoREG(lags<span class="op">=</span><span class="dv">31</span>),</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    forecaster_seasonal<span class="op">=</span>NaiveForecaster(sp<span class="op">=</span><span class="dv">7</span>),</span>
@@ -1188,7 +1188,7 @@ window.Quarto = {
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>model.fit(y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
-<style>#sk-d4801578-5c9e-444a-b89e-d6824cb184b9 {
+<style>#sk-92635760-96ad-4f4c-883e-b6536e07fc5c {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -1213,15 +1213,15 @@ window.Quarto = {
     }
   }
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c {
     color: var(--sklearn-color-text);
   }
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 pre {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c pre {
     padding: 0;
   }
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 input.sk-hidden--visually {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -1233,7 +1233,7 @@ window.Quarto = {
     width: 1px;
   }
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-dashed-wrapped {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -1241,7 +1241,7 @@ window.Quarto = {
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-container {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -1251,7 +1251,7 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-text-repr-fallback {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -1267,14 +1267,14 @@ window.Quarto = {
 
   /* Parallel-specific style estimator block */
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-parallel-item::after {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-parallel {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -1282,28 +1282,28 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-parallel-item {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-parallel-item:first-child::after {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-parallel-item:last-child::after {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-parallel-item:only-child::after {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-serial {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1321,14 +1321,14 @@ window.Quarto = {
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-toggleable {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 label.sk-toggleable__label {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -1338,7 +1338,7 @@ window.Quarto = {
     text-align: center;
   }
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 label.sk-toggleable__label-arrow:before {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -1346,13 +1346,13 @@ window.Quarto = {
     color: var(--sklearn-color-icon);
   }
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 label.sk-toggleable__label-arrow:hover:before {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-toggleable__content {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -1360,27 +1360,27 @@ window.Quarto = {
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-toggleable__content pre {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -1388,38 +1388,38 @@ window.Quarto = {
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-label label.sk-toggleable__label,
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-label label {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-label label.sk-toggleable__label,
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-label:hover label.sk-toggleable__label {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-label label {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-label-container {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-estimator {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -1429,7 +1429,7 @@ window.Quarto = {
   }
 
   /* on hover */
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 div.sk-estimator:hover {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -1486,7 +1486,7 @@ window.Quarto = {
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 a.estimator_doc_link {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -1501,27 +1501,27 @@ window.Quarto = {
   }
 
   /* On hover */
-  #sk-d4801578-5c9e-444a-b89e-d6824cb184b9 a.estimator_doc_link:hover {
+  #sk-92635760-96ad-4f4c-883e-b6536e07fc5c a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-d4801578-5c9e-444a-b89e-d6824cb184b9" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>STLForecaster(forecaster_resid=STLForecaster(forecaster_resid=AutoREG(lags=31),
+</style><div id="sk-92635760-96ad-4f4c-883e-b6536e07fc5c" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>STLForecaster(forecaster_resid=STLForecaster(forecaster_resid=AutoREG(lags=31),
                                              forecaster_seasonal=NaiveForecaster(sp=365),
                                              forecaster_trend=AutoREG(lags=31),
                                              sp=365),
               forecaster_seasonal=NaiveForecaster(sp=7),
-              forecaster_trend=AutoREG(lags=31), sp=7)</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('d8b49ed4-22f9-4258-b3fc-d17f1eec32cc')" type="checkbox"><label for="UUID('d8b49ed4-22f9-4258-b3fc-d17f1eec32cc')" class="sk-toggleable__label sk-toggleable__label-arrow">STLForecaster<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.trend.STLForecaster.html">?<span>Documentation for STLForecaster</span></a></label><div class="sk-toggleable__content"><pre>STLForecaster(forecaster_resid=STLForecaster(forecaster_resid=AutoREG(lags=31),
+              forecaster_trend=AutoREG(lags=31), sp=7)</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('95924854-5057-40d5-9bc1-b0ee57f4a4ee')" type="checkbox"><label for="UUID('95924854-5057-40d5-9bc1-b0ee57f4a4ee')" class="sk-toggleable__label sk-toggleable__label-arrow">STLForecaster<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.trend.STLForecaster.html">?<span>Documentation for STLForecaster</span></a></label><div class="sk-toggleable__content"><pre>STLForecaster(forecaster_resid=STLForecaster(forecaster_resid=AutoREG(lags=31),
                                              forecaster_seasonal=NaiveForecaster(sp=365),
                                              forecaster_trend=AutoREG(lags=31),
                                              sp=365),
               forecaster_seasonal=NaiveForecaster(sp=7),
-              forecaster_trend=AutoREG(lags=31), sp=7)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('f0b3290f-e8f9-4185-a760-d141b33c8d1c')" type="checkbox"><label for="UUID('f0b3290f-e8f9-4185-a760-d141b33c8d1c')" class="sk-toggleable__label sk-toggleable__label-arrow">forecaster_resid: STLForecaster</label><div class="sk-toggleable__content"><pre>STLForecaster(forecaster_resid=AutoREG(lags=31),
+              forecaster_trend=AutoREG(lags=31), sp=7)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('8710fd1c-a435-45e2-a665-e2d1b3f169d0')" type="checkbox"><label for="UUID('8710fd1c-a435-45e2-a665-e2d1b3f169d0')" class="sk-toggleable__label sk-toggleable__label-arrow">forecaster_resid: STLForecaster</label><div class="sk-toggleable__content"><pre>STLForecaster(forecaster_resid=AutoREG(lags=31),
               forecaster_seasonal=NaiveForecaster(sp=365),
-              forecaster_trend=AutoREG(lags=31), sp=365)</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('21bd75e8-54f2-4ec9-b3af-0e98b96fa851')" type="checkbox"><label for="UUID('21bd75e8-54f2-4ec9-b3af-0e98b96fa851')" class="sk-toggleable__label sk-toggleable__label-arrow">forecaster_resid: AutoREG</label><div class="sk-toggleable__content"><pre>AutoREG(lags=31)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('c0a4c4b6-82f2-4010-9403-fc02a87e4b40')" type="checkbox"><label for="UUID('c0a4c4b6-82f2-4010-9403-fc02a87e4b40')" class="sk-toggleable__label sk-toggleable__label-arrow">AutoREG<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.auto_reg.AutoREG.html">?<span>Documentation for AutoREG</span></a></label><div class="sk-toggleable__content"><pre>AutoREG(lags=31)</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('13695cca-f147-4f90-ba9a-4c61591ba450')" type="checkbox"><label for="UUID('13695cca-f147-4f90-ba9a-4c61591ba450')" class="sk-toggleable__label sk-toggleable__label-arrow">forecaster_seasonal: NaiveForecaster</label><div class="sk-toggleable__content"><pre>NaiveForecaster(sp=365)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('c6347e85-de04-4b57-bd5f-bd5251dca5a5')" type="checkbox"><label for="UUID('c6347e85-de04-4b57-bd5f-bd5251dca5a5')" class="sk-toggleable__label sk-toggleable__label-arrow">NaiveForecaster<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.naive.NaiveForecaster.html">?<span>Documentation for NaiveForecaster</span></a></label><div class="sk-toggleable__content"><pre>NaiveForecaster(sp=365)</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('6f9807b7-dfb0-48ad-b56b-110a58d17a82')" type="checkbox"><label for="UUID('6f9807b7-dfb0-48ad-b56b-110a58d17a82')" class="sk-toggleable__label sk-toggleable__label-arrow">forecaster_trend: AutoREG</label><div class="sk-toggleable__content"><pre>AutoREG(lags=31)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('331adaf1-bfb8-4435-a584-52428b20d435')" type="checkbox"><label for="UUID('331adaf1-bfb8-4435-a584-52428b20d435')" class="sk-toggleable__label sk-toggleable__label-arrow">AutoREG<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.auto_reg.AutoREG.html">?<span>Documentation for AutoREG</span></a></label><div class="sk-toggleable__content"><pre>AutoREG(lags=31)</pre></div></div></div></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('70ba0448-5763-4560-b8d8-c8eb114f8896')" type="checkbox"><label for="UUID('70ba0448-5763-4560-b8d8-c8eb114f8896')" class="sk-toggleable__label sk-toggleable__label-arrow">forecaster_seasonal: NaiveForecaster</label><div class="sk-toggleable__content"><pre>NaiveForecaster(sp=7)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('517b040d-7441-48a3-beae-ae8208fb9ea2')" type="checkbox"><label for="UUID('517b040d-7441-48a3-beae-ae8208fb9ea2')" class="sk-toggleable__label sk-toggleable__label-arrow">NaiveForecaster<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.naive.NaiveForecaster.html">?<span>Documentation for NaiveForecaster</span></a></label><div class="sk-toggleable__content"><pre>NaiveForecaster(sp=7)</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('44a990a2-010a-45ee-b413-4ac86be2e08d')" type="checkbox"><label for="UUID('44a990a2-010a-45ee-b413-4ac86be2e08d')" class="sk-toggleable__label sk-toggleable__label-arrow">forecaster_trend: AutoREG</label><div class="sk-toggleable__content"><pre>AutoREG(lags=31)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('c883a056-057f-4f0c-be9d-95077de699b0')" type="checkbox"><label for="UUID('c883a056-057f-4f0c-be9d-95077de699b0')" class="sk-toggleable__label sk-toggleable__label-arrow">AutoREG<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.auto_reg.AutoREG.html">?<span>Documentation for AutoREG</span></a></label><div class="sk-toggleable__content"><pre>AutoREG(lags=31)</pre></div></div></div></div></div></div></div></div></div></div>
+              forecaster_trend=AutoREG(lags=31), sp=365)</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('011d8b75-5ed8-4c88-8f0e-a4929ffcf88b')" type="checkbox"><label for="UUID('011d8b75-5ed8-4c88-8f0e-a4929ffcf88b')" class="sk-toggleable__label sk-toggleable__label-arrow">forecaster_resid: AutoREG</label><div class="sk-toggleable__content"><pre>AutoREG(lags=31)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('12381b08-2a7f-49a4-a3a5-298e675924a7')" type="checkbox"><label for="UUID('12381b08-2a7f-49a4-a3a5-298e675924a7')" class="sk-toggleable__label sk-toggleable__label-arrow">AutoREG<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.auto_reg.AutoREG.html">?<span>Documentation for AutoREG</span></a></label><div class="sk-toggleable__content"><pre>AutoREG(lags=31)</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('3881c06b-171d-4df6-bcf5-4320097f35b7')" type="checkbox"><label for="UUID('3881c06b-171d-4df6-bcf5-4320097f35b7')" class="sk-toggleable__label sk-toggleable__label-arrow">forecaster_seasonal: NaiveForecaster</label><div class="sk-toggleable__content"><pre>NaiveForecaster(sp=365)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('8a5be7a4-800d-4ab3-8dff-2ce45eac72c9')" type="checkbox"><label for="UUID('8a5be7a4-800d-4ab3-8dff-2ce45eac72c9')" class="sk-toggleable__label sk-toggleable__label-arrow">NaiveForecaster<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.naive.NaiveForecaster.html">?<span>Documentation for NaiveForecaster</span></a></label><div class="sk-toggleable__content"><pre>NaiveForecaster(sp=365)</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('cd981a61-a918-4de2-9d56-55e2f35debd8')" type="checkbox"><label for="UUID('cd981a61-a918-4de2-9d56-55e2f35debd8')" class="sk-toggleable__label sk-toggleable__label-arrow">forecaster_trend: AutoREG</label><div class="sk-toggleable__content"><pre>AutoREG(lags=31)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('a9f390a4-628f-4e09-8fdf-c8ac5a175714')" type="checkbox"><label for="UUID('a9f390a4-628f-4e09-8fdf-c8ac5a175714')" class="sk-toggleable__label sk-toggleable__label-arrow">AutoREG<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.auto_reg.AutoREG.html">?<span>Documentation for AutoREG</span></a></label><div class="sk-toggleable__content"><pre>AutoREG(lags=31)</pre></div></div></div></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('2e1ae261-1640-4c6a-b1dc-5138f1193a5c')" type="checkbox"><label for="UUID('2e1ae261-1640-4c6a-b1dc-5138f1193a5c')" class="sk-toggleable__label sk-toggleable__label-arrow">forecaster_seasonal: NaiveForecaster</label><div class="sk-toggleable__content"><pre>NaiveForecaster(sp=7)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('bf69d1e1-84eb-4410-aa24-debc3327307c')" type="checkbox"><label for="UUID('bf69d1e1-84eb-4410-aa24-debc3327307c')" class="sk-toggleable__label sk-toggleable__label-arrow">NaiveForecaster<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.naive.NaiveForecaster.html">?<span>Documentation for NaiveForecaster</span></a></label><div class="sk-toggleable__content"><pre>NaiveForecaster(sp=7)</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('4089565b-5a4e-43da-a546-7113d0da9bca')" type="checkbox"><label for="UUID('4089565b-5a4e-43da-a546-7113d0da9bca')" class="sk-toggleable__label sk-toggleable__label-arrow">forecaster_trend: AutoREG</label><div class="sk-toggleable__content"><pre>AutoREG(lags=31)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('f6b41ec8-7542-44e4-8988-3d667f2b4122')" type="checkbox"><label for="UUID('f6b41ec8-7542-44e4-8988-3d667f2b4122')" class="sk-toggleable__label sk-toggleable__label-arrow">AutoREG<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.auto_reg.AutoREG.html">?<span>Documentation for AutoREG</span></a></label><div class="sk-toggleable__content"><pre>AutoREG(lags=31)</pre></div></div></div></div></div></div></div></div></div></div>
 </div>
 </div>
-<div id="a63cf055" class="cell" data-execution_count="11">
+<div id="1c4d9a6c" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> model.predict(fh<span class="op">=</span>y_test.index)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>plot_series(</span>

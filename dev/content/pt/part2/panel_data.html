@@ -379,7 +379,7 @@ window.Quarto = {
 <h2 data-number="8.1" class="anchored" data-anchor-id="acessando-os-dados"><span class="header-section-number">8.1</span> Acessando os dados</h2>
 <p>Aqui, vamos usar o dataset sintético que vimos antes, mas agora teremos acesso às várias séries temporais que compõe o total.</p>
 <p>Esse dataset é feito para simular um caso de varejo, onde temos vendas diárias de vários produtos:</p>
-<div id="c64df948" class="cell" data-execution_count="2">
+<div id="0bdef1d1" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -388,7 +388,7 @@ window.Quarto = {
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.utils.plotting <span class="im">import</span> plot_series</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="b01c9e24" class="cell" data-execution_count="3">
+<div id="767f619c" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tsbook.datasets.retail <span class="im">import</span> SyntheticRetail</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> SyntheticRetail(<span class="st">"panel"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>y_train, X_train, y_test, X_test <span class="op">=</span> dataset.load(</span>
@@ -396,7 +396,7 @@ window.Quarto = {
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Note que, para dados em painel, os dataframes possuem mais um nível de índice, que identifica a série temporal a que cada observação pertence:</p>
-<div id="6a4d73c7" class="cell" data-execution_count="4">
+<div id="7bd8a946" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>display(X_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -471,7 +471,7 @@ window.Quarto = {
 </div>
 </div>
 <p>Podemos visualizar algumas séries. Vemos que há mais zeros nesse dataset, em comparação ao que usamos antes.</p>
-<div id="9772532b" class="cell" data-execution_count="5">
+<div id="7d3ffb99" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.utils.plotting <span class="im">import</span> plot_series</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
@@ -488,7 +488,7 @@ window.Quarto = {
 <section id="pandas-e-multi-índices" class="level3" data-number="8.1.1">
 <h3 data-number="8.1.1" class="anchored" data-anchor-id="pandas-e-multi-índices"><span class="header-section-number">8.1.1</span> Pandas e multi-índices</h3>
 <p>Para trabalhar com essas estruturas de dados, é importante revisar algumas operações do pandas.</p>
-<div id="3cc26614" class="cell" data-execution_count="6">
+<div id="04c58781" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>y_train.index.get_level_values(<span class="op">-</span><span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>PeriodIndex(['2020-01-01', '2020-01-02', '2020-01-03', '2020-01-04',
@@ -502,7 +502,7 @@ window.Quarto = {
 </div>
 </div>
 <p>As seguintes operações são bem úteis para trabalhar com multi-índices:</p>
-<div id="391f8e4c" class="cell" data-execution_count="7">
+<div id="42fed098" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>y_train.index</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>MultiIndex([( 0, '2020-01-01'),
@@ -530,7 +530,7 @@ window.Quarto = {
 </div>
 </div>
 <p>Acessar valores únicos no primeiro nivel (nível 0, mais à esquerda):</p>
-<div id="a25b264a" class="cell" data-execution_count="8">
+<div id="2f973719" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>y_train.index.get_level_values(<span class="dv">0</span>).unique()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>Index([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
@@ -539,7 +539,7 @@ window.Quarto = {
 </div>
 </div>
 <p>Selecionar uma série específica (nível 0 igual a 0):</p>
-<div id="e9dd13c1" class="cell" data-execution_count="9">
+<div id="e334912c" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>y_train.loc[<span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <div>
@@ -609,7 +609,7 @@ window.Quarto = {
 </div>
 </div>
 <p>Aqui, podemos usar <code>pd.IndexSlice</code> para selecionar várias séries ao mesmo tempo. Note que pd.IndexSlice é passado diretamente para <code>.loc</code>:</p>
-<div id="88ba59aa" class="cell" data-execution_count="10">
+<div id="4aa6eb29" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>y_train.loc[pd.IndexSlice[[<span class="dv">0</span>,<span class="dv">2</span>], :]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <div>
@@ -684,7 +684,7 @@ window.Quarto = {
 </div>
 </div>
 <p>Agora, para selecionar o horizonte de forecasting, temos que chamar <code>unique</code>:</p>
-<div id="0ce45ba9" class="cell" data-execution_count="11">
+<div id="50ed26a3" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>fh <span class="op">=</span> y_test.index.get_level_values(<span class="dv">1</span>).unique()</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>fh</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -704,7 +704,7 @@ window.Quarto = {
 <section id="upcasting-automático" class="level2" data-number="8.2">
 <h2 data-number="8.2" class="anchored" data-anchor-id="upcasting-automático"><span class="header-section-number">8.2</span> Upcasting automático</h2>
 <p>Nem todos modelos suportam nativamente dados em painel. Por exemplo, exponential smoothing. Aqui, temos uma boa notícia: sem linhas extras necessárias. O sktime faz <em>upcasting</em> automático para dados em painel ao usar estimadores do <code>sktime</code>.</p>
-<div id="768e105f" class="cell" data-execution_count="12">
+<div id="4d6c0774" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.forecasting.naive <span class="im">import</span> NaiveForecaster</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -787,7 +787,7 @@ window.Quarto = {
 </div>
 <p>Internamente, o <code>sktime</code> cria um clone do estimador para cada série nos dados em painel. Em seguida, cada clone é treinado com a série correspondente. Isso é feito de forma transparente para usuário, mas sem exigir esforço.</p>
 <p>O atributo <code>forecasters_</code> armazena um DataFrame com os estimatores de cada série.</p>
-<div id="7c148691" class="cell" data-execution_count="13">
+<div id="6d5ab71f" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>naive_forecaster.forecasters_.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <div>
@@ -836,12 +836,12 @@ window.Quarto = {
 <li><code>multilevel="uniform_average_time"</code> para calcular a média das séries temporais no painel.</li>
 <li><code>multilevel="raw_values"</code> para obter o erro por série.</li>
 </ul>
-<div id="473efce3" class="cell" data-execution_count="14">
+<div id="8922862b" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.performance_metrics.forecasting <span class="im">import</span> MeanSquaredScaledError</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>metric <span class="op">=</span> MeanSquaredScaledError(multilevel<span class="op">=</span><span class="st">"uniform_average_time"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="627130ab" class="cell" data-execution_count="15">
+<div id="34908788" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>metric(y_true<span class="op">=</span>y_test, y_pred<span class="op">=</span>y_pred_naive, y_train<span class="op">=</span>y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
 <pre><code>np.float64(19.047949908747597)</code></pre>
@@ -856,18 +856,18 @@ window.Quarto = {
 <p>No caso de dados em painel, também podemos usar essa abordagem, mas agora aproveitando todas as séries temporais para treinar um único modelo global.</p>
 <p><img src="img/global_reduction.png" class="img-fluid"></p>
 <p>Abaixo, vamos comparar um LightGBM global com um local. Veremos o seguinte: o modelo local é <strong>melhor</strong> que o modelo global, <strong>se não processarmos os dados</strong> corretamente para o modelo global aproveitar as <strong>similaridades</strong> entre as séries!</p>
-<div id="b0c98ca2" class="cell" data-execution_count="16">
+<div id="b4cafd82" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tsbook.forecasting.reduction <span class="im">import</span> ReductionForecaster</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lightgbm <span class="im">import</span> LGBMRegressor</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>global_forecaster1 <span class="op">=</span> ReductionForecaster(</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    LGBMRegressor(n_estimators<span class="op">=</span><span class="dv">100</span>, verbose<span class="op">=-</span><span class="dv">1</span>),</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    LGBMRegressor(n_estimators<span class="op">=</span><span class="dv">100</span>, verbose<span class="op">=-</span><span class="dv">1</span>, random_state<span class="op">=</span><span class="dv">42</span>),</span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    window_length<span class="op">=</span><span class="dv">30</span>,</span>
 <span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>global_forecaster1.fit(y_train, X_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
-<style>#sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe {
+<style>#sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -892,15 +892,15 @@ window.Quarto = {
     }
   }
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 {
     color: var(--sklearn-color-text);
   }
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe pre {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 pre {
     padding: 0;
   }
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe input.sk-hidden--visually {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -912,7 +912,7 @@ window.Quarto = {
     width: 1px;
   }
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-dashed-wrapped {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -920,7 +920,7 @@ window.Quarto = {
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-container {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -930,7 +930,7 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-text-repr-fallback {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -946,14 +946,14 @@ window.Quarto = {
 
   /* Parallel-specific style estimator block */
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-parallel-item::after {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-parallel {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -961,28 +961,28 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-parallel-item {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-parallel-item:first-child::after {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-parallel-item:last-child::after {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-parallel-item:only-child::after {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-serial {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1000,14 +1000,14 @@ window.Quarto = {
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-toggleable {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe label.sk-toggleable__label {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -1017,7 +1017,7 @@ window.Quarto = {
     text-align: center;
   }
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe label.sk-toggleable__label-arrow:before {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -1025,13 +1025,13 @@ window.Quarto = {
     color: var(--sklearn-color-icon);
   }
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe label.sk-toggleable__label-arrow:hover:before {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-toggleable__content {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -1039,27 +1039,27 @@ window.Quarto = {
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-toggleable__content pre {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -1067,38 +1067,38 @@ window.Quarto = {
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-label label.sk-toggleable__label,
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-label label {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-label label.sk-toggleable__label,
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-label:hover label.sk-toggleable__label {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-label label {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-label-container {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-estimator {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -1108,7 +1108,7 @@ window.Quarto = {
   }
 
   /* on hover */
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe div.sk-estimator:hover {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -1165,7 +1165,7 @@ window.Quarto = {
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe a.estimator_doc_link {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -1180,18 +1180,20 @@ window.Quarto = {
   }
 
   /* On hover */
-  #sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe a.estimator_doc_link:hover {
+  #sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8 a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-5150c1d9-79fd-4c01-88bf-c6856c091cfe" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ReductionForecaster(estimator=LGBMRegressor(verbose=-1), window_length=30)</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('a7bdab11-1536-4a13-8775-b0ac522be465')" type="checkbox"><label for="UUID('a7bdab11-1536-4a13-8775-b0ac522be465')" class="sk-toggleable__label sk-toggleable__label-arrow">ReductionForecaster</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(verbose=-1), window_length=30)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('d93a3844-bb00-44ad-80aa-b7451f3b0f13')" type="checkbox"><label for="UUID('d93a3844-bb00-44ad-80aa-b7451f3b0f13')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(verbose=-1)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('1701f2f9-af66-4c07-970b-24399d393154')" type="checkbox"><label for="UUID('1701f2f9-af66-4c07-970b-24399d393154')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(verbose=-1)</pre></div></div></div></div></div></div></div></div></div></div>
+</style><div id="sk-553be6c1-132e-49ef-b4af-8ad6ec5489f8" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
+                    window_length=30)</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('f9814cfc-9592-44b2-9d18-60061464a276')" type="checkbox"><label for="UUID('f9814cfc-9592-44b2-9d18-60061464a276')" class="sk-toggleable__label sk-toggleable__label-arrow">ReductionForecaster</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
+                    window_length=30)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('4b2d33bb-aea3-463a-a220-06fe5f80d85e')" type="checkbox"><label for="UUID('4b2d33bb-aea3-463a-a220-06fe5f80d85e')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42, verbose=-1)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('a193e207-2906-489f-82a3-6363ff3d7377')" type="checkbox"><label for="UUID('a193e207-2906-489f-82a3-6363ff3d7377')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42, verbose=-1)</pre></div></div></div></div></div></div></div></div></div></div>
 </div>
 </div>
-<div id="916de471" class="cell" data-execution_count="17">
+<div id="8d49b4a4" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>y_pred_global1 <span class="op">=</span> global_forecaster1.predict(fh<span class="op">=</span>fh, X<span class="op">=</span>X_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="0c3899fc" class="cell" data-execution_count="18">
+<div id="6a48f886" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>y_train.loc[<span class="dv">10</span>, <span class="st">"sales"</span>].plot(ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"Treino"</span>)</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>y_test.loc[<span class="dv">10</span>, <span class="st">"sales"</span>].plot(ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"Teste"</span>)</span>
@@ -1207,14 +1209,14 @@ window.Quarto = {
 </div>
 </div>
 <p>Para forçar que um modelo global funcione como um modelo local, podemos usar <code>ForecastByLevel</code>, que cria um modelo separado para cada série temporal, mesmo quando o estimador suporta dados em painel.</p>
-<div id="c2090154" class="cell" data-execution_count="19">
+<div id="1d3a4e99" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.forecasting.compose <span class="im">import</span> ForecastByLevel</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>local_forecaster1 <span class="op">=</span> ForecastByLevel(global_forecaster1, groupby<span class="op">=</span><span class="st">"local"</span>)</span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>local_forecaster1.fit(y_train, X<span class="op">=</span>X_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="19">
-<style>#sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 {
+<style>#sk-808db842-50e0-4a0b-8e4a-0b23105c10eb {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -1239,15 +1241,15 @@ window.Quarto = {
     }
   }
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb {
     color: var(--sklearn-color-text);
   }
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 pre {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb pre {
     padding: 0;
   }
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 input.sk-hidden--visually {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -1259,7 +1261,7 @@ window.Quarto = {
     width: 1px;
   }
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-dashed-wrapped {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -1267,7 +1269,7 @@ window.Quarto = {
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-container {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -1277,7 +1279,7 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-text-repr-fallback {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -1293,14 +1295,14 @@ window.Quarto = {
 
   /* Parallel-specific style estimator block */
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-parallel-item::after {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-parallel {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -1308,28 +1310,28 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-parallel-item {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-parallel-item:first-child::after {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-parallel-item:last-child::after {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-parallel-item:only-child::after {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-serial {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1347,14 +1349,14 @@ window.Quarto = {
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-toggleable {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 label.sk-toggleable__label {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -1364,7 +1366,7 @@ window.Quarto = {
     text-align: center;
   }
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 label.sk-toggleable__label-arrow:before {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -1372,13 +1374,13 @@ window.Quarto = {
     color: var(--sklearn-color-icon);
   }
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 label.sk-toggleable__label-arrow:hover:before {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-toggleable__content {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -1386,27 +1388,27 @@ window.Quarto = {
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-toggleable__content pre {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -1414,38 +1416,38 @@ window.Quarto = {
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-label label.sk-toggleable__label,
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-label label {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-label label.sk-toggleable__label,
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-label:hover label.sk-toggleable__label {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-label label {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-label-container {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-estimator {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -1455,7 +1457,7 @@ window.Quarto = {
   }
 
   /* on hover */
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 div.sk-estimator:hover {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -1512,7 +1514,7 @@ window.Quarto = {
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 a.estimator_doc_link {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -1527,17 +1529,18 @@ window.Quarto = {
   }
 
   /* On hover */
-  #sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9 a.estimator_doc_link:hover {
+  #sk-808db842-50e0-4a0b-8e4a-0b23105c10eb a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-8c30f5ab-5ebc-495e-a0ee-6ddc09657be9" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ForecastByLevel(forecaster=ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
-                                               window_length=30))</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('5d338d65-e9c0-42e3-a591-82100f21c1b4')" type="checkbox"><label for="UUID('5d338d65-e9c0-42e3-a591-82100f21c1b4')" class="sk-toggleable__label sk-toggleable__label-arrow">ForecastByLevel<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.compose.ForecastByLevel.html">?<span>Documentation for ForecastByLevel</span></a></label><div class="sk-toggleable__content"><pre>ForecastByLevel(forecaster=ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
-                                               window_length=30))</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('7a30ddeb-6287-475d-8b78-2f9bfc4b7e10')" type="checkbox"><label for="UUID('7a30ddeb-6287-475d-8b78-2f9bfc4b7e10')" class="sk-toggleable__label sk-toggleable__label-arrow">forecaster: ReductionForecaster</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(verbose=-1), window_length=30)</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('0c211a48-5d88-4fe7-8532-8519bea6e279')" type="checkbox"><label for="UUID('0c211a48-5d88-4fe7-8532-8519bea6e279')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(verbose=-1)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('9f1f31d5-c0b3-4158-97d8-a996b98bfe44')" type="checkbox"><label for="UUID('9f1f31d5-c0b3-4158-97d8-a996b98bfe44')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(verbose=-1)</pre></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div>
+</style><div id="sk-808db842-50e0-4a0b-8e4a-0b23105c10eb" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ForecastByLevel(forecaster=ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
+                                               window_length=30))</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('72e4d8b2-3896-4079-bdc4-febff5b9a9a2')" type="checkbox"><label for="UUID('72e4d8b2-3896-4079-bdc4-febff5b9a9a2')" class="sk-toggleable__label sk-toggleable__label-arrow">ForecastByLevel<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.compose.ForecastByLevel.html">?<span>Documentation for ForecastByLevel</span></a></label><div class="sk-toggleable__content"><pre>ForecastByLevel(forecaster=ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
+                                               window_length=30))</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('0f815ca2-55df-49be-8641-2270e2d4a0e9')" type="checkbox"><label for="UUID('0f815ca2-55df-49be-8641-2270e2d4a0e9')" class="sk-toggleable__label sk-toggleable__label-arrow">forecaster: ReductionForecaster</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
+                    window_length=30)</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('8c2494d0-2b9c-48d3-a4f9-0bdc7a9d55f5')" type="checkbox"><label for="UUID('8c2494d0-2b9c-48d3-a4f9-0bdc7a9d55f5')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42, verbose=-1)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('5efa95e7-2522-4b27-be86-a5a060f73198')" type="checkbox"><label for="UUID('5efa95e7-2522-4b27-be86-a5a060f73198')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42, verbose=-1)</pre></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div>
 </div>
 </div>
-<div id="324ba248" class="cell" data-execution_count="20">
+<div id="d61519ab" class="cell" data-execution_count="20">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>y_pred_local1 <span class="op">=</span> local_forecaster1.predict(fh<span class="op">=</span>fh, X<span class="op">=</span>X_test)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>err_global1 <span class="op">=</span> metric(y_true<span class="op">=</span>y_test, y_pred<span class="op">=</span>y_pred_global1, y_train<span class="op">=</span>y_train)</span>
@@ -1555,14 +1558,13 @@ window.Quarto = {
 <section id="preprocessamento-e-engenharia-de-features" class="level2" data-number="8.5">
 <h2 data-number="8.5" class="anchored" data-anchor-id="preprocessamento-e-engenharia-de-features"><span class="header-section-number">8.5</span> Preprocessamento e engenharia de features</h2>
 <p>Sabemos como preprocessar séries temporais univariadas para melhorar o desempenho dos modelos de ML. Aplicamos da mesma maneira que fizemos anteriormente o <code>Differencer</code>, com objetivo de remover tendências.</p>
-<div id="ef378056" class="cell" data-execution_count="21">
+<div id="4857922c" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.series.difference <span class="im">import</span> Differencer</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>global_forecaster2 <span class="op">=</span> Differencer() <span class="op">*</span> global_forecaster1</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>global_forecaster2.fit(y_train, X_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>global_forecaster2 <span class="op">=</span> Differencer() <span class="op">*</span> global_forecaster1</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>global_forecaster2.fit(y_train, X_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="21">
-<style>#sk-c192637d-5139-4576-85ca-9068f83ea771 {
+<style>#sk-621855a6-27a6-4aae-b713-bcf68bd23518 {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -1587,15 +1589,15 @@ window.Quarto = {
     }
   }
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 {
     color: var(--sklearn-color-text);
   }
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 pre {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 pre {
     padding: 0;
   }
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 input.sk-hidden--visually {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -1607,7 +1609,7 @@ window.Quarto = {
     width: 1px;
   }
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-dashed-wrapped {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -1615,7 +1617,7 @@ window.Quarto = {
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-container {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -1625,7 +1627,7 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-text-repr-fallback {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -1641,14 +1643,14 @@ window.Quarto = {
 
   /* Parallel-specific style estimator block */
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-parallel-item::after {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-parallel {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -1656,28 +1658,28 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-parallel-item {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-parallel-item:first-child::after {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-parallel-item:last-child::after {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-parallel-item:only-child::after {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-serial {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1695,14 +1697,14 @@ window.Quarto = {
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-toggleable {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 label.sk-toggleable__label {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -1712,7 +1714,7 @@ window.Quarto = {
     text-align: center;
   }
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 label.sk-toggleable__label-arrow:before {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -1720,13 +1722,13 @@ window.Quarto = {
     color: var(--sklearn-color-icon);
   }
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 label.sk-toggleable__label-arrow:hover:before {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-toggleable__content {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -1734,27 +1736,27 @@ window.Quarto = {
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-toggleable__content pre {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -1762,38 +1764,38 @@ window.Quarto = {
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-label label.sk-toggleable__label,
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-label label {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-label label.sk-toggleable__label,
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-label:hover label.sk-toggleable__label {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-label label {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-label-container {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-estimator {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -1803,7 +1805,7 @@ window.Quarto = {
   }
 
   /* on hover */
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 div.sk-estimator:hover {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -1860,7 +1862,7 @@ window.Quarto = {
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 a.estimator_doc_link {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -1875,24 +1877,25 @@ window.Quarto = {
   }
 
   /* On hover */
-  #sk-c192637d-5139-4576-85ca-9068f83ea771 a.estimator_doc_link:hover {
+  #sk-621855a6-27a6-4aae-b713-bcf68bd23518 a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-c192637d-5139-4576-85ca-9068f83ea771" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>TransformedTargetForecaster(steps=[Differencer(),
-                                   ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
-                                                       window_length=30)])</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('5d226424-0e3a-43d6-95e9-07c01fbe97f1')" type="checkbox"><label for="UUID('5d226424-0e3a-43d6-95e9-07c01fbe97f1')" class="sk-toggleable__label sk-toggleable__label-arrow">TransformedTargetForecaster<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.compose.TransformedTargetForecaster.html">?<span>Documentation for TransformedTargetForecaster</span></a></label><div class="sk-toggleable__content"><pre>TransformedTargetForecaster(steps=[Differencer(),
-                                   ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
-                                                       window_length=30)])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('661ded3d-6e05-482e-9bab-95c0b6c536f4')" type="checkbox"><label for="UUID('661ded3d-6e05-482e-9bab-95c0b6c536f4')" class="sk-toggleable__label sk-toggleable__label-arrow">Differencer<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.difference.Differencer.html">?<span>Documentation for Differencer</span></a></label><div class="sk-toggleable__content"><pre>Differencer()</pre></div></div></div><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('964ca338-2cab-4812-89e5-4235993cf2ba')" type="checkbox"><label for="UUID('964ca338-2cab-4812-89e5-4235993cf2ba')" class="sk-toggleable__label sk-toggleable__label-arrow">ReductionForecaster</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(verbose=-1), window_length=30)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('442ac60d-d121-4fe4-ab53-3d391e1e2140')" type="checkbox"><label for="UUID('442ac60d-d121-4fe4-ab53-3d391e1e2140')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(verbose=-1)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('b7774209-44ff-4c28-81fd-46d4e960475b')" type="checkbox"><label for="UUID('b7774209-44ff-4c28-81fd-46d4e960475b')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(verbose=-1)</pre></div></div></div></div></div></div></div></div></div></div></div></div>
+</style><div id="sk-621855a6-27a6-4aae-b713-bcf68bd23518" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>TransformedTargetForecaster(steps=[Differencer(),
+                                   ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
+                                                       window_length=30)])</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('31195b6e-c4c4-4eba-9c13-854d51359815')" type="checkbox"><label for="UUID('31195b6e-c4c4-4eba-9c13-854d51359815')" class="sk-toggleable__label sk-toggleable__label-arrow">TransformedTargetForecaster<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.compose.TransformedTargetForecaster.html">?<span>Documentation for TransformedTargetForecaster</span></a></label><div class="sk-toggleable__content"><pre>TransformedTargetForecaster(steps=[Differencer(),
+                                   ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
+                                                       window_length=30)])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('d0c70f4a-6ccd-48b8-b683-38a37c083f1e')" type="checkbox"><label for="UUID('d0c70f4a-6ccd-48b8-b683-38a37c083f1e')" class="sk-toggleable__label sk-toggleable__label-arrow">Differencer<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.difference.Differencer.html">?<span>Documentation for Differencer</span></a></label><div class="sk-toggleable__content"><pre>Differencer()</pre></div></div></div><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('355041e1-4130-4be5-9110-5302ce5ddd97')" type="checkbox"><label for="UUID('355041e1-4130-4be5-9110-5302ce5ddd97')" class="sk-toggleable__label sk-toggleable__label-arrow">ReductionForecaster</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
+                    window_length=30)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('0e02614e-a579-40a2-bada-928d57629f3d')" type="checkbox"><label for="UUID('0e02614e-a579-40a2-bada-928d57629f3d')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42, verbose=-1)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('65654dd5-a148-4ca6-a97f-57d70f26e60a')" type="checkbox"><label for="UUID('65654dd5-a148-4ca6-a97f-57d70f26e60a')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42, verbose=-1)</pre></div></div></div></div></div></div></div></div></div></div></div></div>
 </div>
 </div>
-<div id="4bcbd7c0" class="cell" data-execution_count="22">
+<div id="f23ade4d" class="cell" data-execution_count="22">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>y_pred_global2 <span class="op">=</span> global_forecaster2.predict(fh<span class="op">=</span>fh, X<span class="op">=</span>X_test)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>metric_global2 <span class="op">=</span> metric(y_true<span class="op">=</span>y_test, y_pred<span class="op">=</span>y_pred_global2, y_train<span class="op">=</span>y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>E agora sua versão local:</p>
-<div id="4e470d86" class="cell" data-execution_count="23">
+<div id="5b975bd7" class="cell" data-execution_count="23">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>local_forecaster2 <span class="op">=</span> ForecastByLevel(global_forecaster2, groupby<span class="op">=</span><span class="st">"local"</span>)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>local_forecaster2.fit(y_train, X<span class="op">=</span>X_train)</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1900,7 +1903,7 @@ window.Quarto = {
 <span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>metric_local2 <span class="op">=</span> metric(y_true<span class="op">=</span>y_test, y_pred<span class="op">=</span>y_pred_local2, y_train<span class="op">=</span>y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Agora, podemos comparar:</p>
-<div id="139d968e" class="cell" data-execution_count="24">
+<div id="04890bc5" class="cell" data-execution_count="24">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>errors[<span class="st">"Global (2)"</span>] <span class="op">=</span> metric_global2</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>errors[<span class="st">"Local (2)"</span>] <span class="op">=</span> metric_local2</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1933,18 +1936,18 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>Note como já superamos o modelo global incial, e o modelo local. Isso é para destacar que é <strong>essencial</strong> realizar um bom preprocessamento e engenharia de features para que modelos de Machine Learning tenham bom desempenho em dados em painel.</p>
+<p>Note como já superamos o modelo global incial. Isso é para destacar que é <strong>essencial</strong> realizar um bom preprocessamento e engenharia de features para que modelos de Machine Learning tenham bom desempenho em dados em painel.</p>
 <section id="normalização-por-janela" class="level3" data-number="8.5.1">
 <h3 data-number="8.5.1" class="anchored" data-anchor-id="normalização-por-janela"><span class="header-section-number">8.5.1</span> Normalização por janela</h3>
 <p>Agora, vamos usar a normalização por janela, que é especialmente útil em dados em painel, onde as séries podem ter diferentes escalas.</p>
-<div id="ae4915ed" class="cell" data-execution_count="25">
+<div id="c9df7606" class="cell" data-execution_count="25">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>global_forecaster3 <span class="op">=</span> global_forecaster1.clone().set_params(</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    normalization_strategy<span class="op">=</span><span class="st">"divide_mean"</span></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>global_forecaster3.fit(y_train, X_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
-<style>#sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c {
+<style>#sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -1969,15 +1972,15 @@ window.Quarto = {
     }
   }
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a {
     color: var(--sklearn-color-text);
   }
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c pre {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a pre {
     padding: 0;
   }
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c input.sk-hidden--visually {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -1989,7 +1992,7 @@ window.Quarto = {
     width: 1px;
   }
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-dashed-wrapped {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -1997,7 +2000,7 @@ window.Quarto = {
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-container {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -2007,7 +2010,7 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-text-repr-fallback {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -2023,14 +2026,14 @@ window.Quarto = {
 
   /* Parallel-specific style estimator block */
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-parallel-item::after {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-parallel {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -2038,28 +2041,28 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-parallel-item {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-parallel-item:first-child::after {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-parallel-item:last-child::after {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-parallel-item:only-child::after {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-serial {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2077,14 +2080,14 @@ window.Quarto = {
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-toggleable {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c label.sk-toggleable__label {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -2094,7 +2097,7 @@ window.Quarto = {
     text-align: center;
   }
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c label.sk-toggleable__label-arrow:before {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -2102,13 +2105,13 @@ window.Quarto = {
     color: var(--sklearn-color-icon);
   }
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c label.sk-toggleable__label-arrow:hover:before {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-toggleable__content {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -2116,27 +2119,27 @@ window.Quarto = {
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-toggleable__content pre {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -2144,38 +2147,38 @@ window.Quarto = {
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-label label.sk-toggleable__label,
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-label label {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-label label.sk-toggleable__label,
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-label:hover label.sk-toggleable__label {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-label label {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-label-container {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-estimator {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -2185,7 +2188,7 @@ window.Quarto = {
   }
 
   /* on hover */
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c div.sk-estimator:hover {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -2242,7 +2245,7 @@ window.Quarto = {
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c a.estimator_doc_link {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -2257,17 +2260,17 @@ window.Quarto = {
   }
 
   /* On hover */
-  #sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c a.estimator_doc_link:hover {
+  #sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-d98d3f4d-1b39-4fa0-a678-ac8505118b2c" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
-                    normalization_strategy='divide_mean', window_length=30)</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('51326b25-950a-4d53-8bab-da514fc55b0f')" type="checkbox"><label for="UUID('51326b25-950a-4d53-8bab-da514fc55b0f')" class="sk-toggleable__label sk-toggleable__label-arrow">ReductionForecaster</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
-                    normalization_strategy='divide_mean', window_length=30)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('6ee59bc8-1da2-4e20-b987-facd15c330a2')" type="checkbox"><label for="UUID('6ee59bc8-1da2-4e20-b987-facd15c330a2')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(verbose=-1)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('9d2409ef-2c43-4eb5-a5c8-5572426bb9b7')" type="checkbox"><label for="UUID('9d2409ef-2c43-4eb5-a5c8-5572426bb9b7')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(verbose=-1)</pre></div></div></div></div></div></div></div></div></div></div>
+</style><div id="sk-caad0e55-9d49-458e-9c15-4eeb4f6f6b0a" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
+                    normalization_strategy='divide_mean', window_length=30)</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('a7084bdb-0a92-4114-bb49-394e1a9d5b25')" type="checkbox"><label for="UUID('a7084bdb-0a92-4114-bb49-394e1a9d5b25')" class="sk-toggleable__label sk-toggleable__label-arrow">ReductionForecaster</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
+                    normalization_strategy='divide_mean', window_length=30)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('ae3aba9c-44ea-479b-85f9-7c0c5de9f979')" type="checkbox"><label for="UUID('ae3aba9c-44ea-479b-85f9-7c0c5de9f979')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42, verbose=-1)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('3b109124-006c-4bdc-bf7d-3bff32bf877d')" type="checkbox"><label for="UUID('3b109124-006c-4bdc-bf7d-3bff32bf877d')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42, verbose=-1)</pre></div></div></div></div></div></div></div></div></div></div>
 </div>
 </div>
-<div id="9c07a328" class="cell" data-execution_count="26">
+<div id="e2713662" class="cell" data-execution_count="26">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>y_pred_global3 <span class="op">=</span> global_forecaster3.predict(fh<span class="op">=</span>fh, X<span class="op">=</span>X_test)</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2313,7 +2316,7 @@ window.Quarto = {
 <h3 data-number="8.5.2" class="anchored" data-anchor-id="pipelines-de-features-exógenas"><span class="header-section-number">8.5.2</span> Pipelines de features exógenas</h3>
 <p>Podemos ajudar o modelo a capturar sazonalidades adicionando features de Fourier como features exógenas.</p>
 <p>Usamos <code>**</code> para criar um pipeline aplicado sobre as features exógenas:</p>
-<div id="60d8feeb" class="cell" data-execution_count="27">
+<div id="3b932c41" class="cell" data-execution_count="27">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.series.fourier <span class="im">import</span> FourierFeatures</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>fourier_features <span class="op">=</span> FourierFeatures(</span>
@@ -2323,7 +2326,7 @@ window.Quarto = {
 <span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>global_forecaster4 <span class="op">=</span> fourier_features<span class="op">**</span>global_forecaster3</span>
 <span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>global_forecaster4.fit(y_train, X_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="27">
-<style>#sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 {
+<style>#sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -2348,15 +2351,15 @@ window.Quarto = {
     }
   }
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 {
     color: var(--sklearn-color-text);
   }
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 pre {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 pre {
     padding: 0;
   }
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 input.sk-hidden--visually {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -2368,7 +2371,7 @@ window.Quarto = {
     width: 1px;
   }
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-dashed-wrapped {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -2376,7 +2379,7 @@ window.Quarto = {
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-container {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -2386,7 +2389,7 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-text-repr-fallback {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -2402,14 +2405,14 @@ window.Quarto = {
 
   /* Parallel-specific style estimator block */
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-parallel-item::after {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-parallel {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -2417,28 +2420,28 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-parallel-item {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-parallel-item:first-child::after {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-parallel-item:last-child::after {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-parallel-item:only-child::after {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-serial {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2456,14 +2459,14 @@ window.Quarto = {
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-toggleable {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 label.sk-toggleable__label {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -2473,7 +2476,7 @@ window.Quarto = {
     text-align: center;
   }
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 label.sk-toggleable__label-arrow:before {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -2481,13 +2484,13 @@ window.Quarto = {
     color: var(--sklearn-color-icon);
   }
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 label.sk-toggleable__label-arrow:hover:before {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-toggleable__content {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -2495,27 +2498,27 @@ window.Quarto = {
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-toggleable__content pre {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -2523,38 +2526,38 @@ window.Quarto = {
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-label label.sk-toggleable__label,
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-label label {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-label label.sk-toggleable__label,
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-label:hover label.sk-toggleable__label {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-label label {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-label-container {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-estimator {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -2564,7 +2567,7 @@ window.Quarto = {
   }
 
   /* on hover */
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 div.sk-estimator:hover {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -2621,7 +2624,7 @@ window.Quarto = {
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 a.estimator_doc_link {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -2636,24 +2639,24 @@ window.Quarto = {
   }
 
   /* On hover */
-  #sk-583022a6-1e71-43df-9ccf-5d01f000b8f2 a.estimator_doc_link:hover {
+  #sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2 a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-583022a6-1e71-43df-9ccf-5d01f000b8f2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ForecastingPipeline(steps=[FourierFeatures(fourier_terms_list=[1, 1], freq='D',
+</style><div id="sk-f4eddce3-cf00-462c-a1e8-3313a62b72b2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ForecastingPipeline(steps=[FourierFeatures(fourier_terms_list=[1, 1], freq='D',
                                            sp_list=[365.25, 30.4375]),
-                           ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
+                           ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
                                                normalization_strategy='divide_mean',
-                                               window_length=30)])</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('4fbb11ed-5640-49be-b872-2ceb19ab3ee3')" type="checkbox"><label for="UUID('4fbb11ed-5640-49be-b872-2ceb19ab3ee3')" class="sk-toggleable__label sk-toggleable__label-arrow">ForecastingPipeline<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.compose.ForecastingPipeline.html">?<span>Documentation for ForecastingPipeline</span></a></label><div class="sk-toggleable__content"><pre>ForecastingPipeline(steps=[FourierFeatures(fourier_terms_list=[1, 1], freq='D',
+                                               window_length=30)])</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('ad814f36-9783-45af-b3c6-6af5f63ed45a')" type="checkbox"><label for="UUID('ad814f36-9783-45af-b3c6-6af5f63ed45a')" class="sk-toggleable__label sk-toggleable__label-arrow">ForecastingPipeline<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.compose.ForecastingPipeline.html">?<span>Documentation for ForecastingPipeline</span></a></label><div class="sk-toggleable__content"><pre>ForecastingPipeline(steps=[FourierFeatures(fourier_terms_list=[1, 1], freq='D',
                                            sp_list=[365.25, 30.4375]),
-                           ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
+                           ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
                                                normalization_strategy='divide_mean',
-                                               window_length=30)])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('5f72d84b-59b6-41bb-a6c2-45a33aef8f4e')" type="checkbox"><label for="UUID('5f72d84b-59b6-41bb-a6c2-45a33aef8f4e')" class="sk-toggleable__label sk-toggleable__label-arrow">FourierFeatures<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.fourier.FourierFeatures.html">?<span>Documentation for FourierFeatures</span></a></label><div class="sk-toggleable__content"><pre>FourierFeatures(fourier_terms_list=[1, 1], freq='D', sp_list=[365.25, 30.4375])</pre></div></div></div><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('c95ebc1f-1552-4540-ac47-757d61afc1fa')" type="checkbox"><label for="UUID('c95ebc1f-1552-4540-ac47-757d61afc1fa')" class="sk-toggleable__label sk-toggleable__label-arrow">ReductionForecaster</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
-                    normalization_strategy='divide_mean', window_length=30)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('39923f88-659d-4e6d-97ad-9fe573ed0a03')" type="checkbox"><label for="UUID('39923f88-659d-4e6d-97ad-9fe573ed0a03')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(verbose=-1)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('aabe9e6b-b314-4688-bd53-50b48d4c5e7d')" type="checkbox"><label for="UUID('aabe9e6b-b314-4688-bd53-50b48d4c5e7d')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(verbose=-1)</pre></div></div></div></div></div></div></div></div></div></div></div></div>
+                                               window_length=30)])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('1ed702d9-7aa8-4671-913d-5f3bfcd41fde')" type="checkbox"><label for="UUID('1ed702d9-7aa8-4671-913d-5f3bfcd41fde')" class="sk-toggleable__label sk-toggleable__label-arrow">FourierFeatures<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.fourier.FourierFeatures.html">?<span>Documentation for FourierFeatures</span></a></label><div class="sk-toggleable__content"><pre>FourierFeatures(fourier_terms_list=[1, 1], freq='D', sp_list=[365.25, 30.4375])</pre></div></div></div><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('ee623c70-0e2f-4a37-9812-422cf2a57d79')" type="checkbox"><label for="UUID('ee623c70-0e2f-4a37-9812-422cf2a57d79')" class="sk-toggleable__label sk-toggleable__label-arrow">ReductionForecaster</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
+                    normalization_strategy='divide_mean', window_length=30)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('e3ca292b-a2d4-4f22-9dd2-1a5b7e25b37b')" type="checkbox"><label for="UUID('e3ca292b-a2d4-4f22-9dd2-1a5b7e25b37b')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42, verbose=-1)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('3a60a8d1-85c7-4826-9624-a5871c56111d')" type="checkbox"><label for="UUID('3a60a8d1-85c7-4826-9624-a5871c56111d')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42, verbose=-1)</pre></div></div></div></div></div></div></div></div></div></div></div></div>
 </div>
 </div>
-<div id="53257c2f" class="cell" data-execution_count="28">
+<div id="afe7212e" class="cell" data-execution_count="28">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>y_pred_global4 <span class="op">=</span> global_forecaster4.predict(fh<span class="op">=</span>fh, X<span class="op">=</span>X_test)</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>metric_global4 <span class="op">=</span> metric(y_true<span class="op">=</span>y_test, y_pred<span class="op">=</span>y_pred_global4, y_train<span class="op">=</span>y_train)</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2745,7 +2748,7 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<div id="4022cc14" class="cell" data-execution_count="29">
+<div id="fd4b9ac8" class="cell" data-execution_count="29">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -2754,7 +2757,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div id="98d07718" class="cell" data-execution_count="30">
+<div id="07ba1cea" class="cell" data-execution_count="30">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.forecasting.compose <span class="im">import</span> GroupbyCategoryForecaster</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.series.adi_cv <span class="im">import</span> ADICVTransformer</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2771,7 +2774,7 @@ window.Quarto = {
 <span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>group_forecaster.fit(y_train, X_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="30">
-<style>#sk-6d5579f0-0a60-4827-8173-343d0e11547c {
+<style>#sk-b70ad07e-3b82-4445-857f-f75239ce2fac {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -2796,15 +2799,15 @@ window.Quarto = {
     }
   }
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac {
     color: var(--sklearn-color-text);
   }
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c pre {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac pre {
     padding: 0;
   }
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c input.sk-hidden--visually {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -2816,7 +2819,7 @@ window.Quarto = {
     width: 1px;
   }
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-dashed-wrapped {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -2824,7 +2827,7 @@ window.Quarto = {
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-container {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -2834,7 +2837,7 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-text-repr-fallback {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -2850,14 +2853,14 @@ window.Quarto = {
 
   /* Parallel-specific style estimator block */
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-parallel-item::after {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-parallel {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -2865,28 +2868,28 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-parallel-item {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-parallel-item:first-child::after {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-parallel-item:last-child::after {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-parallel-item:only-child::after {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-serial {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2904,14 +2907,14 @@ window.Quarto = {
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-toggleable {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c label.sk-toggleable__label {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -2921,7 +2924,7 @@ window.Quarto = {
     text-align: center;
   }
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c label.sk-toggleable__label-arrow:before {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -2929,13 +2932,13 @@ window.Quarto = {
     color: var(--sklearn-color-icon);
   }
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c label.sk-toggleable__label-arrow:hover:before {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-toggleable__content {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -2943,27 +2946,27 @@ window.Quarto = {
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-toggleable__content pre {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -2971,38 +2974,38 @@ window.Quarto = {
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-label label.sk-toggleable__label,
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-label label {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-label label.sk-toggleable__label,
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-label:hover label.sk-toggleable__label {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-label label {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-label-container {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-estimator {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -3012,7 +3015,7 @@ window.Quarto = {
   }
 
   /* on hover */
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c div.sk-estimator:hover {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -3069,7 +3072,7 @@ window.Quarto = {
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c a.estimator_doc_link {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -3084,43 +3087,43 @@ window.Quarto = {
   }
 
   /* On hover */
-  #sk-6d5579f0-0a60-4827-8173-343d0e11547c a.estimator_doc_link:hover {
+  #sk-b70ad07e-3b82-4445-857f-f75239ce2fac a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-6d5579f0-0a60-4827-8173-343d0e11547c" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>GroupbyCategoryForecaster(forecasters={'erratic': ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
+</style><div id="sk-b70ad07e-3b82-4445-857f-f75239ce2fac" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>GroupbyCategoryForecaster(forecasters={'erratic': ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
                                                                       normalization_strategy='divide_mean',
                                                                       window_length=30),
-                                       'intermittent': ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
+                                       'intermittent': ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
                                                                            normalization_strategy='divide_mean',
                                                                            window_length=30),
-                                       'lumpy': ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
+                                       'lumpy': ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
                                                                     normalization_strategy='divide_mean',
                                                                     window_length=30),
-                                       'smooth': ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
+                                       'smooth': ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
                                                                      normalization_strategy='divide_mean',
                                                                      window_length=30)},
-                          transformer=ADICVTransformer(features=['class']))</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('86923197-ea1d-46d3-b786-f9743cab1587')" type="checkbox"><label for="UUID('86923197-ea1d-46d3-b786-f9743cab1587')" class="sk-toggleable__label sk-toggleable__label-arrow">GroupbyCategoryForecaster<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.compose.GroupbyCategoryForecaster.html">?<span>Documentation for GroupbyCategoryForecaster</span></a></label><div class="sk-toggleable__content"><pre>GroupbyCategoryForecaster(forecasters={'erratic': ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
+                          transformer=ADICVTransformer(features=['class']))</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('88231c32-c5a7-464b-a928-4b393669b5a1')" type="checkbox"><label for="UUID('88231c32-c5a7-464b-a928-4b393669b5a1')" class="sk-toggleable__label sk-toggleable__label-arrow">GroupbyCategoryForecaster<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.compose.GroupbyCategoryForecaster.html">?<span>Documentation for GroupbyCategoryForecaster</span></a></label><div class="sk-toggleable__content"><pre>GroupbyCategoryForecaster(forecasters={'erratic': ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
                                                                       normalization_strategy='divide_mean',
                                                                       window_length=30),
-                                       'intermittent': ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
+                                       'intermittent': ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
                                                                            normalization_strategy='divide_mean',
                                                                            window_length=30),
-                                       'lumpy': ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
+                                       'lumpy': ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
                                                                     normalization_strategy='divide_mean',
                                                                     window_length=30),
-                                       'smooth': ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
+                                       'smooth': ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
                                                                      normalization_strategy='divide_mean',
                                                                      window_length=30)},
-                          transformer=ADICVTransformer(features=['class']))</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('c3429928-be95-4083-8670-dc097cdc853c')" type="checkbox"><label for="UUID('c3429928-be95-4083-8670-dc097cdc853c')" class="sk-toggleable__label sk-toggleable__label-arrow">ADICVTransformer</label><div class="sk-toggleable__content"><pre>ADICVTransformer(features=['class'])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('322d98ac-3a82-42bf-8349-c1f929910fb1')" type="checkbox"><label for="UUID('322d98ac-3a82-42bf-8349-c1f929910fb1')" class="sk-toggleable__label sk-toggleable__label-arrow">ADICVTransformer<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.adi_cv.ADICVTransformer.html">?<span>Documentation for ADICVTransformer</span></a></label><div class="sk-toggleable__content"><pre>ADICVTransformer(features=['class'])</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('e6e2377f-2caa-4e76-a614-c66027679cbe')" type="checkbox"><label for="UUID('e6e2377f-2caa-4e76-a614-c66027679cbe')" class="sk-toggleable__label sk-toggleable__label-arrow">smooth</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
-                    normalization_strategy='divide_mean', window_length=30)</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('4afe28b0-1c61-4dce-86ec-2d94e2b74370')" type="checkbox"><label for="UUID('4afe28b0-1c61-4dce-86ec-2d94e2b74370')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(verbose=-1)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('5e3c9d05-4f76-4af4-bdbf-4165e7b87fac')" type="checkbox"><label for="UUID('5e3c9d05-4f76-4af4-bdbf-4165e7b87fac')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(verbose=-1)</pre></div></div></div></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('04644a65-d59e-4781-84ee-fab44989f35b')" type="checkbox"><label for="UUID('04644a65-d59e-4781-84ee-fab44989f35b')" class="sk-toggleable__label sk-toggleable__label-arrow">erratic</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
-                    normalization_strategy='divide_mean', window_length=30)</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('b8e712a1-2b5d-4fc4-a7f3-71fdc78c3641')" type="checkbox"><label for="UUID('b8e712a1-2b5d-4fc4-a7f3-71fdc78c3641')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(verbose=-1)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('3d20213a-a779-4973-85e6-0d6663984258')" type="checkbox"><label for="UUID('3d20213a-a779-4973-85e6-0d6663984258')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(verbose=-1)</pre></div></div></div></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('5b300696-727e-44f3-8072-5843caa42a7d')" type="checkbox"><label for="UUID('5b300696-727e-44f3-8072-5843caa42a7d')" class="sk-toggleable__label sk-toggleable__label-arrow">intermittent</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
-                    normalization_strategy='divide_mean', window_length=30)</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('c75e5c9d-0566-4613-841e-758f3ad2f6f6')" type="checkbox"><label for="UUID('c75e5c9d-0566-4613-841e-758f3ad2f6f6')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(verbose=-1)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('872c793a-0b5f-4b64-836d-3ba60cf5f16d')" type="checkbox"><label for="UUID('872c793a-0b5f-4b64-836d-3ba60cf5f16d')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(verbose=-1)</pre></div></div></div></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('30997ed3-221e-45bc-8a3b-3ef01ba49093')" type="checkbox"><label for="UUID('30997ed3-221e-45bc-8a3b-3ef01ba49093')" class="sk-toggleable__label sk-toggleable__label-arrow">lumpy</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(verbose=-1),
-                    normalization_strategy='divide_mean', window_length=30)</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('952529c6-e65a-41bb-b98d-ca85411cccbb')" type="checkbox"><label for="UUID('952529c6-e65a-41bb-b98d-ca85411cccbb')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(verbose=-1)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('b280e17b-10f0-4992-a127-516a3425f005')" type="checkbox"><label for="UUID('b280e17b-10f0-4992-a127-516a3425f005')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(verbose=-1)</pre></div></div></div></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('f3231c96-6182-44ba-97a7-2c0add01efcb')" type="checkbox"><label for="UUID('f3231c96-6182-44ba-97a7-2c0add01efcb')" class="sk-toggleable__label sk-toggleable__label-arrow">fallback_forecaster</label><div class="sk-toggleable__content"><pre>None</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('3015b5db-1df4-4579-84be-ca7922a2ed2d')" type="checkbox"><label for="UUID('3015b5db-1df4-4579-84be-ca7922a2ed2d')" class="sk-toggleable__label sk-toggleable__label-arrow">None</label><div class="sk-toggleable__content"><pre>None</pre></div></div></div></div></div></div></div></div></div></div>
+                          transformer=ADICVTransformer(features=['class']))</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('bf838d28-b55c-4e9a-a50e-305587ead581')" type="checkbox"><label for="UUID('bf838d28-b55c-4e9a-a50e-305587ead581')" class="sk-toggleable__label sk-toggleable__label-arrow">ADICVTransformer</label><div class="sk-toggleable__content"><pre>ADICVTransformer(features=['class'])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('aae8c989-6144-4a2e-bc1e-fe27b7b0f80e')" type="checkbox"><label for="UUID('aae8c989-6144-4a2e-bc1e-fe27b7b0f80e')" class="sk-toggleable__label sk-toggleable__label-arrow">ADICVTransformer<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.adi_cv.ADICVTransformer.html">?<span>Documentation for ADICVTransformer</span></a></label><div class="sk-toggleable__content"><pre>ADICVTransformer(features=['class'])</pre></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('6573ab6d-8ba4-4e44-a7d0-bdb877229ba6')" type="checkbox"><label for="UUID('6573ab6d-8ba4-4e44-a7d0-bdb877229ba6')" class="sk-toggleable__label sk-toggleable__label-arrow">smooth</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
+                    normalization_strategy='divide_mean', window_length=30)</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('e3558a4a-88e1-4aaa-aeb2-57236fa124eb')" type="checkbox"><label for="UUID('e3558a4a-88e1-4aaa-aeb2-57236fa124eb')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42, verbose=-1)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('67ad99fa-2f86-4ec2-b5d5-26a8fb9dd37d')" type="checkbox"><label for="UUID('67ad99fa-2f86-4ec2-b5d5-26a8fb9dd37d')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42, verbose=-1)</pre></div></div></div></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('a4858ee1-d263-461c-b5ac-7c1c88c73dea')" type="checkbox"><label for="UUID('a4858ee1-d263-461c-b5ac-7c1c88c73dea')" class="sk-toggleable__label sk-toggleable__label-arrow">erratic</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
+                    normalization_strategy='divide_mean', window_length=30)</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('b918cf14-7213-42bd-a6c3-73efc484d147')" type="checkbox"><label for="UUID('b918cf14-7213-42bd-a6c3-73efc484d147')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42, verbose=-1)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('14b6d70a-8c27-4263-b68a-344ef8575299')" type="checkbox"><label for="UUID('14b6d70a-8c27-4263-b68a-344ef8575299')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42, verbose=-1)</pre></div></div></div></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('8c91325a-b925-4308-b9ef-0441c3906742')" type="checkbox"><label for="UUID('8c91325a-b925-4308-b9ef-0441c3906742')" class="sk-toggleable__label sk-toggleable__label-arrow">intermittent</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
+                    normalization_strategy='divide_mean', window_length=30)</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('3e8efb37-57ff-41bd-a008-4153fa478ab0')" type="checkbox"><label for="UUID('3e8efb37-57ff-41bd-a008-4153fa478ab0')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42, verbose=-1)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('d75cfc90-de4e-49c1-b858-28bd92bb5dfb')" type="checkbox"><label for="UUID('d75cfc90-de4e-49c1-b858-28bd92bb5dfb')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42, verbose=-1)</pre></div></div></div></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('ecc42e27-755f-49c1-863f-a3df45a2d231')" type="checkbox"><label for="UUID('ecc42e27-755f-49c1-863f-a3df45a2d231')" class="sk-toggleable__label sk-toggleable__label-arrow">lumpy</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42, verbose=-1),
+                    normalization_strategy='divide_mean', window_length=30)</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('b0bfba0c-7220-4f3b-a44d-3c89a49c6332')" type="checkbox"><label for="UUID('b0bfba0c-7220-4f3b-a44d-3c89a49c6332')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42, verbose=-1)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('31194d4b-6ab8-4c3a-b881-79cd3e25956f')" type="checkbox"><label for="UUID('31194d4b-6ab8-4c3a-b881-79cd3e25956f')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42, verbose=-1)</pre></div></div></div></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('2b4c4cd1-a49a-4a50-bf51-3b97bff83322')" type="checkbox"><label for="UUID('2b4c4cd1-a49a-4a50-bf51-3b97bff83322')" class="sk-toggleable__label sk-toggleable__label-arrow">fallback_forecaster</label><div class="sk-toggleable__content"><pre>None</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('cae7ddd2-9626-4157-847e-0e1f3773ac9f')" type="checkbox"><label for="UUID('cae7ddd2-9626-4157-847e-0e1f3773ac9f')" class="sk-toggleable__label sk-toggleable__label-arrow">None</label><div class="sk-toggleable__content"><pre>None</pre></div></div></div></div></div></div></div></div></div></div>
 </div>
 </div>
-<div id="b0ce5756" class="cell" data-execution_count="31">
+<div id="ec1f4ed4" class="cell" data-execution_count="31">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>y_pred_group <span class="op">=</span> group_forecaster.predict(fh<span class="op">=</span>fh, X<span class="op">=</span>X_test)</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>metric_group <span class="op">=</span> metric(y_true<span class="op">=</span>y_test, y_pred<span class="op">=</span>y_pred_group, y_train<span class="op">=</span>y_train)</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>

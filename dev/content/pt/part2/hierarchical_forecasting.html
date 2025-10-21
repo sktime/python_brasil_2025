@@ -396,7 +396,7 @@ window.Quarto = {
 <section id="carregando-dados" class="level2" data-number="9.1">
 <h2 data-number="9.1" class="anchored" data-anchor-id="carregando-dados"><span class="header-section-number">9.1</span> Carregando dados</h2>
 <p>Vamos usar os dados sintéticos, agora com sua versao hierárquica.</p>
-<div id="a8396979" class="cell" data-execution_count="2">
+<div id="88ddaf19" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tsbook.datasets.retail <span class="im">import</span> SyntheticRetail</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> SyntheticRetail(<span class="st">"hierarchical"</span>)</span>
@@ -406,7 +406,7 @@ window.Quarto = {
 <section id="uso-de-pandas-e-dados-hierárquicos" class="level2" data-number="9.2">
 <h2 data-number="9.2" class="anchored" data-anchor-id="uso-de-pandas-e-dados-hierárquicos"><span class="header-section-number">9.2</span> Uso de pandas e dados hierárquicos</h2>
 <p>Agora, os dataframes possuem mais de 2 ou mais índices, representando a hierarquia.</p>
-<div id="773a2f86" class="cell" data-execution_count="3">
+<div id="db4e7aea" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>y_train</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
@@ -486,14 +486,14 @@ window.Quarto = {
 </div>
 </div>
 <p>Para obter o número de pontos de série únicos (séries temporais individuais), podemos fazer o seguinte:</p>
-<div id="4ceb511b" class="cell" data-execution_count="4">
+<div id="78d14e80" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>y_train.index.droplevel(<span class="op">-</span><span class="dv">1</span>).nunique()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>31</code></pre>
 </div>
 </div>
 <p>Note que existem algumas séries com um identificador <code>__total</code>. Esse identificador representa o total para aquele nível da hierarquia. Por exemplo, se o id completo é <code>(-1, "__total")</code>, isso representa o total do grupo -1.</p>
-<div id="6b143fad" class="cell" data-execution_count="5">
+<div id="43748a15" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>y_train.loc[(<span class="op">-</span><span class="dv">1</span>, <span class="st">"__total"</span>)].head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <div>
@@ -538,7 +538,7 @@ window.Quarto = {
 </div>
 </div>
 <p>O total de todas as séries é representado por <code>("__total", "__total")</code>.</p>
-<div id="d1367dd7" class="cell" data-execution_count="6">
+<div id="bf11cb19" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>y_train.loc[(<span class="st">"__total"</span>, <span class="st">"__total"</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <div>
@@ -608,7 +608,7 @@ window.Quarto = {
 </div>
 </div>
 <p>Para contabilizar o número de séries temporais individuais, podemos fazer o seguinte:</p>
-<div id="f88a0f87" class="cell" data-execution_count="7">
+<div id="28575a4b" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>y_train.index.droplevel(<span class="op">-</span><span class="dv">1</span>).nunique()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>31</code></pre>
@@ -618,15 +618,15 @@ window.Quarto = {
 <section id="previsão-sem-reconciliação" class="level2" data-number="9.3">
 <h2 data-number="9.3" class="anchored" data-anchor-id="previsão-sem-reconciliação"><span class="header-section-number">9.3</span> Previsão sem reconciliação</h2>
 <p>Vamos fazer uma previsão e entender o problema da incoerência.</p>
-<div id="e9601433" class="cell" data-execution_count="8">
+<div id="06656578" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fh <span class="op">=</span> y_test.index.get_level_values(<span class="op">-</span><span class="dv">1</span>).unique()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="9aa28a34" class="cell" data-execution_count="9">
+<div id="06bf337f" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tsbook.forecasting.reduction <span class="im">import</span> ReductionForecaster</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lightgbm <span class="im">import</span> LGBMRegressor</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>forecaster <span class="op">=</span> ReductionForecaster(</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    LGBMRegressor(n_estimators<span class="op">=</span><span class="dv">50</span>, verbose<span class="op">=-</span><span class="dv">1</span>, objective<span class="op">=</span><span class="st">"tweedie"</span>),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    LGBMRegressor(n_estimators<span class="op">=</span><span class="dv">100</span>, verbose<span class="op">=-</span><span class="dv">1</span>, objective<span class="op">=</span><span class="st">"tweedie"</span>, random_state<span class="op">=</span><span class="dv">42</span>),</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    window_length<span class="op">=</span><span class="dv">30</span>,</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    normalization_strategy<span class="op">=</span><span class="st">"divide_mean"</span>,</span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -634,7 +634,7 @@ window.Quarto = {
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> forecaster.predict(fh, X<span class="op">=</span>X_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Para somar as previsões de baixo para cima, podemos usar o transformador <code>Aggregator</code>. Vamos ver que, quando somarmos as previsões das séries filhas, o resultado não é igual à previsão da série total.</p>
-<div id="9e053166" class="cell" data-execution_count="10">
+<div id="21a699db" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.hierarchical.aggregate <span class="im">import</span> Aggregator</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>Aggregator().fit_transform(y_pred) <span class="op">-</span> y_pred</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -690,23 +690,23 @@ window.Quarto = {
 <th rowspan="5" data-quarto-table-cell-role="th" data-valign="top">__total</th>
 <th rowspan="5" data-quarto-table-cell-role="th" data-valign="top">__total</th>
 <th data-quarto-table-cell-role="th">2024-12-28</th>
-<td>-427.337183</td>
+<td>-303.956496</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">2024-12-29</th>
-<td>145.464894</td>
+<td>276.995900</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2024-12-30</th>
-<td>233.108316</td>
+<td>-189.336243</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">2024-12-31</th>
-<td>282.447832</td>
+<td>415.699469</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2025-01-01</th>
-<td>-229.781623</td>
+<td>-148.407308</td>
 </tr>
 </tbody>
 </table>
@@ -737,7 +737,7 @@ C(t) = A(t) + B(t)
 <li>Sérias filhas podem capturar detalhes específicos que podem ser perdidos em níveis superiores.</li>
 </ul>
 <p>No entanto, essa abordagem também tem desvantagens: é sucetível ao ruído nas séries filhas, e se as séries filhas tiverem pouca informação, as previsões podem ser ruins. Por exemplo, muitos zeros nas séries de níveis baixos pode levar a previsões ruins a niveis agregados.</p>
-<div id="5fc324c4" class="cell" data-execution_count="11">
+<div id="479bdb8d" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.hierarchical.reconcile <span class="im">import</span> BottomUpReconciler</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>bottom_up <span class="op">=</span> BottomUpReconciler() <span class="op">*</span> forecaster</span>
@@ -746,7 +746,7 @@ C(t) = A(t) + B(t)
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>y_pred_bottomup <span class="op">=</span> bottom_up.predict(fh<span class="op">=</span>fh)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Agora vemos que as previsões são coerentes:</p>
-<div id="0975febd" class="cell" data-execution_count="12">
+<div id="59c26c89" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>Aggregator().fit_transform(y_pred_bottomup) <span class="op">-</span> y_pred_bottomup</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
 <div>
@@ -851,7 +851,7 @@ p_B(t) = \frac{\hat{B}(t)}{\hat{A}(t) + \hat{B}(t)}
 <p><img src="img/hierarchical_td_fcst.png" alt="Topdown Forecast" width="900"></p>
 <p>O que chamam de “Proporções históricas” é equivalente a esse método, mas com um modelo Naive para prever as proporções.</p>
 <p>Esse método pode ser bom quando o forecast total é de boa qualidade. No entanto, dependemos profundamente da qualidade do forecast total e das proporções.</p>
-<div id="37b58722" class="cell" data-execution_count="13">
+<div id="41643b02" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.hierarchical.reconcile <span class="im">import</span> TopdownReconciler</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>top_down_fcst <span class="op">=</span> TopdownReconciler() <span class="op">*</span> forecaster</span>
@@ -875,14 +875,14 @@ p_B(t) = \frac{\hat{B}(t)}{\hat{A}(t) + \hat{B}(t)}
 <li><strong>Minimum trace (MinT)</strong>: use a matriz de covariância do erro para encontrar as previsões reconciliadas ótimas. Chamado de “ótimo”.</li>
 </ul>
 <p>Para a reconciliação ótima com OLS, podemos usar o <code>OptimalReconciler</code> do sktime:</p>
-<div id="63d3c1d0" class="cell" data-execution_count="14">
+<div id="728e2b1f" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.hierarchical.reconcile <span class="im">import</span> OptimalReconciler</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>optimal <span class="op">=</span> OptimalReconciler(<span class="st">"ols"</span>) <span class="op">*</span> forecaster</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>optimal.fit(y_train)</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>y_pred_optimal <span class="op">=</span> optimal.predict(fh<span class="op">=</span>fh)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="0203aef4" class="cell" data-execution_count="15">
+<div id="d3f64353" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.utils.plotting <span class="im">import</span> plot_series</span>
@@ -911,7 +911,7 @@ p_B(t) = \frac{\hat{B}(t)}{\hat{A}(t) + \hat{B}(t)}
 </div>
 </div>
 <p>Para reconciliações ótimas (que usam a covariância do erro), podemos usar o <code>ReconcilerForecaster</code> do sktime, que internamente já faz o cálculo da covariância do erro:</p>
-<div id="6d6b3018" class="cell" data-execution_count="16">
+<div id="fad00bbe" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.forecasting.reconcile <span class="im">import</span> ReconcilerForecaster</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -925,7 +925,7 @@ p_B(t) = \frac{\hat{B}(t)}{\hat{A}(t) + \hat{B}(t)}
 </section>
 <section id="comparando-resultados" class="level2" data-number="9.8">
 <h2 data-number="9.8" class="anchored" data-anchor-id="comparando-resultados"><span class="header-section-number">9.8</span> Comparando resultados</h2>
-<div id="8c30971b" class="cell" data-execution_count="17">
+<div id="c7aeb14a" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.performance_metrics.forecasting <span class="im">import</span> MeanSquaredScaledError</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>metric <span class="op">=</span> MeanSquaredScaledError(multilevel<span class="op">=</span><span class="st">"uniform_average_time"</span>)</span>
@@ -938,7 +938,7 @@ p_B(t) = \frac{\hat{B}(t)}{\hat{A}(t) + \hat{B}(t)}
 <span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"OptimalReconciler (ols)"</span>: metric(y_test, y_pred_optimal, y_train<span class="op">=</span>y_train),</span>
 <span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Mint Reconciler"</span>: metric(y_test, y_pred_mint, y_train<span class="op">=</span>y_train),</span>
 <span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>[<span class="st">"Mean Absolute Scaled Error"</span>],</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>[<span class="st">"Mean Absolute Squared Error"</span>],</span>
 <span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <div>
@@ -957,12 +957,12 @@ p_B(t) = \frac{\hat{B}(t)}{\hat{A}(t) + \hat{B}(t)}
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">Mean Absolute Scaled Error</th>
-<td>88.363834</td>
-<td>76.233522</td>
-<td>126.500698</td>
-<td>125.780259</td>
-<td>117.026707</td>
+<th data-quarto-table-cell-role="th">Mean Absolute Squared Error</th>
+<td>76.656003</td>
+<td>22.363895</td>
+<td>96.793563</td>
+<td>95.197245</td>
+<td>95.599564</td>
 </tr>
 </tbody>
 </table>

@@ -364,7 +364,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="baixando-exemplos-por-mtype" class="level4" data-number="11.1.1.1">
 <h4 data-number="11.1.1.1" class="anchored" data-anchor-id="baixando-exemplos-por-mtype"><span class="header-section-number">11.1.1.1</span> Baixando exemplos por mtype</h4>
 <p>Para entender melhor cada mtype, podemos baixar exemplos práticos usando a função <code>get_examples</code> do sktime:</p>
-<div id="563ff869" class="cell" data-execution_count="1">
+<div id="3ec65078" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.datatypes <span class="im">import</span> get_examples</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>get_examples(mtype<span class="op">=</span><span class="st">"np.ndarray"</span>, as_scitype<span class="op">=</span><span class="st">"Series"</span>)[<span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -375,7 +375,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        [-3. ]])</code></pre>
 </div>
 </div>
-<div id="c2039fe5" class="cell" data-execution_count="2">
+<div id="6f233829" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>get_examples(mtype<span class="op">=</span><span class="st">"pd.DataFrame"</span>, as_scitype<span class="op">=</span><span class="st">"Series"</span>)[<span class="dv">0</span>].head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <div>
@@ -411,7 +411,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="99bb37a8" class="cell" data-execution_count="3">
+<div id="f713377a" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>get_examples(mtype<span class="op">=</span><span class="st">"pd-multiindex"</span>, as_scitype<span class="op">=</span><span class="st">"Panel"</span>)[<span class="dv">0</span>].head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
@@ -466,7 +466,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="30382ec8" class="cell" data-execution_count="4">
+<div id="51f01c2e" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>get_examples(mtype<span class="op">=</span><span class="st">"pd_multiindex_hier"</span>, as_scitype<span class="op">=</span><span class="st">"Hierarchical"</span>)[<span class="dv">0</span>].head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <div>
@@ -529,22 +529,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="exemplo-prático" class="level4" data-number="11.1.1.2">
 <h4 data-number="11.1.1.2" class="anchored" data-anchor-id="exemplo-prático"><span class="header-section-number">11.1.1.2</span> Exemplo prático</h4>
 <p>Vamos criar o nosso primeiro esqueleto de forecaster customizado. Para isso, baixamos uma série de exemplo:</p>
-<div id="5ccf3fcc" class="cell" data-execution_count="6">
+<div id="aa3f9a30" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.forecasting.base <span class="im">import</span> BaseForecaster</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.utils._testing.series <span class="im">import</span> _make_series</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> _make_series(<span class="dv">4</span>)</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
-<pre><code>2000-01-01    2.003781
+<pre><code>2000-01-01    1.841809
 2000-01-02    1.000000
-2000-01-03    3.045525
-2000-01-04    2.236960
+2000-01-03    3.142622
+2000-01-04    3.286321
 Freq: D, dtype: float64</code></pre>
 </div>
 </div>
 <p>Nosso protótipo irá apenas printar os dados recebidos no método <code>_fit</code>. O <code>__init__</code> recebe um dicionário de tags para definir as capacidades do modelo.</p>
-<div id="3dc887e8" class="cell" data-execution_count="7">
+<div id="6f751012" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Logger(BaseForecaster):</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    _tags <span class="op">=</span> {</span>
@@ -562,19 +562,19 @@ Freq: D, dtype: float64</code></pre>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(y)</span>
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="eb175199" class="cell" data-execution_count="8">
+<div id="747c9e6f" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>logger <span class="op">=</span> Logger(tags_to_set<span class="op">=</span>{<span class="st">"y_inner_mtype"</span> : [<span class="st">"pd.Series"</span>] })</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>logger.fit(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Inside fit:
-2000-01-01    2.003781
+2000-01-01    1.841809
 2000-01-02    1.000000
-2000-01-03    3.045525
-2000-01-04    2.236960
+2000-01-03    3.142622
+2000-01-04    3.286321
 Freq: D, dtype: float64</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="8">
-<style>#sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 {
+<style>#sk-3e66dec8-8834-420c-8290-824e16efff8c {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -599,15 +599,15 @@ Freq: D, dtype: float64</code></pre>
     }
   }
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c {
     color: var(--sklearn-color-text);
   }
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 pre {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c pre {
     padding: 0;
   }
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 input.sk-hidden--visually {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -619,7 +619,7 @@ Freq: D, dtype: float64</code></pre>
     width: 1px;
   }
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-dashed-wrapped {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -627,7 +627,7 @@ Freq: D, dtype: float64</code></pre>
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-container {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -637,7 +637,7 @@ Freq: D, dtype: float64</code></pre>
     position: relative;
   }
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-text-repr-fallback {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -653,14 +653,14 @@ Freq: D, dtype: float64</code></pre>
 
   /* Parallel-specific style estimator block */
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-parallel-item::after {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-parallel {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -668,28 +668,28 @@ Freq: D, dtype: float64</code></pre>
     position: relative;
   }
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-parallel-item {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-parallel-item:first-child::after {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-parallel-item:last-child::after {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-parallel-item:only-child::after {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-serial {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -707,14 +707,14 @@ Freq: D, dtype: float64</code></pre>
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-toggleable {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 label.sk-toggleable__label {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -724,7 +724,7 @@ Freq: D, dtype: float64</code></pre>
     text-align: center;
   }
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 label.sk-toggleable__label-arrow:before {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -732,13 +732,13 @@ Freq: D, dtype: float64</code></pre>
     color: var(--sklearn-color-icon);
   }
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 label.sk-toggleable__label-arrow:hover:before {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-toggleable__content {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -746,27 +746,27 @@ Freq: D, dtype: float64</code></pre>
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-toggleable__content pre {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -774,38 +774,38 @@ Freq: D, dtype: float64</code></pre>
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-label label.sk-toggleable__label,
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-label label {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-label label.sk-toggleable__label,
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-label:hover label.sk-toggleable__label {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-label label {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-label-container {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-estimator {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -815,7 +815,7 @@ Freq: D, dtype: float64</code></pre>
   }
 
   /* on hover */
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 div.sk-estimator:hover {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -872,7 +872,7 @@ Freq: D, dtype: float64</code></pre>
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 a.estimator_doc_link {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -887,26 +887,26 @@ Freq: D, dtype: float64</code></pre>
   }
 
   /* On hover */
-  #sk-91cf7032-15ed-43c2-8b27-f2207a8fce42 a.estimator_doc_link:hover {
+  #sk-3e66dec8-8834-420c-8290-824e16efff8c a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-91cf7032-15ed-43c2-8b27-f2207a8fce42" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Logger(tags_to_set={'y_inner_mtype': ['pd.Series']})</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('68e82982-e6dc-473b-842a-1afc188bd9e3')" type="checkbox" checked=""><label for="UUID('68e82982-e6dc-473b-842a-1afc188bd9e3')" class="sk-toggleable__label sk-toggleable__label-arrow">Logger</label><div class="sk-toggleable__content"><pre>Logger(tags_to_set={'y_inner_mtype': ['pd.Series']})</pre></div></div></div></div></div>
+</style><div id="sk-3e66dec8-8834-420c-8290-824e16efff8c" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Logger(tags_to_set={'y_inner_mtype': ['pd.Series']})</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('0bb0c870-14d0-4d03-b0ba-773a83edf057')" type="checkbox" checked=""><label for="UUID('0bb0c870-14d0-4d03-b0ba-773a83edf057')" class="sk-toggleable__label sk-toggleable__label-arrow">Logger</label><div class="sk-toggleable__content"><pre>Logger(tags_to_set={'y_inner_mtype': ['pd.Series']})</pre></div></div></div></div></div>
 </div>
 </div>
-<div id="1a9718bb" class="cell" data-execution_count="9">
+<div id="5f7456cd" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>logger <span class="op">=</span> Logger(tags_to_set<span class="op">=</span>{<span class="st">"y_inner_mtype"</span> : [<span class="st">"np.ndarray"</span>] })</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>logger.fit(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Inside fit:
-[[2.00378142]
+[[1.84180945]
  [1.        ]
- [3.04552466]
- [2.23695995]]</code></pre>
+ [3.14262168]
+ [3.28632133]]</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="9">
-<style>#sk-ba8c6260-b297-42f0-a8e4-68534c1b478f {
+<style>#sk-0b7074bf-e217-4df6-b9c7-db668447619d {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -931,15 +931,15 @@ Freq: D, dtype: float64</code></pre>
     }
   }
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d {
     color: var(--sklearn-color-text);
   }
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f pre {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d pre {
     padding: 0;
   }
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f input.sk-hidden--visually {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -951,7 +951,7 @@ Freq: D, dtype: float64</code></pre>
     width: 1px;
   }
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-dashed-wrapped {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -959,7 +959,7 @@ Freq: D, dtype: float64</code></pre>
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-container {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -969,7 +969,7 @@ Freq: D, dtype: float64</code></pre>
     position: relative;
   }
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-text-repr-fallback {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -985,14 +985,14 @@ Freq: D, dtype: float64</code></pre>
 
   /* Parallel-specific style estimator block */
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-parallel-item::after {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-parallel {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -1000,28 +1000,28 @@ Freq: D, dtype: float64</code></pre>
     position: relative;
   }
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-parallel-item {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-parallel-item:first-child::after {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-parallel-item:last-child::after {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-parallel-item:only-child::after {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-serial {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1039,14 +1039,14 @@ Freq: D, dtype: float64</code></pre>
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-toggleable {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f label.sk-toggleable__label {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -1056,7 +1056,7 @@ Freq: D, dtype: float64</code></pre>
     text-align: center;
   }
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f label.sk-toggleable__label-arrow:before {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -1064,13 +1064,13 @@ Freq: D, dtype: float64</code></pre>
     color: var(--sklearn-color-icon);
   }
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f label.sk-toggleable__label-arrow:hover:before {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-toggleable__content {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -1078,27 +1078,27 @@ Freq: D, dtype: float64</code></pre>
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-toggleable__content pre {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -1106,38 +1106,38 @@ Freq: D, dtype: float64</code></pre>
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-label label.sk-toggleable__label,
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-label label {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-label label.sk-toggleable__label,
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-label:hover label.sk-toggleable__label {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-label label {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-label-container {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-estimator {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -1147,7 +1147,7 @@ Freq: D, dtype: float64</code></pre>
   }
 
   /* on hover */
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f div.sk-estimator:hover {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -1204,7 +1204,7 @@ Freq: D, dtype: float64</code></pre>
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f a.estimator_doc_link {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -1219,27 +1219,27 @@ Freq: D, dtype: float64</code></pre>
   }
 
   /* On hover */
-  #sk-ba8c6260-b297-42f0-a8e4-68534c1b478f a.estimator_doc_link:hover {
+  #sk-0b7074bf-e217-4df6-b9c7-db668447619d a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-ba8c6260-b297-42f0-a8e4-68534c1b478f" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Logger(tags_to_set={'y_inner_mtype': ['np.ndarray']})</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('904cd9fa-5b24-411b-a567-4ac77724ff42')" type="checkbox" checked=""><label for="UUID('904cd9fa-5b24-411b-a567-4ac77724ff42')" class="sk-toggleable__label sk-toggleable__label-arrow">Logger</label><div class="sk-toggleable__content"><pre>Logger(tags_to_set={'y_inner_mtype': ['np.ndarray']})</pre></div></div></div></div></div>
+</style><div id="sk-0b7074bf-e217-4df6-b9c7-db668447619d" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Logger(tags_to_set={'y_inner_mtype': ['np.ndarray']})</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('e62e306b-f013-448c-bef7-2f9f09a60596')" type="checkbox" checked=""><label for="UUID('e62e306b-f013-448c-bef7-2f9f09a60596')" class="sk-toggleable__label sk-toggleable__label-arrow">Logger</label><div class="sk-toggleable__content"><pre>Logger(tags_to_set={'y_inner_mtype': ['np.ndarray']})</pre></div></div></div></div></div>
 </div>
 </div>
-<div id="de530548" class="cell" data-execution_count="10">
+<div id="f233cad2" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>logger <span class="op">=</span> Logger(tags_to_set<span class="op">=</span>{<span class="st">"y_inner_mtype"</span> : [<span class="st">"pd.DataFrame"</span>] })</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>logger.fit(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Inside fit:
                    0
-2000-01-01  2.003781
+2000-01-01  1.841809
 2000-01-02  1.000000
-2000-01-03  3.045525
-2000-01-04  2.236960</code></pre>
+2000-01-03  3.142622
+2000-01-04  3.286321</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="10">
-<style>#sk-690c1d80-752b-4b32-b8b2-9d1a92186365 {
+<style>#sk-690da30c-db04-4973-92dc-b1bd2f9d0989 {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -1264,15 +1264,15 @@ Freq: D, dtype: float64</code></pre>
     }
   }
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 {
     color: var(--sklearn-color-text);
   }
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 pre {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 pre {
     padding: 0;
   }
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 input.sk-hidden--visually {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -1284,7 +1284,7 @@ Freq: D, dtype: float64</code></pre>
     width: 1px;
   }
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-dashed-wrapped {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -1292,7 +1292,7 @@ Freq: D, dtype: float64</code></pre>
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-container {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -1302,7 +1302,7 @@ Freq: D, dtype: float64</code></pre>
     position: relative;
   }
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-text-repr-fallback {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -1318,14 +1318,14 @@ Freq: D, dtype: float64</code></pre>
 
   /* Parallel-specific style estimator block */
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-parallel-item::after {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-parallel {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -1333,28 +1333,28 @@ Freq: D, dtype: float64</code></pre>
     position: relative;
   }
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-parallel-item {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-parallel-item:first-child::after {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-parallel-item:last-child::after {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-parallel-item:only-child::after {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-serial {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1372,14 +1372,14 @@ Freq: D, dtype: float64</code></pre>
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-toggleable {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 label.sk-toggleable__label {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -1389,7 +1389,7 @@ Freq: D, dtype: float64</code></pre>
     text-align: center;
   }
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 label.sk-toggleable__label-arrow:before {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -1397,13 +1397,13 @@ Freq: D, dtype: float64</code></pre>
     color: var(--sklearn-color-icon);
   }
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 label.sk-toggleable__label-arrow:hover:before {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-toggleable__content {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -1411,27 +1411,27 @@ Freq: D, dtype: float64</code></pre>
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-toggleable__content pre {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -1439,38 +1439,38 @@ Freq: D, dtype: float64</code></pre>
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-label label.sk-toggleable__label,
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-label label {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-label label.sk-toggleable__label,
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-label:hover label.sk-toggleable__label {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-label label {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-label-container {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-estimator {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -1480,7 +1480,7 @@ Freq: D, dtype: float64</code></pre>
   }
 
   /* on hover */
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 div.sk-estimator:hover {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -1537,7 +1537,7 @@ Freq: D, dtype: float64</code></pre>
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 a.estimator_doc_link {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -1552,15 +1552,15 @@ Freq: D, dtype: float64</code></pre>
   }
 
   /* On hover */
-  #sk-690c1d80-752b-4b32-b8b2-9d1a92186365 a.estimator_doc_link:hover {
+  #sk-690da30c-db04-4973-92dc-b1bd2f9d0989 a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-690c1d80-752b-4b32-b8b2-9d1a92186365" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Logger(tags_to_set={'y_inner_mtype': ['pd.DataFrame']})</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('b8235fcd-a663-403b-818c-6e17733e77f4')" type="checkbox" checked=""><label for="UUID('b8235fcd-a663-403b-818c-6e17733e77f4')" class="sk-toggleable__label sk-toggleable__label-arrow">Logger</label><div class="sk-toggleable__content"><pre>Logger(tags_to_set={'y_inner_mtype': ['pd.DataFrame']})</pre></div></div></div></div></div>
+</style><div id="sk-690da30c-db04-4973-92dc-b1bd2f9d0989" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Logger(tags_to_set={'y_inner_mtype': ['pd.DataFrame']})</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('701b336e-2b0a-4ec3-abf3-854823950698')" type="checkbox" checked=""><label for="UUID('701b336e-2b0a-4ec3-abf3-854823950698')" class="sk-toggleable__label sk-toggleable__label-arrow">Logger</label><div class="sk-toggleable__content"><pre>Logger(tags_to_set={'y_inner_mtype': ['pd.DataFrame']})</pre></div></div></div></div></div>
 </div>
 </div>
-<div id="62af55d5" class="cell" data-execution_count="11">
+<div id="520115a6" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    logger <span class="op">=</span> Logger(tags_to_set<span class="op">=</span>{<span class="st">"y_inner_mtype"</span> : [<span class="st">"pd_multiindex_hier"</span>] })</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    logger.fit(y)</span>
@@ -1570,7 +1570,7 @@ Freq: D, dtype: float64</code></pre>
 <pre><code>Error in Logger, no series scitypes supported, likely a bug in estimator: scitypes arg passed to _most_complex_scitype are ['Hierarchical']</code></pre>
 </div>
 </div>
-<div id="08ef592d" class="cell" data-execution_count="12">
+<div id="c0439f7e" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    logger <span class="op">=</span> Logger(tags_to_set<span class="op">=</span>{<span class="st">"y_inner_mtype"</span>: [<span class="st">"pd.DataFrame"</span>, <span class="st">"pd_multiindex_hier"</span>]})</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    logger.fit(y)</span>
@@ -1579,17 +1579,17 @@ Freq: D, dtype: float64</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Inside fit:
                    0
-2000-01-01  2.003781
+2000-01-01  1.841809
 2000-01-02  1.000000
-2000-01-03  3.045525
-2000-01-04  2.236960</code></pre>
+2000-01-03  3.142622
+2000-01-04  3.286321</code></pre>
 </div>
 </div>
 </section>
 <section id="input-hierárquico" class="level4" data-number="11.1.1.3">
 <h4 data-number="11.1.1.3" class="anchored" data-anchor-id="input-hierárquico"><span class="header-section-number">11.1.1.3</span> Input hierárquico</h4>
 <p>Agora veremos como o modelo se comporta com dados hierárquicos. Note que, nos casos onde o modelo não suporta dados hierárquicos, o sktime tentará convertê-los para um mtype suportado.</p>
-<div id="846a3ee0" class="cell" data-execution_count="13">
+<div id="01365dfc" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.utils._testing.hierarchical <span class="im">import</span> _make_hierarchical</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> _make_hierarchical((<span class="dv">1</span>,<span class="dv">2</span>), max_timepoints<span class="op">=</span><span class="dv">4</span>, min_timepoints<span class="op">=</span><span class="dv">2</span>)</span>
@@ -1615,31 +1615,23 @@ Freq: D, dtype: float64</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<th rowspan="6" data-quarto-table-cell-role="th" data-valign="top">h0_0</th>
-<th rowspan="3" data-quarto-table-cell-role="th" data-valign="top">h1_0</th>
-<th data-quarto-table-cell-role="th">2000-01-02</th>
-<td>3.465742</td>
-</tr>
-<tr class="even">
+<th rowspan="4" data-quarto-table-cell-role="th" data-valign="top">h0_0</th>
+<th rowspan="2" data-quarto-table-cell-role="th" data-valign="top">h1_0</th>
 <th data-quarto-table-cell-role="th">2000-01-03</th>
-<td>1.712278</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">2000-01-04</th>
-<td>1.104541</td>
+<td>2.663502</td>
 </tr>
 <tr class="even">
-<th rowspan="3" data-quarto-table-cell-role="th" data-valign="top">h1_1</th>
-<th data-quarto-table-cell-role="th">2000-01-02</th>
-<td>1.434428</td>
+<th data-quarto-table-cell-role="th">2000-01-04</th>
+<td>2.334660</td>
 </tr>
 <tr class="odd">
+<th rowspan="2" data-quarto-table-cell-role="th" data-valign="top">h1_1</th>
 <th data-quarto-table-cell-role="th">2000-01-03</th>
 <td>1.000000</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">2000-01-04</th>
-<td>1.636871</td>
+<td>1.664346</td>
 </tr>
 </tbody>
 </table>
@@ -1647,25 +1639,23 @@ Freq: D, dtype: float64</code></pre>
 </div>
 </div>
 </div>
-<div id="d21c5d58" class="cell" data-execution_count="14">
+<div id="2edcefc1" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>logger <span class="op">=</span> Logger(tags_to_set<span class="op">=</span>{<span class="st">"y_inner_mtype"</span> : [<span class="st">"pd.Series"</span>] })</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>logger.fit(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Inside fit:
 time
-2000-01-02    3.465742
-2000-01-03    1.712278
-2000-01-04    1.104541
-Freq: D, dtype: float64
+2000-01-03    2.663502
+2000-01-04    2.334660
+dtype: float64
 Inside fit:
 time
-2000-01-02    1.434428
 2000-01-03    1.000000
-2000-01-04    1.636871
-Freq: D, dtype: float64</code></pre>
+2000-01-04    1.664346
+dtype: float64</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="14">
-<style>#sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 {
+<style>#sk-8714a39f-714c-40b4-b549-a250d0f1b163 {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -1690,15 +1680,15 @@ Freq: D, dtype: float64</code></pre>
     }
   }
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 {
     color: var(--sklearn-color-text);
   }
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 pre {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 pre {
     padding: 0;
   }
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 input.sk-hidden--visually {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -1710,7 +1700,7 @@ Freq: D, dtype: float64</code></pre>
     width: 1px;
   }
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-dashed-wrapped {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -1718,7 +1708,7 @@ Freq: D, dtype: float64</code></pre>
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-container {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -1728,7 +1718,7 @@ Freq: D, dtype: float64</code></pre>
     position: relative;
   }
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-text-repr-fallback {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -1744,14 +1734,14 @@ Freq: D, dtype: float64</code></pre>
 
   /* Parallel-specific style estimator block */
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-parallel-item::after {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-parallel {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -1759,28 +1749,28 @@ Freq: D, dtype: float64</code></pre>
     position: relative;
   }
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-parallel-item {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-parallel-item:first-child::after {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-parallel-item:last-child::after {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-parallel-item:only-child::after {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-serial {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1798,14 +1788,14 @@ Freq: D, dtype: float64</code></pre>
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-toggleable {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 label.sk-toggleable__label {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -1815,7 +1805,7 @@ Freq: D, dtype: float64</code></pre>
     text-align: center;
   }
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 label.sk-toggleable__label-arrow:before {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -1823,13 +1813,13 @@ Freq: D, dtype: float64</code></pre>
     color: var(--sklearn-color-icon);
   }
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 label.sk-toggleable__label-arrow:hover:before {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-toggleable__content {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -1837,27 +1827,27 @@ Freq: D, dtype: float64</code></pre>
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-toggleable__content pre {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -1865,38 +1855,38 @@ Freq: D, dtype: float64</code></pre>
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-label label.sk-toggleable__label,
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-label label {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-label label.sk-toggleable__label,
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-label:hover label.sk-toggleable__label {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-label label {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-label-container {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-estimator {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -1906,7 +1896,7 @@ Freq: D, dtype: float64</code></pre>
   }
 
   /* on hover */
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 div.sk-estimator:hover {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -1963,7 +1953,7 @@ Freq: D, dtype: float64</code></pre>
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 a.estimator_doc_link {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -1978,29 +1968,27 @@ Freq: D, dtype: float64</code></pre>
   }
 
   /* On hover */
-  #sk-a3d7851a-f628-40e4-a1c3-5c509b37b437 a.estimator_doc_link:hover {
+  #sk-8714a39f-714c-40b4-b549-a250d0f1b163 a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-a3d7851a-f628-40e4-a1c3-5c509b37b437" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Logger(tags_to_set={'y_inner_mtype': ['pd.Series']})</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('24d1e83d-3297-4939-8259-859c19c0ebfe')" type="checkbox" checked=""><label for="UUID('24d1e83d-3297-4939-8259-859c19c0ebfe')" class="sk-toggleable__label sk-toggleable__label-arrow">Logger</label><div class="sk-toggleable__content"><pre>Logger(tags_to_set={'y_inner_mtype': ['pd.Series']})</pre></div></div></div></div></div>
+</style><div id="sk-8714a39f-714c-40b4-b549-a250d0f1b163" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Logger(tags_to_set={'y_inner_mtype': ['pd.Series']})</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('3d4096d8-6159-4611-9c26-57011de779d6')" type="checkbox" checked=""><label for="UUID('3d4096d8-6159-4611-9c26-57011de779d6')" class="sk-toggleable__label sk-toggleable__label-arrow">Logger</label><div class="sk-toggleable__content"><pre>Logger(tags_to_set={'y_inner_mtype': ['pd.Series']})</pre></div></div></div></div></div>
 </div>
 </div>
-<div id="32597997" class="cell" data-execution_count="15">
+<div id="0d8af232" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>logger <span class="op">=</span> Logger(tags_to_set<span class="op">=</span>{<span class="st">"y_inner_mtype"</span> : [<span class="st">"np.ndarray"</span>] })</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>logger.fit(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Inside fit:
-[[3.46574173]
- [1.71227772]
- [1.10454094]]
+[[2.66350204]
+ [2.33466028]]
 Inside fit:
-[[1.43442793]
- [1.        ]
- [1.63687071]]</code></pre>
+[[1.        ]
+ [1.66434641]]</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="15">
-<style>#sk-1107e255-3303-4fca-983b-9a68e9ad7918 {
+<style>#sk-35671a0c-3029-4722-9ad9-916517136c1a {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -2025,15 +2013,15 @@ Inside fit:
     }
   }
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a {
     color: var(--sklearn-color-text);
   }
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 pre {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a pre {
     padding: 0;
   }
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 input.sk-hidden--visually {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -2045,7 +2033,7 @@ Inside fit:
     width: 1px;
   }
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-dashed-wrapped {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -2053,7 +2041,7 @@ Inside fit:
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-container {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -2063,7 +2051,7 @@ Inside fit:
     position: relative;
   }
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-text-repr-fallback {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -2079,14 +2067,14 @@ Inside fit:
 
   /* Parallel-specific style estimator block */
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-parallel-item::after {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-parallel {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -2094,28 +2082,28 @@ Inside fit:
     position: relative;
   }
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-parallel-item {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-parallel-item:first-child::after {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-parallel-item:last-child::after {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-parallel-item:only-child::after {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-serial {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2133,14 +2121,14 @@ Inside fit:
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-toggleable {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 label.sk-toggleable__label {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -2150,7 +2138,7 @@ Inside fit:
     text-align: center;
   }
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 label.sk-toggleable__label-arrow:before {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -2158,13 +2146,13 @@ Inside fit:
     color: var(--sklearn-color-icon);
   }
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 label.sk-toggleable__label-arrow:hover:before {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-toggleable__content {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -2172,27 +2160,27 @@ Inside fit:
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-toggleable__content pre {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -2200,38 +2188,38 @@ Inside fit:
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-label label.sk-toggleable__label,
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-label label {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-label label.sk-toggleable__label,
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-label:hover label.sk-toggleable__label {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-label label {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-label-container {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-estimator {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -2241,7 +2229,7 @@ Inside fit:
   }
 
   /* on hover */
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 div.sk-estimator:hover {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -2298,7 +2286,7 @@ Inside fit:
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 a.estimator_doc_link {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -2313,33 +2301,31 @@ Inside fit:
   }
 
   /* On hover */
-  #sk-1107e255-3303-4fca-983b-9a68e9ad7918 a.estimator_doc_link:hover {
+  #sk-35671a0c-3029-4722-9ad9-916517136c1a a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-1107e255-3303-4fca-983b-9a68e9ad7918" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Logger(tags_to_set={'y_inner_mtype': ['np.ndarray']})</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('d3258e01-4093-47f8-abaf-bc0bc18166cc')" type="checkbox" checked=""><label for="UUID('d3258e01-4093-47f8-abaf-bc0bc18166cc')" class="sk-toggleable__label sk-toggleable__label-arrow">Logger</label><div class="sk-toggleable__content"><pre>Logger(tags_to_set={'y_inner_mtype': ['np.ndarray']})</pre></div></div></div></div></div>
+</style><div id="sk-35671a0c-3029-4722-9ad9-916517136c1a" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Logger(tags_to_set={'y_inner_mtype': ['np.ndarray']})</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('614a5f72-e210-4a6d-9280-c52783c12e78')" type="checkbox" checked=""><label for="UUID('614a5f72-e210-4a6d-9280-c52783c12e78')" class="sk-toggleable__label sk-toggleable__label-arrow">Logger</label><div class="sk-toggleable__content"><pre>Logger(tags_to_set={'y_inner_mtype': ['np.ndarray']})</pre></div></div></div></div></div>
 </div>
 </div>
-<div id="2bdf478e" class="cell" data-execution_count="16">
+<div id="f1d8712a" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>logger <span class="op">=</span> Logger(tags_to_set<span class="op">=</span>{<span class="st">"y_inner_mtype"</span> : [<span class="st">"pd.DataFrame"</span>] })</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>logger.fit(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Inside fit:
                   c0
 time                
-2000-01-02  3.465742
-2000-01-03  1.712278
-2000-01-04  1.104541
+2000-01-03  2.663502
+2000-01-04  2.334660
 Inside fit:
                   c0
 time                
-2000-01-02  1.434428
 2000-01-03  1.000000
-2000-01-04  1.636871</code></pre>
+2000-01-04  1.664346</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="16">
-<style>#sk-5391276c-8f40-451e-80f9-980659dda7f1 {
+<style>#sk-bf4cf737-aded-48e2-98d0-e69763649552 {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -2364,15 +2350,15 @@ time
     }
   }
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 {
     color: var(--sklearn-color-text);
   }
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 pre {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 pre {
     padding: 0;
   }
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 input.sk-hidden--visually {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -2384,7 +2370,7 @@ time
     width: 1px;
   }
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-dashed-wrapped {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -2392,7 +2378,7 @@ time
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-container {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -2402,7 +2388,7 @@ time
     position: relative;
   }
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-text-repr-fallback {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -2418,14 +2404,14 @@ time
 
   /* Parallel-specific style estimator block */
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-parallel-item::after {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-parallel {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -2433,28 +2419,28 @@ time
     position: relative;
   }
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-parallel-item {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-parallel-item:first-child::after {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-parallel-item:last-child::after {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-parallel-item:only-child::after {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-serial {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2472,14 +2458,14 @@ time
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-toggleable {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 label.sk-toggleable__label {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -2489,7 +2475,7 @@ time
     text-align: center;
   }
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 label.sk-toggleable__label-arrow:before {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -2497,13 +2483,13 @@ time
     color: var(--sklearn-color-icon);
   }
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 label.sk-toggleable__label-arrow:hover:before {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-toggleable__content {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -2511,27 +2497,27 @@ time
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-toggleable__content pre {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -2539,38 +2525,38 @@ time
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-label label.sk-toggleable__label,
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-label label {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-label label.sk-toggleable__label,
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-label:hover label.sk-toggleable__label {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-label label {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-label-container {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-estimator {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -2580,7 +2566,7 @@ time
   }
 
   /* on hover */
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 div.sk-estimator:hover {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -2637,7 +2623,7 @@ time
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 a.estimator_doc_link {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -2652,15 +2638,15 @@ time
   }
 
   /* On hover */
-  #sk-5391276c-8f40-451e-80f9-980659dda7f1 a.estimator_doc_link:hover {
+  #sk-bf4cf737-aded-48e2-98d0-e69763649552 a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-5391276c-8f40-451e-80f9-980659dda7f1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Logger(tags_to_set={'y_inner_mtype': ['pd.DataFrame']})</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('37a50ff7-7371-45d4-befc-de9b644b53aa')" type="checkbox" checked=""><label for="UUID('37a50ff7-7371-45d4-befc-de9b644b53aa')" class="sk-toggleable__label sk-toggleable__label-arrow">Logger</label><div class="sk-toggleable__content"><pre>Logger(tags_to_set={'y_inner_mtype': ['pd.DataFrame']})</pre></div></div></div></div></div>
+</style><div id="sk-bf4cf737-aded-48e2-98d0-e69763649552" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Logger(tags_to_set={'y_inner_mtype': ['pd.DataFrame']})</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('084a24be-4489-465b-b9e1-06b6a06213e0')" type="checkbox" checked=""><label for="UUID('084a24be-4489-465b-b9e1-06b6a06213e0')" class="sk-toggleable__label sk-toggleable__label-arrow">Logger</label><div class="sk-toggleable__content"><pre>Logger(tags_to_set={'y_inner_mtype': ['pd.DataFrame']})</pre></div></div></div></div></div>
 </div>
 </div>
-<div id="6cd3f78a" class="cell" data-execution_count="17">
+<div id="86ec339f" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    logger <span class="op">=</span> Logger(tags_to_set<span class="op">=</span>{<span class="st">"y_inner_mtype"</span>: [<span class="st">"pd_multiindex_hier"</span>]})</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    logger.fit(y)</span>
@@ -2670,12 +2656,10 @@ time
 <pre><code>Inside fit:
                             c0
 h0   h1   time                
-h0_0 h1_0 2000-01-02  3.465742
-          2000-01-03  1.712278
-          2000-01-04  1.104541
-     h1_1 2000-01-02  1.434428
-          2000-01-03  1.000000
-          2000-01-04  1.636871</code></pre>
+h0_0 h1_0 2000-01-03  2.663502
+          2000-01-04  2.334660
+     h1_1 2000-01-03  1.000000
+          2000-01-04  1.664346</code></pre>
 </div>
 </div>
 </section>
@@ -2685,7 +2669,7 @@ h0_0 h1_0 2000-01-02  3.465742
 <h2 data-number="11.2" class="anchored" data-anchor-id="criando-um-modelo-naive"><span class="header-section-number">11.2</span> Criando um modelo naive</h2>
 <p>Agora, vamos implementar um modelo simples de previsão, o <code>CustomNaiveForecaster</code>, que prevê o valor médio dos últimos n pontos da série temporal.</p>
 <p>É um exemplo simples, mas que ilustra bem como criar um forecaster customizado com sktime.</p>
-<div id="f73b0519" class="cell" data-execution_count="18">
+<div id="bfd32efa" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tsbook.datasets.retail <span class="im">import</span> SyntheticRetail</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> SyntheticRetail(<span class="st">"panel"</span>)</span>
@@ -2763,7 +2747,7 @@ h0_0 h1_0 2000-01-02  3.465742
 </div>
 </div>
 </div>
-<div id="192dc826" class="cell" data-execution_count="19">
+<div id="4f320f92" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.utils.plotting <span class="im">import</span> plot_series</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>plot_series(</span>
@@ -2783,7 +2767,7 @@ h0_0 h1_0 2000-01-02  3.465742
 </div>
 </div>
 <p>Abaixo, implementamos o <code>CustomNaiveForecaster</code> seguindo as regras do sktime (clique para expandir). Em seguida, explicamos passo a passo.</p>
-<div id="6d55cd1b" class="cell" data-execution_count="20">
+<div id="4e14007a" class="cell" data-execution_count="20">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.forecasting.base <span class="im">import</span> BaseForecaster</span>
@@ -2888,11 +2872,11 @@ h0_0 h1_0 2000-01-02  3.465742
 <section id="usando-o-customnaiveforecaster" class="level3" data-number="11.2.4">
 <h3 data-number="11.2.4" class="anchored" data-anchor-id="usando-o-customnaiveforecaster"><span class="header-section-number">11.2.4</span> Usando o <code>CustomNaiveForecaster</code></h3>
 <p>Agora, já podemos usar o nosso modelo customizado para fazer previsões.</p>
-<div id="677a783a" class="cell" data-execution_count="21">
+<div id="c477e675" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>custom_naive_model <span class="op">=</span> CustomNaiveForecaster()</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>custom_naive_model.fit(y_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="21">
-<style>#sk-ddff6500-8c11-403f-b284-138aa48401dc {
+<style>#sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -2917,15 +2901,15 @@ h0_0 h1_0 2000-01-02  3.465742
     }
   }
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 {
     color: var(--sklearn-color-text);
   }
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc pre {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 pre {
     padding: 0;
   }
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc input.sk-hidden--visually {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -2937,7 +2921,7 @@ h0_0 h1_0 2000-01-02  3.465742
     width: 1px;
   }
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-dashed-wrapped {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -2945,7 +2929,7 @@ h0_0 h1_0 2000-01-02  3.465742
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-container {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -2955,7 +2939,7 @@ h0_0 h1_0 2000-01-02  3.465742
     position: relative;
   }
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-text-repr-fallback {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -2971,14 +2955,14 @@ h0_0 h1_0 2000-01-02  3.465742
 
   /* Parallel-specific style estimator block */
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-parallel-item::after {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-parallel {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -2986,28 +2970,28 @@ h0_0 h1_0 2000-01-02  3.465742
     position: relative;
   }
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-parallel-item {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-parallel-item:first-child::after {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-parallel-item:last-child::after {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-parallel-item:only-child::after {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-serial {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -3025,14 +3009,14 @@ h0_0 h1_0 2000-01-02  3.465742
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-toggleable {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc label.sk-toggleable__label {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -3042,7 +3026,7 @@ h0_0 h1_0 2000-01-02  3.465742
     text-align: center;
   }
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc label.sk-toggleable__label-arrow:before {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -3050,13 +3034,13 @@ h0_0 h1_0 2000-01-02  3.465742
     color: var(--sklearn-color-icon);
   }
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc label.sk-toggleable__label-arrow:hover:before {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-toggleable__content {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -3064,27 +3048,27 @@ h0_0 h1_0 2000-01-02  3.465742
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-toggleable__content pre {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -3092,38 +3076,38 @@ h0_0 h1_0 2000-01-02  3.465742
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-label label.sk-toggleable__label,
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-label label {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-label label.sk-toggleable__label,
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-label:hover label.sk-toggleable__label {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-label label {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-label-container {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-estimator {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -3133,7 +3117,7 @@ h0_0 h1_0 2000-01-02  3.465742
   }
 
   /* on hover */
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc div.sk-estimator:hover {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -3190,7 +3174,7 @@ h0_0 h1_0 2000-01-02  3.465742
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc a.estimator_doc_link {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -3205,16 +3189,16 @@ h0_0 h1_0 2000-01-02  3.465742
   }
 
   /* On hover */
-  #sk-ddff6500-8c11-403f-b284-138aa48401dc a.estimator_doc_link:hover {
+  #sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5 a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-ddff6500-8c11-403f-b284-138aa48401dc" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>CustomNaiveForecaster()</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('643d9d46-e0cc-4552-951b-b56260d85686')" type="checkbox" checked=""><label for="UUID('643d9d46-e0cc-4552-951b-b56260d85686')" class="sk-toggleable__label sk-toggleable__label-arrow">CustomNaiveForecaster</label><div class="sk-toggleable__content"><pre>CustomNaiveForecaster()</pre></div></div></div></div></div>
+</style><div id="sk-b5ceef80-18d1-45bf-b7ea-19483c4a2dc5" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>CustomNaiveForecaster()</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('1eadb3e9-c8b3-494f-b3d1-6a861bf9188f')" type="checkbox" checked=""><label for="UUID('1eadb3e9-c8b3-494f-b3d1-6a861bf9188f')" class="sk-toggleable__label sk-toggleable__label-arrow">CustomNaiveForecaster</label><div class="sk-toggleable__content"><pre>CustomNaiveForecaster()</pre></div></div></div></div></div>
 </div>
 </div>
 <p>Como passamos um dado hierárquico, o sktime converteu automaticamente para <code>pd.Series</code>, que é o mtype suportado pelo nosso modelo. Os modelos internos, para cada série, ficam disponíveis em <code>forecasters_</code>.</p>
-<div id="d0d52746" class="cell" data-execution_count="22">
+<div id="379fd299" class="cell" data-execution_count="22">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>custom_naive_model.forecasters_</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <div>
@@ -3334,7 +3318,7 @@ h0_0 h1_0 2000-01-02  3.465742
 </div>
 </div>
 </div>
-<div id="44397198" class="cell" data-execution_count="23">
+<div id="4ce8508f" class="cell" data-execution_count="23">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> custom_naive_model.predict(fh<span class="op">=</span>y_test.index.get_level_values(<span class="op">-</span><span class="dv">1</span>).unique())</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>fig, _ <span class="op">=</span> plot_series(</span>
@@ -3360,7 +3344,7 @@ h0_0 h1_0 2000-01-02  3.465742
 <h2 data-number="11.3" class="anchored" data-anchor-id="testes-unitários"><span class="header-section-number">11.3</span> Testes unitários</h2>
 <p>O sktime também fornece uma funcionalidade que traz testes unitários prontos para validar se o modelo customizado está funcionando corretamente.</p>
 <p>Ele usa os hiperparâmetros retornados pelo método <code>get_test_params</code> para criar instâncias do modelo e executar uma série de testes.</p>
-<div id="99f5022b" class="cell" data-execution_count="24">
+<div id="df84486d" class="cell" data-execution_count="24">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.utils.estimator_checks <span class="im">import</span> check_estimator</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -3369,12 +3353,11 @@ h0_0 h1_0 2000-01-02  3.465742
 <pre><code>All tests PASSED!</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="24">
-<pre><code>{'test_no_cross_test_side_effects_part2[CustomNaiveForecaster-0]': 'PASSED',
- 'test_no_cross_test_side_effects_part2[CustomNaiveForecaster-1]': 'PASSED',
- 'test_no_cross_test_side_effects_part1[CustomNaiveForecaster-0]': 'PASSED',
- 'test_no_cross_test_side_effects_part1[CustomNaiveForecaster-1]': 'PASSED',
- 'test_repr_html[CustomNaiveForecaster-0]': 'PASSED',
- 'test_repr_html[CustomNaiveForecaster-1]': 'PASSED',
+<pre><code>{'test_constructor[CustomNaiveForecaster]': 'PASSED',
+ 'test_repr[CustomNaiveForecaster-0]': 'PASSED',
+ 'test_repr[CustomNaiveForecaster-1]': 'PASSED',
+ 'test_inheritance[CustomNaiveForecaster]': 'PASSED',
+ 'test_obj_vs_cls_signature[CustomNaiveForecaster]': 'PASSED',
  'test_no_between_test_case_side_effects[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX-0]': 'PASSED',
  'test_no_between_test_case_side_effects[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX-1]': 'PASSED',
  'test_no_between_test_case_side_effects[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX-0]': 'PASSED',
@@ -3383,57 +3366,37 @@ h0_0 h1_0 2000-01-02  3.465742
  'test_no_between_test_case_side_effects[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX-1]': 'PASSED',
  'test_no_between_test_case_side_effects[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX-0]': 'PASSED',
  'test_no_between_test_case_side_effects[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX-1]': 'PASSED',
- 'test_clone[CustomNaiveForecaster-0]': 'PASSED',
- 'test_clone[CustomNaiveForecaster-1]': 'PASSED',
- 'test_obj_vs_cls_signature[CustomNaiveForecaster]': 'PASSED',
  'test_create_test_instance[CustomNaiveForecaster]': 'PASSED',
  'test_set_params_sklearn[CustomNaiveForecaster]': 'PASSED',
- 'test_inheritance[CustomNaiveForecaster]': 'PASSED',
- 'test_constructor[CustomNaiveForecaster]': 'PASSED',
+ 'test_no_cross_test_side_effects_part1[CustomNaiveForecaster-0]': 'PASSED',
+ 'test_no_cross_test_side_effects_part1[CustomNaiveForecaster-1]': 'PASSED',
+ 'test_repr_html[CustomNaiveForecaster-0]': 'PASSED',
+ 'test_repr_html[CustomNaiveForecaster-1]': 'PASSED',
  'test_valid_estimator_class_tags[CustomNaiveForecaster]': 'PASSED',
- 'test_valid_estimator_tags[CustomNaiveForecaster-0]': 'PASSED',
- 'test_valid_estimator_tags[CustomNaiveForecaster-1]': 'PASSED',
- 'test_random_tags[CustomNaiveForecaster]': 'PASSED',
- 'test_create_test_instances_and_names[CustomNaiveForecaster]': 'PASSED',
- 'test_repr[CustomNaiveForecaster-0]': 'PASSED',
- 'test_repr[CustomNaiveForecaster-1]': 'PASSED',
+ 'test_clone[CustomNaiveForecaster-0]': 'PASSED',
+ 'test_clone[CustomNaiveForecaster-1]': 'PASSED',
  'test_get_params[CustomNaiveForecaster-0]': 'PASSED',
  'test_get_params[CustomNaiveForecaster-1]': 'PASSED',
- 'test_get_test_params_coverage[CustomNaiveForecaster]': 'PASSED',
- 'test_has_common_interface[CustomNaiveForecaster]': 'PASSED',
+ 'test_create_test_instances_and_names[CustomNaiveForecaster]': 'PASSED',
  'test_set_params[CustomNaiveForecaster-0]': 'PASSED',
  'test_set_params[CustomNaiveForecaster-1]': 'PASSED',
- 'test_get_test_params[CustomNaiveForecaster]': 'PASSED',
  'test_estimator_tags[CustomNaiveForecaster]': 'PASSED',
+ 'test_has_common_interface[CustomNaiveForecaster]': 'PASSED',
+ 'test_valid_estimator_tags[CustomNaiveForecaster-0]': 'PASSED',
+ 'test_valid_estimator_tags[CustomNaiveForecaster-1]': 'PASSED',
+ 'test_get_test_params[CustomNaiveForecaster]': 'PASSED',
+ 'test_no_cross_test_side_effects_part2[CustomNaiveForecaster-0]': 'PASSED',
+ 'test_no_cross_test_side_effects_part2[CustomNaiveForecaster-1]': 'PASSED',
+ 'test_get_test_params_coverage[CustomNaiveForecaster]': 'PASSED',
+ 'test_random_tags[CustomNaiveForecaster]': 'PASSED',
  'test_persistence_via_pickle[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX-predict]': 'PASSED',
  'test_persistence_via_pickle[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
  'test_persistence_via_pickle[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX-predict]': 'PASSED',
  'test_persistence_via_pickle[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
- 'test_dl_constructor_initializes_deeply[CustomNaiveForecaster]': 'PASSED',
- 'test_fit_does_not_overwrite_hyper_params[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX]': 'PASSED',
- 'test_fit_does_not_overwrite_hyper_params[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX]': 'PASSED',
- 'test_fit_does_not_overwrite_hyper_params[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX]': 'PASSED',
- 'test_fit_does_not_overwrite_hyper_params[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX]': 'PASSED',
- 'test_fit_updates_state[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX]': 'PASSED',
- 'test_fit_updates_state[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX]': 'PASSED',
- 'test_fit_updates_state[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX]': 'PASSED',
- 'test_fit_updates_state[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX]': 'PASSED',
- 'test_non_state_changing_method_contract[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX-predict]': 'PASSED',
- 'test_non_state_changing_method_contract[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX-get_fitted_params]': 'PASSED',
- 'test_non_state_changing_method_contract[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
- 'test_non_state_changing_method_contract[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX-get_fitted_params]': 'PASSED',
- 'test_non_state_changing_method_contract[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX-predict]': 'PASSED',
- 'test_non_state_changing_method_contract[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX-get_fitted_params]': 'PASSED',
- 'test_non_state_changing_method_contract[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
- 'test_non_state_changing_method_contract[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX-get_fitted_params]': 'PASSED',
  'test_save_estimators_to_file[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX-predict]': 'PASSED',
  'test_save_estimators_to_file[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
  'test_save_estimators_to_file[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX-predict]': 'PASSED',
  'test_save_estimators_to_file[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
- 'test_multiprocessing_idempotent[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX-predict]': 'PASSED',
- 'test_multiprocessing_idempotent[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
- 'test_multiprocessing_idempotent[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX-predict]': 'PASSED',
- 'test_multiprocessing_idempotent[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
  'test_raises_not_fitted_error[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX-predict]': 'PASSED',
  'test_raises_not_fitted_error[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX-get_fitted_params]': 'PASSED',
  'test_raises_not_fitted_error[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
@@ -3442,10 +3405,14 @@ h0_0 h1_0 2000-01-02  3.465742
  'test_raises_not_fitted_error[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX-get_fitted_params]': 'PASSED',
  'test_raises_not_fitted_error[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
  'test_raises_not_fitted_error[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX-get_fitted_params]': 'PASSED',
- 'test_fit_returns_self[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX]': 'PASSED',
- 'test_fit_returns_self[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX]': 'PASSED',
- 'test_fit_returns_self[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX]': 'PASSED',
- 'test_fit_returns_self[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX]': 'PASSED',
+ 'test_fit_idempotent[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX-predict]': 'PASSED',
+ 'test_fit_idempotent[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
+ 'test_fit_idempotent[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX-predict]': 'PASSED',
+ 'test_fit_idempotent[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
+ 'test_fit_does_not_overwrite_hyper_params[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX]': 'PASSED',
+ 'test_fit_does_not_overwrite_hyper_params[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX]': 'PASSED',
+ 'test_fit_does_not_overwrite_hyper_params[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX]': 'PASSED',
+ 'test_fit_does_not_overwrite_hyper_params[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX]': 'PASSED',
  'test_methods_have_no_side_effects[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX-predict]': 'PASSED',
  'test_methods_have_no_side_effects[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX-get_fitted_params]': 'PASSED',
  'test_methods_have_no_side_effects[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
@@ -3454,148 +3421,39 @@ h0_0 h1_0 2000-01-02  3.465742
  'test_methods_have_no_side_effects[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX-get_fitted_params]': 'PASSED',
  'test_methods_have_no_side_effects[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
  'test_methods_have_no_side_effects[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX-get_fitted_params]': 'PASSED',
- 'test_fit_idempotent[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX-predict]': 'PASSED',
- 'test_fit_idempotent[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
- 'test_fit_idempotent[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX-predict]': 'PASSED',
- 'test_fit_idempotent[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
- 'test_fit_predict[CustomNaiveForecaster-0-y:1cols]': 'PASSED',
- 'test_fit_predict[CustomNaiveForecaster-0-y:2cols]': 'PASSED',
- 'test_fit_predict[CustomNaiveForecaster-1-y:1cols]': 'PASSED',
- 'test_fit_predict[CustomNaiveForecaster-1-y:2cols]': 'PASSED',
- 'test_X_invalid_type_raises_error[CustomNaiveForecaster-0-y:1cols-0]': 'PASSED',
- 'test_X_invalid_type_raises_error[CustomNaiveForecaster-0-y:1cols-1]': 'PASSED',
- 'test_X_invalid_type_raises_error[CustomNaiveForecaster-0-y:2cols-0]': 'PASSED',
- 'test_X_invalid_type_raises_error[CustomNaiveForecaster-0-y:2cols-1]': 'PASSED',
- 'test_X_invalid_type_raises_error[CustomNaiveForecaster-1-y:1cols-0]': 'PASSED',
- 'test_X_invalid_type_raises_error[CustomNaiveForecaster-1-y:1cols-1]': 'PASSED',
- 'test_X_invalid_type_raises_error[CustomNaiveForecaster-1-y:2cols-0]': 'PASSED',
- 'test_X_invalid_type_raises_error[CustomNaiveForecaster-1-y:2cols-1]': 'PASSED',
- 'test_hierarchical_with_exogeneous[CustomNaiveForecaster-0-y:1cols]': 'PASSED',
- 'test_hierarchical_with_exogeneous[CustomNaiveForecaster-0-y:2cols]': 'PASSED',
- 'test_hierarchical_with_exogeneous[CustomNaiveForecaster-1-y:1cols]': 'PASSED',
- 'test_hierarchical_with_exogeneous[CustomNaiveForecaster-1-y:2cols]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=1-int-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=1-int-int-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=1-range-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=1-range-int-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=1-period-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=1-period-period-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=1-datetime-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=1-datetime-datetime-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=1-datetime-timedelta-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-int-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-int-int-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-range-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-range-int-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-period-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-period-period-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-datetime-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-datetime-datetime-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-datetime-timedelta-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=1-int-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=1-int-int-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=1-range-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=1-range-int-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=1-period-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=1-period-period-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=1-datetime-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=1-datetime-datetime-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=1-datetime-timedelta-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-int-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-int-int-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-range-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-range-int-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-period-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-period-period-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-datetime-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-datetime-datetime-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-datetime-timedelta-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=1-int-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=1-int-int-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=1-range-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=1-range-int-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=1-period-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=1-period-period-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=1-datetime-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=1-datetime-datetime-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=1-datetime-timedelta-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-int-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-int-int-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-range-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-range-int-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-period-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-period-period-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-datetime-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-datetime-datetime-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-datetime-timedelta-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=1-int-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=1-int-int-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=1-range-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=1-range-int-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=1-period-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=1-period-period-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=1-datetime-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=1-datetime-datetime-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=1-datetime-timedelta-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-int-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-int-int-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-range-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-range-int-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-period-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-period-period-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-datetime-int-True]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-datetime-datetime-False]': 'PASSED',
- 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-datetime-timedelta-True]': 'PASSED',
- 'test__y_and_cutoff[CustomNaiveForecaster-0-y:1cols]': 'PASSED',
- 'test__y_and_cutoff[CustomNaiveForecaster-0-y:2cols]': 'PASSED',
- 'test__y_and_cutoff[CustomNaiveForecaster-1-y:1cols]': 'PASSED',
- 'test__y_and_cutoff[CustomNaiveForecaster-1-y:2cols]': 'PASSED',
- 'test__y_when_refitting[CustomNaiveForecaster-0-y:1cols]': 'PASSED',
- 'test__y_when_refitting[CustomNaiveForecaster-0-y:2cols]': 'PASSED',
- 'test__y_when_refitting[CustomNaiveForecaster-1-y:1cols]': 'PASSED',
- 'test__y_when_refitting[CustomNaiveForecaster-1-y:2cols]': 'PASSED',
+ 'test_non_state_changing_method_contract[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX-predict]': 'PASSED',
+ 'test_non_state_changing_method_contract[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX-get_fitted_params]': 'PASSED',
+ 'test_non_state_changing_method_contract[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
+ 'test_non_state_changing_method_contract[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX-get_fitted_params]': 'PASSED',
+ 'test_non_state_changing_method_contract[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX-predict]': 'PASSED',
+ 'test_non_state_changing_method_contract[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX-get_fitted_params]': 'PASSED',
+ 'test_non_state_changing_method_contract[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
+ 'test_non_state_changing_method_contract[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX-get_fitted_params]': 'PASSED',
+ 'test_dl_constructor_initializes_deeply[CustomNaiveForecaster]': 'PASSED',
+ 'test_multiprocessing_idempotent[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX-predict]': 'PASSED',
+ 'test_multiprocessing_idempotent[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
+ 'test_multiprocessing_idempotent[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX-predict]': 'PASSED',
+ 'test_multiprocessing_idempotent[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX-predict]': 'PASSED',
+ 'test_fit_updates_state[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX]': 'PASSED',
+ 'test_fit_updates_state[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX]': 'PASSED',
+ 'test_fit_updates_state[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX]': 'PASSED',
+ 'test_fit_updates_state[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX]': 'PASSED',
+ 'test_fit_returns_self[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX]': 'PASSED',
+ 'test_fit_returns_self[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX]': 'PASSED',
+ 'test_fit_returns_self[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX]': 'PASSED',
+ 'test_fit_returns_self[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX]': 'PASSED',
  'test_fh_not_passed_error_handling[CustomNaiveForecaster-0-y:1cols]': 'PASSED',
  'test_fh_not_passed_error_handling[CustomNaiveForecaster-0-y:2cols]': 'PASSED',
  'test_fh_not_passed_error_handling[CustomNaiveForecaster-1-y:1cols]': 'PASSED',
  'test_fh_not_passed_error_handling[CustomNaiveForecaster-1-y:2cols]': 'PASSED',
- 'test_y_multivariate_raises_error[CustomNaiveForecaster-0]': 'PASSED',
- 'test_y_multivariate_raises_error[CustomNaiveForecaster-1]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-0-y:1cols-fh=1-alpha=0.05]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-0-y:1cols-fh=1-alpha=0.1]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-0-y:1cols-fh=1-alpha=[0.25, 0.75]]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-alpha=0.05]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-alpha=0.1]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-alpha=[0.25, 0.75]]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-0-y:2cols-fh=1-alpha=0.05]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-0-y:2cols-fh=1-alpha=0.1]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-0-y:2cols-fh=1-alpha=[0.25, 0.75]]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-alpha=0.05]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-alpha=0.1]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-alpha=[0.25, 0.75]]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-1-y:1cols-fh=1-alpha=0.05]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-1-y:1cols-fh=1-alpha=0.1]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-1-y:1cols-fh=1-alpha=[0.25, 0.75]]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-alpha=0.05]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-alpha=0.1]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-alpha=[0.25, 0.75]]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-1-y:2cols-fh=1-alpha=0.05]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-1-y:2cols-fh=1-alpha=0.1]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-1-y:2cols-fh=1-alpha=[0.25, 0.75]]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-alpha=0.05]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-alpha=0.1]': 'PASSED',
- 'test_predict_quantiles[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-alpha=[0.25, 0.75]]': 'PASSED',
- 'test_categorical_X_raises_error[CustomNaiveForecaster-0]': 'PASSED',
- 'test_categorical_X_raises_error[CustomNaiveForecaster-1]': 'PASSED',
- 'test_score[CustomNaiveForecaster-0-y:1cols-fh=1]': 'PASSED',
- 'test_score[CustomNaiveForecaster-0-y:1cols-fh=[2 5]]': 'PASSED',
- 'test_score[CustomNaiveForecaster-0-y:2cols-fh=1]': 'PASSED',
- 'test_score[CustomNaiveForecaster-0-y:2cols-fh=[2 5]]': 'PASSED',
- 'test_score[CustomNaiveForecaster-1-y:1cols-fh=1]': 'PASSED',
- 'test_score[CustomNaiveForecaster-1-y:1cols-fh=[2 5]]': 'PASSED',
- 'test_score[CustomNaiveForecaster-1-y:2cols-fh=1]': 'PASSED',
- 'test_score[CustomNaiveForecaster-1-y:2cols-fh=[2 5]]': 'PASSED',
- 'test_pred_int_tag[CustomNaiveForecaster-0]': 'PASSED',
- 'test_pred_int_tag[CustomNaiveForecaster-1]': 'PASSED',
+ 'test__y_and_cutoff[CustomNaiveForecaster-0-y:1cols]': 'PASSED',
+ 'test__y_and_cutoff[CustomNaiveForecaster-0-y:2cols]': 'PASSED',
+ 'test__y_and_cutoff[CustomNaiveForecaster-1-y:1cols]': 'PASSED',
+ 'test__y_and_cutoff[CustomNaiveForecaster-1-y:2cols]': 'PASSED',
+ 'test_fh_attribute[CustomNaiveForecaster-0-y:1cols]': 'PASSED',
+ 'test_fh_attribute[CustomNaiveForecaster-0-y:2cols]': 'PASSED',
+ 'test_fh_attribute[CustomNaiveForecaster-1-y:1cols]': 'PASSED',
+ 'test_fh_attribute[CustomNaiveForecaster-1-y:2cols]': 'PASSED',
  'test_update_predict_predicted_index[CustomNaiveForecaster-0-y:1cols-update_params=True-0-fh=1]': 'PASSED',
  'test_update_predict_predicted_index[CustomNaiveForecaster-0-y:1cols-update_params=True-0-fh=[2 5]]': 'PASSED',
  'test_update_predict_predicted_index[CustomNaiveForecaster-0-y:1cols-update_params=True-1-fh=1]': 'PASSED',
@@ -3644,10 +3502,134 @@ h0_0 h1_0 2000-01-02  3.465742
  'test_update_predict_predicted_index[CustomNaiveForecaster-1-y:2cols-update_params=False-step=5-0-fh=[2 5]]': 'PASSED',
  'test_update_predict_predicted_index[CustomNaiveForecaster-1-y:2cols-update_params=False-step=5-1-fh=1]': 'PASSED',
  'test_update_predict_predicted_index[CustomNaiveForecaster-1-y:2cols-update_params=False-step=5-1-fh=[2 5]]': 'PASSED',
- 'test_fh_attribute[CustomNaiveForecaster-0-y:1cols]': 'PASSED',
- 'test_fh_attribute[CustomNaiveForecaster-0-y:2cols]': 'PASSED',
- 'test_fh_attribute[CustomNaiveForecaster-1-y:1cols]': 'PASSED',
- 'test_fh_attribute[CustomNaiveForecaster-1-y:2cols]': 'PASSED',
+ 'test_raises_not_fitted_error[CustomNaiveForecaster-0]': 'PASSED',
+ 'test_raises_not_fitted_error[CustomNaiveForecaster-1]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:1cols-int-int-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:1cols-int-int-False]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:1cols-range-int-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:1cols-range-int-False]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:1cols-period-int-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:1cols-period-period-False]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:1cols-datetime-int-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:1cols-datetime-datetime-False]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:1cols-datetime-timedelta-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:2cols-int-int-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:2cols-int-int-False]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:2cols-range-int-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:2cols-range-int-False]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:2cols-period-int-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:2cols-period-period-False]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:2cols-datetime-int-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:2cols-datetime-datetime-False]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:2cols-datetime-timedelta-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:1cols-int-int-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:1cols-int-int-False]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:1cols-range-int-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:1cols-range-int-False]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:1cols-period-int-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:1cols-period-period-False]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:1cols-datetime-int-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:1cols-datetime-datetime-False]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:1cols-datetime-timedelta-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:2cols-int-int-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:2cols-int-int-False]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:2cols-range-int-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:2cols-range-int-False]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:2cols-period-int-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:2cols-period-period-False]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:2cols-datetime-int-True]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:2cols-datetime-datetime-False]': 'PASSED',
+ 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:2cols-datetime-timedelta-True]': 'PASSED',
+ 'test_categorical_X_raises_error[CustomNaiveForecaster-0]': 'PASSED',
+ 'test_categorical_X_raises_error[CustomNaiveForecaster-1]': 'PASSED',
+ 'test_predict_series_name_preserved[CustomNaiveForecaster-0]': 'PASSED',
+ 'test_predict_series_name_preserved[CustomNaiveForecaster-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=1-alpha=0.05-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=1-alpha=0.05-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=1-alpha=0.1-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=1-alpha=0.1-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=1-alpha=[0.25, 0.75]-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=1-alpha=[0.25, 0.75]-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-alpha=0.05-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-alpha=0.05-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-alpha=0.1-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-alpha=0.1-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-alpha=[0.25, 0.75]-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-alpha=[0.25, 0.75]-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=1-alpha=0.05-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=1-alpha=0.05-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=1-alpha=0.1-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=1-alpha=0.1-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=1-alpha=[0.25, 0.75]-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=1-alpha=[0.25, 0.75]-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-alpha=0.05-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-alpha=0.05-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-alpha=0.1-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-alpha=0.1-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-alpha=[0.25, 0.75]-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-alpha=[0.25, 0.75]-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=1-alpha=0.05-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=1-alpha=0.05-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=1-alpha=0.1-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=1-alpha=0.1-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=1-alpha=[0.25, 0.75]-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=1-alpha=[0.25, 0.75]-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-alpha=0.05-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-alpha=0.05-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-alpha=0.1-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-alpha=0.1-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-alpha=[0.25, 0.75]-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-alpha=[0.25, 0.75]-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=1-alpha=0.05-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=1-alpha=0.05-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=1-alpha=0.1-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=1-alpha=0.1-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=1-alpha=[0.25, 0.75]-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=1-alpha=[0.25, 0.75]-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-alpha=0.05-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-alpha=0.05-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-alpha=0.1-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-alpha=0.1-1]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-alpha=[0.25, 0.75]-0]': 'PASSED',
+ 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-alpha=[0.25, 0.75]-1]': 'PASSED',
+ 'test_categorical_y_raises_error[CustomNaiveForecaster-0]': 'PASSED',
+ 'test_categorical_y_raises_error[CustomNaiveForecaster-1]': 'PASSED',
+ 'test_different_fh_in_fit_and_predict_error_handling[CustomNaiveForecaster-0-y:1cols]': 'PASSED',
+ 'test_different_fh_in_fit_and_predict_error_handling[CustomNaiveForecaster-0-y:2cols]': 'PASSED',
+ 'test_different_fh_in_fit_and_predict_error_handling[CustomNaiveForecaster-1-y:1cols]': 'PASSED',
+ 'test_different_fh_in_fit_and_predict_error_handling[CustomNaiveForecaster-1-y:2cols]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-0-y:1cols-fh=1-alpha=0.05]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-0-y:1cols-fh=1-alpha=0.1]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-0-y:1cols-fh=1-alpha=[0.25, 0.75]]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-alpha=0.05]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-alpha=0.1]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-alpha=[0.25, 0.75]]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-0-y:2cols-fh=1-alpha=0.05]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-0-y:2cols-fh=1-alpha=0.1]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-0-y:2cols-fh=1-alpha=[0.25, 0.75]]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-alpha=0.05]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-alpha=0.1]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-alpha=[0.25, 0.75]]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-1-y:1cols-fh=1-alpha=0.05]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-1-y:1cols-fh=1-alpha=0.1]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-1-y:1cols-fh=1-alpha=[0.25, 0.75]]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-alpha=0.05]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-alpha=0.1]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-alpha=[0.25, 0.75]]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-1-y:2cols-fh=1-alpha=0.05]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-1-y:2cols-fh=1-alpha=0.1]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-1-y:2cols-fh=1-alpha=[0.25, 0.75]]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-alpha=0.05]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-alpha=0.1]': 'PASSED',
+ 'test_predict_quantiles[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-alpha=[0.25, 0.75]]': 'PASSED',
+ 'test_X_invalid_type_raises_error[CustomNaiveForecaster-0-y:1cols-0]': 'PASSED',
+ 'test_X_invalid_type_raises_error[CustomNaiveForecaster-0-y:1cols-1]': 'PASSED',
+ 'test_X_invalid_type_raises_error[CustomNaiveForecaster-0-y:2cols-0]': 'PASSED',
+ 'test_X_invalid_type_raises_error[CustomNaiveForecaster-0-y:2cols-1]': 'PASSED',
+ 'test_X_invalid_type_raises_error[CustomNaiveForecaster-1-y:1cols-0]': 'PASSED',
+ 'test_X_invalid_type_raises_error[CustomNaiveForecaster-1-y:1cols-1]': 'PASSED',
+ 'test_X_invalid_type_raises_error[CustomNaiveForecaster-1-y:2cols-0]': 'PASSED',
+ 'test_X_invalid_type_raises_error[CustomNaiveForecaster-1-y:2cols-1]': 'PASSED',
  'test_predict_proba[CustomNaiveForecaster-0-y:1cols-fh=1]': 'PASSED',
  'test_predict_proba[CustomNaiveForecaster-0-y:1cols-fh=[2 5]]': 'PASSED',
  'test_predict_proba[CustomNaiveForecaster-0-y:2cols-fh=1]': 'PASSED',
@@ -3656,14 +3638,16 @@ h0_0 h1_0 2000-01-02  3.465742
  'test_predict_proba[CustomNaiveForecaster-1-y:1cols-fh=[2 5]]': 'PASSED',
  'test_predict_proba[CustomNaiveForecaster-1-y:2cols-fh=1]': 'PASSED',
  'test_predict_proba[CustomNaiveForecaster-1-y:2cols-fh=[2 5]]': 'PASSED',
- 'test_different_fh_in_fit_and_predict_error_handling[CustomNaiveForecaster-0-y:1cols]': 'PASSED',
- 'test_different_fh_in_fit_and_predict_error_handling[CustomNaiveForecaster-0-y:2cols]': 'PASSED',
- 'test_different_fh_in_fit_and_predict_error_handling[CustomNaiveForecaster-1-y:1cols]': 'PASSED',
- 'test_different_fh_in_fit_and_predict_error_handling[CustomNaiveForecaster-1-y:2cols]': 'PASSED',
- 'test_y_invalid_type_raises_error[CustomNaiveForecaster-0-0]': 'PASSED',
- 'test_y_invalid_type_raises_error[CustomNaiveForecaster-0-1]': 'PASSED',
- 'test_y_invalid_type_raises_error[CustomNaiveForecaster-1-0]': 'PASSED',
- 'test_y_invalid_type_raises_error[CustomNaiveForecaster-1-1]': 'PASSED',
+ 'test_get_fitted_params[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX]': 'PASSED',
+ 'test_get_fitted_params[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX]': 'PASSED',
+ 'test_get_fitted_params[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX]': 'PASSED',
+ 'test_get_fitted_params[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX]': 'PASSED',
+ 'test_y_multivariate_raises_error[CustomNaiveForecaster-0]': 'PASSED',
+ 'test_y_multivariate_raises_error[CustomNaiveForecaster-1]': 'PASSED',
+ 'test_hierarchical_with_exogeneous[CustomNaiveForecaster-0-y:1cols]': 'PASSED',
+ 'test_hierarchical_with_exogeneous[CustomNaiveForecaster-0-y:2cols]': 'PASSED',
+ 'test_hierarchical_with_exogeneous[CustomNaiveForecaster-1-y:1cols]': 'PASSED',
+ 'test_hierarchical_with_exogeneous[CustomNaiveForecaster-1-y:2cols]': 'PASSED',
  'test_update_with_exogenous_variables[CustomNaiveForecaster-0-y:1cols-update_params=True]': 'PASSED',
  'test_update_with_exogenous_variables[CustomNaiveForecaster-0-y:1cols-update_params=False]': 'PASSED',
  'test_update_with_exogenous_variables[CustomNaiveForecaster-0-y:2cols-update_params=True]': 'PASSED',
@@ -3672,6 +3656,14 @@ h0_0 h1_0 2000-01-02  3.465742
  'test_update_with_exogenous_variables[CustomNaiveForecaster-1-y:1cols-update_params=False]': 'PASSED',
  'test_update_with_exogenous_variables[CustomNaiveForecaster-1-y:2cols-update_params=True]': 'PASSED',
  'test_update_with_exogenous_variables[CustomNaiveForecaster-1-y:2cols-update_params=False]': 'PASSED',
+ 'test_score[CustomNaiveForecaster-0-y:1cols-fh=1]': 'PASSED',
+ 'test_score[CustomNaiveForecaster-0-y:1cols-fh=[2 5]]': 'PASSED',
+ 'test_score[CustomNaiveForecaster-0-y:2cols-fh=1]': 'PASSED',
+ 'test_score[CustomNaiveForecaster-0-y:2cols-fh=[2 5]]': 'PASSED',
+ 'test_score[CustomNaiveForecaster-1-y:1cols-fh=1]': 'PASSED',
+ 'test_score[CustomNaiveForecaster-1-y:1cols-fh=[2 5]]': 'PASSED',
+ 'test_score[CustomNaiveForecaster-1-y:2cols-fh=1]': 'PASSED',
+ 'test_score[CustomNaiveForecaster-1-y:2cols-fh=[2 5]]': 'PASSED',
  'test_update_predict_single[CustomNaiveForecaster-0-y:1cols-update_params=True-fh=1]': 'PASSED',
  'test_update_predict_single[CustomNaiveForecaster-0-y:1cols-update_params=True-fh=[2 5]]': 'PASSED',
  'test_update_predict_single[CustomNaiveForecaster-0-y:1cols-update_params=False-fh=1]': 'PASSED',
@@ -3904,100 +3896,92 @@ h0_0 h1_0 2000-01-02  3.465742
  'test_predict_time_index[CustomNaiveForecaster-1-y:2cols-fh=[-3  2]-datetime-int-True]': 'PASSED',
  'test_predict_time_index[CustomNaiveForecaster-1-y:2cols-fh=[-3  2]-datetime-datetime-False]': 'PASSED',
  'test_predict_time_index[CustomNaiveForecaster-1-y:2cols-fh=[-3  2]-datetime-timedelta-True]': 'PASSED',
- 'test_predict_series_name_preserved[CustomNaiveForecaster-0]': 'PASSED',
- 'test_predict_series_name_preserved[CustomNaiveForecaster-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=1-alpha=0.05-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=1-alpha=0.05-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=1-alpha=0.1-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=1-alpha=0.1-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=1-alpha=[0.25, 0.75]-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=1-alpha=[0.25, 0.75]-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-alpha=0.05-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-alpha=0.05-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-alpha=0.1-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-alpha=0.1-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-alpha=[0.25, 0.75]-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-alpha=[0.25, 0.75]-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=1-alpha=0.05-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=1-alpha=0.05-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=1-alpha=0.1-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=1-alpha=0.1-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=1-alpha=[0.25, 0.75]-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=1-alpha=[0.25, 0.75]-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-alpha=0.05-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-alpha=0.05-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-alpha=0.1-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-alpha=0.1-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-alpha=[0.25, 0.75]-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-alpha=[0.25, 0.75]-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=1-alpha=0.05-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=1-alpha=0.05-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=1-alpha=0.1-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=1-alpha=0.1-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=1-alpha=[0.25, 0.75]-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=1-alpha=[0.25, 0.75]-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-alpha=0.05-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-alpha=0.05-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-alpha=0.1-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-alpha=0.1-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-alpha=[0.25, 0.75]-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-alpha=[0.25, 0.75]-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=1-alpha=0.05-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=1-alpha=0.05-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=1-alpha=0.1-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=1-alpha=0.1-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=1-alpha=[0.25, 0.75]-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=1-alpha=[0.25, 0.75]-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-alpha=0.05-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-alpha=0.05-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-alpha=0.1-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-alpha=0.1-1]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-alpha=[0.25, 0.75]-0]': 'PASSED',
- 'test_predict_interval[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-alpha=[0.25, 0.75]-1]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:1cols-int-int-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:1cols-int-int-False]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:1cols-range-int-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:1cols-range-int-False]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:1cols-period-int-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:1cols-period-period-False]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:1cols-datetime-int-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:1cols-datetime-datetime-False]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:1cols-datetime-timedelta-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:2cols-int-int-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:2cols-int-int-False]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:2cols-range-int-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:2cols-range-int-False]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:2cols-period-int-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:2cols-period-period-False]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:2cols-datetime-int-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:2cols-datetime-datetime-False]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-0-y:2cols-datetime-timedelta-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:1cols-int-int-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:1cols-int-int-False]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:1cols-range-int-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:1cols-range-int-False]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:1cols-period-int-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:1cols-period-period-False]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:1cols-datetime-int-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:1cols-datetime-datetime-False]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:1cols-datetime-timedelta-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:2cols-int-int-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:2cols-int-int-False]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:2cols-range-int-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:2cols-range-int-False]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:2cols-period-int-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:2cols-period-period-False]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:2cols-datetime-int-True]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:2cols-datetime-datetime-False]': 'PASSED',
- 'test_predict_time_index_in_sample_full[CustomNaiveForecaster-1-y:2cols-datetime-timedelta-True]': 'PASSED',
- 'test_raises_not_fitted_error[CustomNaiveForecaster-0]': 'PASSED',
- 'test_raises_not_fitted_error[CustomNaiveForecaster-1]': 'PASSED',
- 'test_categorical_y_raises_error[CustomNaiveForecaster-0]': 'PASSED',
- 'test_categorical_y_raises_error[CustomNaiveForecaster-1]': 'PASSED',
- 'test_get_fitted_params[CustomNaiveForecaster-0-ForecasterFitPredictUnivariateWithX]': 'PASSED',
- 'test_get_fitted_params[CustomNaiveForecaster-0-ForecasterFitPredictMultivariateNoX]': 'PASSED',
- 'test_get_fitted_params[CustomNaiveForecaster-1-ForecasterFitPredictUnivariateWithX]': 'PASSED',
- 'test_get_fitted_params[CustomNaiveForecaster-1-ForecasterFitPredictMultivariateNoX]': 'PASSED'}</code></pre>
+ 'test__y_when_refitting[CustomNaiveForecaster-0-y:1cols]': 'PASSED',
+ 'test__y_when_refitting[CustomNaiveForecaster-0-y:2cols]': 'PASSED',
+ 'test__y_when_refitting[CustomNaiveForecaster-1-y:1cols]': 'PASSED',
+ 'test__y_when_refitting[CustomNaiveForecaster-1-y:2cols]': 'PASSED',
+ 'test_fit_predict[CustomNaiveForecaster-0-y:1cols]': 'PASSED',
+ 'test_fit_predict[CustomNaiveForecaster-0-y:2cols]': 'PASSED',
+ 'test_fit_predict[CustomNaiveForecaster-1-y:1cols]': 'PASSED',
+ 'test_fit_predict[CustomNaiveForecaster-1-y:2cols]': 'PASSED',
+ 'test_pred_int_tag[CustomNaiveForecaster-0]': 'PASSED',
+ 'test_pred_int_tag[CustomNaiveForecaster-1]': 'PASSED',
+ 'test_y_invalid_type_raises_error[CustomNaiveForecaster-0-0]': 'PASSED',
+ 'test_y_invalid_type_raises_error[CustomNaiveForecaster-0-1]': 'PASSED',
+ 'test_y_invalid_type_raises_error[CustomNaiveForecaster-1-0]': 'PASSED',
+ 'test_y_invalid_type_raises_error[CustomNaiveForecaster-1-1]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=1-int-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=1-int-int-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=1-range-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=1-range-int-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=1-period-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=1-period-period-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=1-datetime-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=1-datetime-datetime-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=1-datetime-timedelta-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-int-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-int-int-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-range-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-range-int-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-period-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-period-period-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-datetime-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-datetime-datetime-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:1cols-fh=[2 5]-datetime-timedelta-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=1-int-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=1-int-int-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=1-range-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=1-range-int-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=1-period-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=1-period-period-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=1-datetime-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=1-datetime-datetime-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=1-datetime-timedelta-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-int-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-int-int-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-range-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-range-int-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-period-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-period-period-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-datetime-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-datetime-datetime-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-0-y:2cols-fh=[2 5]-datetime-timedelta-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=1-int-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=1-int-int-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=1-range-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=1-range-int-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=1-period-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=1-period-period-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=1-datetime-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=1-datetime-datetime-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=1-datetime-timedelta-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-int-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-int-int-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-range-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-range-int-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-period-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-period-period-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-datetime-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-datetime-datetime-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:1cols-fh=[2 5]-datetime-timedelta-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=1-int-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=1-int-int-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=1-range-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=1-range-int-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=1-period-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=1-period-period-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=1-datetime-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=1-datetime-datetime-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=1-datetime-timedelta-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-int-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-int-int-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-range-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-range-int-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-period-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-period-period-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-datetime-int-True]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-datetime-datetime-False]': 'PASSED',
+ 'test_predict_time_index_with_X[CustomNaiveForecaster-1-y:2cols-fh=[2 5]-datetime-timedelta-True]': 'PASSED'}</code></pre>
 </div>
 </div>
 

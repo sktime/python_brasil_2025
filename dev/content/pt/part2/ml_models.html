@@ -360,7 +360,7 @@ window.Quarto = {
 <li><strong>Previsão direta</strong>: em vez de prever um passo de cada vez, podemos treinar o modelo para prever todos os <span class="math inline">\(h\)</span> passos à frente de uma vez. Isso pode ser feito usando um modelo para cada <span class="math inline">\(h\)</span> ou usando um modelo que prevê um vetor de <span class="math inline">\(h\)</span> valores.</li>
 </ol>
 <p>A verdade é que as duas abordagens podem ser vistas como uma: a previsão recursiva pode ser vista como uma previsão direta para <span class="math inline">\(h=1\)</span>.</p>
-<div id="34e26cec" class="cell" data-execution_count="2">
+<div id="2dac3999" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tsbook.datasets.retail <span class="im">import</span> SyntheticRetail</span>
@@ -376,7 +376,7 @@ window.Quarto = {
 <section id="o-problema-da-tendência" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="o-problema-da-tendência"><span class="header-section-number">7.1</span> O problema da tendência</h2>
 <p>A tendência em séries temporais é como um constante problema de data drift:</p>
-<div id="bbf65dae" class="cell" data-execution_count="3">
+<div id="796ee2d8" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>_X <span class="op">=</span> [y_train.iloc[i : i <span class="op">+</span> <span class="dv">7</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">700</span>)]</span>
@@ -421,7 +421,7 @@ window.Quarto = {
 </div>
 <p>Quando criamos nossas janelas e olhamos treine e teste, esse problema fica claro. A informação de uma série em treino não é util para prever a série de teste, pois elas estão em magnitudes diferentes.</p>
 <p>Uma possível solução para isso é normalizar cada janela, dividindo pelo valor médio da janela. Assim, todas as janelas ficam na mesma escala:</p>
-<div id="9ad549dd" class="cell" data-execution_count="4">
+<div id="dffda23a" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>_X <span class="op">=</span> [x <span class="op">/</span> x.mean() <span class="cf">for</span> x <span class="kw">in</span> _X]</span>
@@ -451,18 +451,25 @@ window.Quarto = {
 <section id="usando-modelos-de-ml-com-sktime" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="usando-modelos-de-ml-com-sktime"><span class="header-section-number">7.2</span> Usando modelos de ML com sktime</h2>
 <p>Primeiro, vamos import <code>ReductionForecaster</code>, que é a classe que implementa a abordagem de janelas deslizantes para usar modelos de ML em séries temporais. Vamos testar um primeiro caso sem nenhum tipo de preprocessamento, apenas criando as janelas:</p>
-<div id="c991f19e" class="cell" data-execution_count="5">
+<div id="06457bf5" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tsbook.forecasting.reduction <span class="im">import</span> ReductionForecaster</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lightgbm <span class="im">import</span> LGBMRegressor</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> ReductionForecaster(</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">100</span>, random_state<span class="op">=</span><span class="dv">42</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    LGBMRegressor(n_estimators<span class="op">=</span><span class="dv">100</span>, random_state<span class="op">=</span><span class="dv">42</span>),</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    window_length<span class="op">=</span><span class="dv">30</span>,</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>model.fit(y_train, X<span class="op">=</span>X_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000227 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 7652
+[LightGBM] [Info] Number of data points in the train set: 1618, number of used features: 31
+[LightGBM] [Info] Start training from score 580.323857</code></pre>
+</div>
 <div class="cell-output cell-output-display" data-execution_count="5">
-<style>#sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 {
+<style>#sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -487,15 +494,15 @@ window.Quarto = {
     }
   }
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 {
     color: var(--sklearn-color-text);
   }
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 pre {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 pre {
     padding: 0;
   }
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 input.sk-hidden--visually {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -507,7 +514,7 @@ window.Quarto = {
     width: 1px;
   }
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-dashed-wrapped {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -515,7 +522,7 @@ window.Quarto = {
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-container {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -525,7 +532,7 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-text-repr-fallback {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -541,14 +548,14 @@ window.Quarto = {
 
   /* Parallel-specific style estimator block */
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-parallel-item::after {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-parallel {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -556,28 +563,28 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-parallel-item {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-parallel-item:first-child::after {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-parallel-item:last-child::after {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-parallel-item:only-child::after {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-serial {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -595,14 +602,14 @@ window.Quarto = {
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-toggleable {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 label.sk-toggleable__label {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -612,7 +619,7 @@ window.Quarto = {
     text-align: center;
   }
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 label.sk-toggleable__label-arrow:before {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -620,13 +627,13 @@ window.Quarto = {
     color: var(--sklearn-color-icon);
   }
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 label.sk-toggleable__label-arrow:hover:before {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-toggleable__content {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -634,27 +641,27 @@ window.Quarto = {
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-toggleable__content pre {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -662,38 +669,38 @@ window.Quarto = {
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-label label.sk-toggleable__label,
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-label label {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-label label.sk-toggleable__label,
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-label:hover label.sk-toggleable__label {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-label label {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-label-container {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-estimator {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -703,7 +710,7 @@ window.Quarto = {
   }
 
   /* on hover */
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 div.sk-estimator:hover {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -760,7 +767,7 @@ window.Quarto = {
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 a.estimator_doc_link {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -775,20 +782,18 @@ window.Quarto = {
   }
 
   /* On hover */
-  #sk-7f614e96-306d-44c2-a310-a1c2343fa2b2 a.estimator_doc_link:hover {
+  #sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73 a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-7f614e96-306d-44c2-a310-a1c2343fa2b2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ReductionForecaster(estimator=RandomForestRegressor(random_state=42),
-                    window_length=30)</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('b199bf50-1fa2-4296-b49b-c1b518dc0003')" type="checkbox"><label for="UUID('b199bf50-1fa2-4296-b49b-c1b518dc0003')" class="sk-toggleable__label sk-toggleable__label-arrow">ReductionForecaster</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=RandomForestRegressor(random_state=42),
-                    window_length=30)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('6645fcae-9814-4652-aac3-ce82044a0d17')" type="checkbox"><label for="UUID('6645fcae-9814-4652-aac3-ce82044a0d17')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: RandomForestRegressor</label><div class="sk-toggleable__content"><pre>RandomForestRegressor(random_state=42)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('a1b5f9a0-5042-4206-95e1-ff0d4f0bab92')" type="checkbox"><label for="UUID('a1b5f9a0-5042-4206-95e1-ff0d4f0bab92')" class="sk-toggleable__label sk-toggleable__label-arrow">RandomForestRegressor<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.7/modules/generated/sklearn.ensemble.RandomForestRegressor.html">?<span>Documentation for RandomForestRegressor</span></a></label><div class="sk-toggleable__content"><pre>RandomForestRegressor(random_state=42)</pre></div></div></div></div></div></div></div></div></div></div>
+</style><div id="sk-82e31eb8-dda8-4485-ac05-d6ce6f1e9e73" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42), window_length=30)</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('0d664dd9-23f1-44f5-a8eb-e41f30b304ad')" type="checkbox"><label for="UUID('0d664dd9-23f1-44f5-a8eb-e41f30b304ad')" class="sk-toggleable__label sk-toggleable__label-arrow">ReductionForecaster</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42), window_length=30)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('bd78d02f-69b7-4adb-aa10-c06e1162c82a')" type="checkbox"><label for="UUID('bd78d02f-69b7-4adb-aa10-c06e1162c82a')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('fcd18c41-ec01-4d5b-ae08-fa1c22163859')" type="checkbox"><label for="UUID('fcd18c41-ec01-4d5b-ae08-fa1c22163859')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42)</pre></div></div></div></div></div></div></div></div></div></div>
 </div>
 </div>
-<div id="82008911" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> model.predict(fh<span class="op">=</span>y_test.index, X<span class="op">=</span>X_test)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>plot_series(y_train, y_test, y_pred, labels<span class="op">=</span>[<span class="st">"Treino"</span>, <span class="st">"Teste"</span>, <span class="st">"Previsão com ML"</span>])</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="8151c15c" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> model.predict(fh<span class="op">=</span>y_test.index, X<span class="op">=</span>X_test)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>plot_series(y_train, y_test, y_pred, labels<span class="op">=</span>[<span class="st">"Treino"</span>, <span class="st">"Teste"</span>, <span class="st">"Previsão com ML"</span>])</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -801,20 +806,27 @@ window.Quarto = {
 <section id="solução-1-diferenciação" class="level3" data-number="7.2.1">
 <h3 data-number="7.2.1" class="anchored" data-anchor-id="solução-1-diferenciação"><span class="header-section-number">7.2.1</span> Solução 1: Diferenciação</h3>
 <p>Uma solução é usar a diferenciação para remover a tendência da série.</p>
-<div id="ada45d8a" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.series.difference <span class="im">import</span> Differencer</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>regressor <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">100</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> Differencer() <span class="op">*</span> ReductionForecaster(</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    regressor,</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    window_length<span class="op">=</span><span class="dv">30</span>,</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    steps_ahead<span class="op">=</span><span class="dv">1</span>,</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>model.fit(y_train, X<span class="op">=</span>X_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="c3b4b19e" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.series.difference <span class="im">import</span> Differencer</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>regressor <span class="op">=</span> LGBMRegressor(n_estimators<span class="op">=</span><span class="dv">100</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> Differencer() <span class="op">*</span> ReductionForecaster(</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    regressor,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    window_length<span class="op">=</span><span class="dv">30</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    steps_ahead<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>model.fit(y_train, X<span class="op">=</span>X_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000239 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 7638
+[LightGBM] [Info] Number of data points in the train set: 1618, number of used features: 31
+[LightGBM] [Info] Start training from score 1.496292</code></pre>
+</div>
 <div class="cell-output cell-output-display" data-execution_count="7">
-<style>#sk-c48de073-2527-436b-bcf8-ab562bf36b2c {
+<style>#sk-a2f96fe0-ff85-4998-b24e-f649bdda619f {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -839,15 +851,15 @@ window.Quarto = {
     }
   }
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f {
     color: var(--sklearn-color-text);
   }
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c pre {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f pre {
     padding: 0;
   }
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c input.sk-hidden--visually {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -859,7 +871,7 @@ window.Quarto = {
     width: 1px;
   }
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-dashed-wrapped {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -867,7 +879,7 @@ window.Quarto = {
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-container {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -877,7 +889,7 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-text-repr-fallback {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -893,14 +905,14 @@ window.Quarto = {
 
   /* Parallel-specific style estimator block */
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-parallel-item::after {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-parallel {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -908,28 +920,28 @@ window.Quarto = {
     position: relative;
   }
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-parallel-item {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-parallel-item:first-child::after {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-parallel-item:last-child::after {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-parallel-item:only-child::after {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-serial {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -947,14 +959,14 @@ window.Quarto = {
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-toggleable {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c label.sk-toggleable__label {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -964,7 +976,7 @@ window.Quarto = {
     text-align: center;
   }
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c label.sk-toggleable__label-arrow:before {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -972,13 +984,13 @@ window.Quarto = {
     color: var(--sklearn-color-icon);
   }
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c label.sk-toggleable__label-arrow:hover:before {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-toggleable__content {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -986,27 +998,27 @@ window.Quarto = {
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-toggleable__content pre {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -1014,38 +1026,38 @@ window.Quarto = {
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-label label.sk-toggleable__label,
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-label label {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-label label.sk-toggleable__label,
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-label:hover label.sk-toggleable__label {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-label label {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-label-container {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-estimator {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -1055,7 +1067,7 @@ window.Quarto = {
   }
 
   /* on hover */
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c div.sk-estimator:hover {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -1112,7 +1124,7 @@ window.Quarto = {
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c a.estimator_doc_link {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -1127,26 +1139,25 @@ window.Quarto = {
   }
 
   /* On hover */
-  #sk-c48de073-2527-436b-bcf8-ab562bf36b2c a.estimator_doc_link:hover {
+  #sk-a2f96fe0-ff85-4998-b24e-f649bdda619f a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-c48de073-2527-436b-bcf8-ab562bf36b2c" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>TransformedTargetForecaster(steps=[Differencer(),
-                                   ReductionForecaster(estimator=RandomForestRegressor(random_state=42),
-                                                       window_length=30)])</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('9225282d-d3ee-4d3a-8938-7d5247e5fd88')" type="checkbox"><label for="UUID('9225282d-d3ee-4d3a-8938-7d5247e5fd88')" class="sk-toggleable__label sk-toggleable__label-arrow">TransformedTargetForecaster<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.compose.TransformedTargetForecaster.html">?<span>Documentation for TransformedTargetForecaster</span></a></label><div class="sk-toggleable__content"><pre>TransformedTargetForecaster(steps=[Differencer(),
-                                   ReductionForecaster(estimator=RandomForestRegressor(random_state=42),
-                                                       window_length=30)])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('3aefed8b-3dbc-431d-bba4-38b68c376040')" type="checkbox"><label for="UUID('3aefed8b-3dbc-431d-bba4-38b68c376040')" class="sk-toggleable__label sk-toggleable__label-arrow">Differencer<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.difference.Differencer.html">?<span>Documentation for Differencer</span></a></label><div class="sk-toggleable__content"><pre>Differencer()</pre></div></div></div><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('5ed2375b-8617-4e5f-ae43-8a16bf558b07')" type="checkbox"><label for="UUID('5ed2375b-8617-4e5f-ae43-8a16bf558b07')" class="sk-toggleable__label sk-toggleable__label-arrow">ReductionForecaster</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=RandomForestRegressor(random_state=42),
-                    window_length=30)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('c99cf36c-7bd8-47ca-a40e-07aef15e073f')" type="checkbox"><label for="UUID('c99cf36c-7bd8-47ca-a40e-07aef15e073f')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: RandomForestRegressor</label><div class="sk-toggleable__content"><pre>RandomForestRegressor(random_state=42)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('cfb0cfa8-87fd-4c02-9a57-326eb14c8a02')" type="checkbox"><label for="UUID('cfb0cfa8-87fd-4c02-9a57-326eb14c8a02')" class="sk-toggleable__label sk-toggleable__label-arrow">RandomForestRegressor<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.7/modules/generated/sklearn.ensemble.RandomForestRegressor.html">?<span>Documentation for RandomForestRegressor</span></a></label><div class="sk-toggleable__content"><pre>RandomForestRegressor(random_state=42)</pre></div></div></div></div></div></div></div></div></div></div></div></div>
+</style><div id="sk-a2f96fe0-ff85-4998-b24e-f649bdda619f" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>TransformedTargetForecaster(steps=[Differencer(),
+                                   ReductionForecaster(estimator=LGBMRegressor(random_state=42),
+                                                       window_length=30)])</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('febc0930-0f69-4523-98a8-f2a20aeb0171')" type="checkbox"><label for="UUID('febc0930-0f69-4523-98a8-f2a20aeb0171')" class="sk-toggleable__label sk-toggleable__label-arrow">TransformedTargetForecaster<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.compose.TransformedTargetForecaster.html">?<span>Documentation for TransformedTargetForecaster</span></a></label><div class="sk-toggleable__content"><pre>TransformedTargetForecaster(steps=[Differencer(),
+                                   ReductionForecaster(estimator=LGBMRegressor(random_state=42),
+                                                       window_length=30)])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('8a396a04-7a5c-43bc-982d-c4eadbbda7b5')" type="checkbox"><label for="UUID('8a396a04-7a5c-43bc-982d-c4eadbbda7b5')" class="sk-toggleable__label sk-toggleable__label-arrow">Differencer<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.difference.Differencer.html">?<span>Documentation for Differencer</span></a></label><div class="sk-toggleable__content"><pre>Differencer()</pre></div></div></div><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('145aea18-411d-41e9-b5bc-25916a8fdb4c')" type="checkbox"><label for="UUID('145aea18-411d-41e9-b5bc-25916a8fdb4c')" class="sk-toggleable__label sk-toggleable__label-arrow">ReductionForecaster</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42), window_length=30)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('dabec9aa-6364-474f-9bde-70bb4f639f53')" type="checkbox"><label for="UUID('dabec9aa-6364-474f-9bde-70bb4f639f53')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('60e5f4e6-9785-4194-857a-cb4cccb7c1f9')" type="checkbox"><label for="UUID('60e5f4e6-9785-4194-857a-cb4cccb7c1f9')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42)</pre></div></div></div></div></div></div></div></div></div></div></div></div>
 </div>
 </div>
-<div id="1760ce96" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>y_pred_diff <span class="op">=</span> model.predict(fh<span class="op">=</span>y_test.index, X<span class="op">=</span>X_test)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plot_series(</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    y_train, y_test, y_pred_diff, labels<span class="op">=</span>[<span class="st">"Treino"</span>, <span class="st">"Teste"</span>, <span class="st">"Previsão com ML + Diferença"</span>]</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="c868c356" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>y_pred_diff <span class="op">=</span> model.predict(fh<span class="op">=</span>y_test.index, X<span class="op">=</span>X_test)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>plot_series(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    y_train, y_test, y_pred_diff, labels<span class="op">=</span>[<span class="st">"Treino"</span>, <span class="st">"Teste"</span>, <span class="st">"Previsão com ML + Diferença"</span>]</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1156,23 +1167,30 @@ window.Quarto = {
 </div>
 </div>
 <p>Aqui, já vemos uma melhora significativa. Mas tem algo que podemos melhorar para realizar a diferenciação? Sim. Lembre que essa série tem um padrão multiplicativo. Então, antes de aplicar a diferenciação, podemos aplicar uma transformação logarítmica para estabilizar a variância:</p>
-<div id="b3bb370a" class="cell" data-execution_count="9">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.series.boxcox <span class="im">import</span> LogTransformer</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>model_log <span class="op">=</span> LogTransformer() <span class="op">*</span> model</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>model_log.fit(y_train, X<span class="op">=</span>X_train)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>y_pred_log_diff <span class="op">=</span> model_log.predict(fh<span class="op">=</span>y_test.index, X<span class="op">=</span>X_test)</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>plot_series(</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    y_train,</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    y_test,</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    y_pred_log_diff,</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    labels<span class="op">=</span>[<span class="st">"Treino"</span>, <span class="st">"Teste"</span>, <span class="st">"Previsão com ML + Log + Diferença"</span>],</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="25fd134e" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.series.boxcox <span class="im">import</span> LogTransformer</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>model_log <span class="op">=</span> LogTransformer() <span class="op">*</span> model</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>model_log.fit(y_train, X<span class="op">=</span>X_train)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>y_pred_log_diff <span class="op">=</span> model_log.predict(fh<span class="op">=</span>y_test.index, X<span class="op">=</span>X_test)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>plot_series(</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    y_train,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    y_test,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    y_pred_log_diff,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    labels<span class="op">=</span>[<span class="st">"Treino"</span>, <span class="st">"Teste"</span>, <span class="st">"Previsão com ML + Log + Diferença"</span>],</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000246 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 7652
+[LightGBM] [Info] Number of data points in the train set: 1618, number of used features: 31
+[LightGBM] [Info] Start training from score 0.002516</code></pre>
+</div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ml_models_files/figure-html/cell-10-output-1.png" width="1271" height="337" class="figure-img"></p>
+<p><img src="ml_models_files/figure-html/cell-10-output-2.png" width="1271" height="337" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1181,24 +1199,31 @@ window.Quarto = {
 <section id="solução-2-normalização-por-janela" class="level3" data-number="7.2.2">
 <h3 data-number="7.2.2" class="anchored" data-anchor-id="solução-2-normalização-por-janela"><span class="header-section-number">7.2.2</span> Solução 2: Normalização por janela</h3>
 <p>A diferenciação aumenta o ruído da série, o que pode dificultar o trabalho do modelo de ML. Outra opção é normalizar em cada janela. A classe <code>ReductionForecaster</code> tem um parâmetro chamado <code>normalization_strategy</code>, que pode ser usado para determinar a estratégia de normalização. Vamos usar a estratégia <code>divide_mean</code>, que divide cada janela pelo seu valor médio.</p>
-<div id="8be99475" class="cell" data-execution_count="10">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> ReductionForecaster(</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    regressor,</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    window_length<span class="op">=</span><span class="dv">30</span>,</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    steps_ahead<span class="op">=</span><span class="dv">1</span>,</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    normalization_strategy<span class="op">=</span><span class="st">"divide_mean"</span>,</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>model.fit(y_train, X<span class="op">=</span>X_train)</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>y_pred_norm <span class="op">=</span> model.predict(fh<span class="op">=</span>y_test.index, X<span class="op">=</span>X_test)</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>plot_series(</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    y_train, y_test, y_pred_norm, labels<span class="op">=</span>[<span class="st">"Treino"</span>, <span class="st">"Teste"</span>, <span class="st">"Previsão com ML + Normalização"</span>]</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="68d7b3f5" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> ReductionForecaster(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    regressor,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    window_length<span class="op">=</span><span class="dv">30</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    steps_ahead<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    normalization_strategy<span class="op">=</span><span class="st">"divide_mean"</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>model.fit(y_train, X<span class="op">=</span>X_train)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>y_pred_norm <span class="op">=</span> model.predict(fh<span class="op">=</span>y_test.index, X<span class="op">=</span>X_test)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>plot_series(</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    y_train, y_test, y_pred_norm, labels<span class="op">=</span>[<span class="st">"Treino"</span>, <span class="st">"Teste"</span>, <span class="st">"Previsão com ML + Normalização"</span>]</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000235 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 7652
+[LightGBM] [Info] Number of data points in the train set: 1618, number of used features: 31
+[LightGBM] [Info] Start training from score 1.043527</code></pre>
+</div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ml_models_files/figure-html/cell-11-output-1.png" width="1271" height="337" class="figure-img"></p>
+<p><img src="ml_models_files/figure-html/cell-11-output-2.png" width="1271" height="337" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1207,24 +1232,86 @@ window.Quarto = {
 <section id="modelo-direto-e-recursivo" class="level3" data-number="7.2.3">
 <h3 data-number="7.2.3" class="anchored" data-anchor-id="modelo-direto-e-recursivo"><span class="header-section-number">7.2.3</span> Modelo direto e recursivo</h3>
 <p>Podemos fazer um conjunto de modelos, um para cada passo à frente. Abaixo, definimos <code>steps_ahead=12</code>, o que significa que o modelo vai prever 12 passos à frente diretamente.</p>
-<div id="9c4bc5f3" class="cell" data-execution_count="11">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> ReductionForecaster(</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    regressor,</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    window_length<span class="op">=</span><span class="dv">30</span>,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    steps_ahead<span class="op">=</span><span class="dv">12</span>,</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    normalization_strategy<span class="op">=</span><span class="st">"divide_mean"</span>,</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>model.fit(y_train, X<span class="op">=</span>X_train)</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>y_pred_norm_direct <span class="op">=</span> model.predict(fh<span class="op">=</span>y_test.index, X<span class="op">=</span>X_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="28cf2873" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> ReductionForecaster(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    regressor,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    window_length<span class="op">=</span><span class="dv">30</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    steps_ahead<span class="op">=</span><span class="dv">12</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    normalization_strategy<span class="op">=</span><span class="st">"divide_mean"</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>model.fit(y_train, X<span class="op">=</span>X_train)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>y_pred_norm_direct <span class="op">=</span> model.predict(fh<span class="op">=</span>y_test.index, X<span class="op">=</span>X_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000211 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 7652
+[LightGBM] [Info] Number of data points in the train set: 1618, number of used features: 31
+[LightGBM] [Info] Start training from score 1.043527
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000241 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 7652
+[LightGBM] [Info] Number of data points in the train set: 1617, number of used features: 31
+[LightGBM] [Info] Start training from score 1.047267
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000260 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 7652
+[LightGBM] [Info] Number of data points in the train set: 1616, number of used features: 31
+[LightGBM] [Info] Start training from score 1.050587
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000250 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 7652
+[LightGBM] [Info] Number of data points in the train set: 1615, number of used features: 31
+[LightGBM] [Info] Start training from score 1.053028
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000258 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 7652
+[LightGBM] [Info] Number of data points in the train set: 1614, number of used features: 31
+[LightGBM] [Info] Start training from score 1.055194
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000240 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 7652
+[LightGBM] [Info] Number of data points in the train set: 1613, number of used features: 31
+[LightGBM] [Info] Start training from score 1.057457
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000246 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 7652
+[LightGBM] [Info] Number of data points in the train set: 1612, number of used features: 31
+[LightGBM] [Info] Start training from score 1.060191
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000211 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 7652
+[LightGBM] [Info] Number of data points in the train set: 1611, number of used features: 31
+[LightGBM] [Info] Start training from score 1.063314
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000207 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 7652
+[LightGBM] [Info] Number of data points in the train set: 1610, number of used features: 31
+[LightGBM] [Info] Start training from score 1.066550
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000229 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 7652
+[LightGBM] [Info] Number of data points in the train set: 1609, number of used features: 31
+[LightGBM] [Info] Start training from score 1.069536
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000208 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 7652
+[LightGBM] [Info] Number of data points in the train set: 1608, number of used features: 31
+[LightGBM] [Info] Start training from score 1.072317
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000214 seconds.
+You can set `force_col_wise=true` to remove the overhead.
+[LightGBM] [Info] Total Bins 7652
+[LightGBM] [Info] Number of data points in the train set: 1607, number of used features: 31
+[LightGBM] [Info] Start training from score 1.074787</code></pre>
 </div>
-<div id="79b3e5fa" class="cell" data-execution_count="12">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>plot_series(</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    y_train,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    y_test,</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    y_pred_norm_direct,</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    labels<span class="op">=</span>[<span class="st">"Treino"</span>, <span class="st">"Teste"</span>, <span class="st">"Previsão com ML + Normalização"</span>],</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="c6f1e124" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>plot_series(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    y_train,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    y_test,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    y_pred_norm_direct,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    labels<span class="op">=</span>[<span class="st">"Treino"</span>, <span class="st">"Teste"</span>, <span class="st">"Previsão com ML + Normalização"</span>],</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1234,34 +1321,34 @@ window.Quarto = {
 </div>
 </div>
 <p>Podemos comparar o MAPE de todos os modelos:</p>
-<div id="9be4aa52" class="cell" data-execution_count="13">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.performance_metrics.forecasting <span class="im">import</span> MeanAbsolutePercentageError</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>mape <span class="op">=</span> MeanAbsolutePercentageError()</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> {}</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _y_pred, label <span class="kw">in</span> <span class="bu">zip</span>(</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    [</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        y_pred,</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>        y_pred_diff,</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        y_pred_log_diff,</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        y_pred_norm,</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        y_pred_norm_direct,</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    ],</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    [</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ML"</span>,</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ML + Diferença"</span>,</span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ML + Log + Diferença"</span>,</span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ML + Normalização"</span>,</span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ML + Normalização + Direto"</span>,</span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    ],</span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>):</span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    results[label] <span class="op">=</span> mape(y_test, _y_pred)</span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pd.DataFrame.from_dict(results, orient<span class="op">=</span><span class="st">"index"</span>, columns<span class="op">=</span>[<span class="st">"MAPE"</span>])</span>
-<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>results.sort_values(<span class="st">"MAPE"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="1716d3fa" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.performance_metrics.forecasting <span class="im">import</span> MeanAbsolutePercentageError</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>mape <span class="op">=</span> MeanAbsolutePercentageError()</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> {}</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _y_pred, label <span class="kw">in</span> <span class="bu">zip</span>(</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    [</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>        y_pred,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>        y_pred_diff,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>        y_pred_log_diff,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        y_pred_norm,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>        y_pred_norm_direct,</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    [</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ML"</span>,</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ML + Diferença"</span>,</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ML + Log + Diferença"</span>,</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ML + Normalização"</span>,</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ML + Normalização + Direto"</span>,</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    results[label] <span class="op">=</span> mape(y_test, _y_pred)</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pd.DataFrame.from_dict(results, orient<span class="op">=</span><span class="st">"index"</span>, columns<span class="op">=</span>[<span class="st">"MAPE"</span>])</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>results.sort_values(<span class="st">"MAPE"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <div>
 
@@ -1275,24 +1362,24 @@ window.Quarto = {
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">ML + Log + Diferença</th>
-<td>0.127422</td>
+<th data-quarto-table-cell-role="th">ML + Normalização + Direto</th>
+<td>0.145813</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">ML + Normalização + Direto</th>
-<td>0.131544</td>
+<th data-quarto-table-cell-role="th">ML + Log + Diferença</th>
+<td>0.153906</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">ML + Normalização</th>
-<td>0.132936</td>
+<td>0.156855</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">ML + Diferença</th>
-<td>0.187260</td>
+<td>0.231855</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">ML</th>
-<td>0.237997</td>
+<td>0.234599</td>
 </tr>
 </tbody>
 </table>
