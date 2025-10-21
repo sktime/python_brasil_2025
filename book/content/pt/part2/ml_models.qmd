@@ -1,6 +1,33 @@
 # Modelos de Machine Learning
 
+Nesse capítulo vamos ver as maneiras de usar modelos de Machine Learning para
+forecasting. Aqui é onde mais acontecem erros de novos praticantes, pois
+muitas vezes tentam aplicar modelos de ML diretamente na série temporal.
+
+
+Para usar um modelo de ML, precisamos transformar a série temporal em um problema de regressão tradicional. Isso é feito criando janelas deslizantes (sliding windows) da série temporal, onde cada janela é usada como uma amostra de treinamento para o modelo de ML.
+
+Ou seja, se temos uma série temporal $(y_t)$, podemos criar janelas de tamanho $n$ e usar os valores $y_{t-n}, y_{t-n+1}, \ldots, y_{t-1}$ como características (features) para prever o valor $y_t$.
+
+![img/reduction.png](img/reduction.png)
+
+
+Para prever mais de um passo à frente, existem duas abordagens:
+
+1. **Previsão recursive**: se queremos prever $h$ passos à frente, podemos usar o modelo para prever $y_{t+1}$, depois usar essa previsão para prever $y_{t+2}$, e assim por diante, até $y_{t+h}$. Isso pode levar a erros acumulados, pois cada previsão depende das previsões anteriores.
+2. **Previsão direta**: em vez de prever um passo de cada vez, podemos treinar o modelo para prever todos os $h$ passos à frente de uma vez. Isso pode ser feito usando um modelo para cada $h$ ou usando um modelo que prevê um vetor de $h$ valores.
+
+A verdade é que as duas abordagens podem ser vistas como uma: a previsão recursiva pode ser vista como uma previsão direta para $h=1$.
+
 ```{python}
+# | echo: false
+
+import warnings
+warnings.filterwarnings("ignore")
+```
+
+```{python}
+# | code-fold: true
 from tsbook.datasets.retail import SyntheticRetail
 from sktime.utils.plotting import plot_series
 from sktime.forecasting.naive import NaiveForecaster
@@ -9,40 +36,150 @@ dataset = SyntheticRetail("univariate")
 y_train, X_train, y_test, X_test = dataset.load(
     "y_train", "X_train", "y_test", "X_test"
 )
-
-X_train
 ```
 
+## O problema da tendência
+
+A tendência em séries temporais é como um constante problema de data drift:
 
 ```{python}
-from tsbook.forecasting.global_reduction import GlobalReductionForecaster
+# | code-fold: true
+_X = [y_train.iloc[i : i + 7] for i in range(0, 700)]
+
+_X_test = [y_train.iloc[i : i + 7] for i in range(700, 800)]
+
+
+def set_index(x):
+    x.index = range(len(x))
+    return x
+
+
+_X = [set_index(x) for x in _X]
+_X_test = [set_index(x) for x in _X_test]
+
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots()
+for x in _X:
+    ax.plot(x, color="gray", alpha=0.3)
+for x in _X_test:
+    ax.plot(x, color="red", alpha=0.3)
+
+# Add legend, with 1 red line for test and 1 gray for train
+from matplotlib.lines import Line2D
+
+legend_handles = [
+    Line2D([0], [0], color="gray", alpha=0.3, lw=2, label="Treino"),
+    Line2D([0], [0], color="red", alpha=0.3, lw=2, label="Teste"),
+]
+ax.legend(handles=legend_handles, loc="best")
+ax.set_title("Série original - Magnitudes diferentes para cada janela")
+fig.show()
+```
+
+Quando criamos nossas janelas e olhamos treine e teste, esse problema fica claro. A informação de uma série em treino não é util para prever a série de teste, pois elas estão em magnitudes diferentes.
+
+Uma possível solução para isso é normalizar cada janela, dividindo pelo valor médio da janela. Assim, todas as janelas ficam na mesma escala:
+
+```{python}
+# | code-fold: true
+
+_X = [x / x.mean() for x in _X]
+_X_test = [x / x.mean() for x in _X_test]
+
+fig, ax = plt.subplots()
+for x in _X:
+    ax.plot(x, color="gray", alpha=0.3)
+for x in _X_test:
+    ax.plot(x, color="red", alpha=0.3)
+
+ax.legend(handles=legend_handles, loc="best")
+ax.set_title("Série normalizada")
+fig.show()
+
+```
+
+e podemos prever sem problemas.
+
+Outra possibilidade é a diferenciação, como já vimos em capítulos anteriores. A diferenciação remove a tendência da série, tornando-a estacionária.
+
+## Usando modelos de ML com sktime
+
+Primeiro, vamos import `ReductionForecaster`, que é a classe que implementa a abordagem de janelas deslizantes para usar modelos de ML em séries temporais. Vamos testar um primeiro caso sem nenhum tipo de preprocessamento, apenas criando as janelas:
+
+```{python}
+from tsbook.forecasting.reduction import ReductionForecaster
 from sklearn.ensemble import RandomForestRegressor
+
+model = ReductionForecaster(
+    RandomForestRegressor(n_estimators=100, random_state=42),
+    window_length=30,
+)
+
+model.fit(y_train, X=X_train)
+```
+
+```{python}
+y_pred = model.predict(fh=y_test.index, X=X_test)
+plot_series(y_train, y_test, y_pred, labels=["Treino", "Teste", "Previsão com ML"])
+plt.show()
+```
+
+Claramente, tivemos o problema que mencionamos anteriormente.
+
+
+### Solução 1: Diferenciação
+
+Uma solução é usar a diferenciação para remover a tendência da série. 
+
+```{python}
 from sktime.transformations.series.difference import Differencer
 
 regressor = RandomForestRegressor(n_estimators=100, random_state=42)
-model = Differencer() * GlobalReductionForecaster(
+
+model = Differencer() * ReductionForecaster(
     regressor,
     window_length=30,
     steps_ahead=1,
 )
 
 model.fit(y_train, X=X_train)
-y_pred = model.predict(fh=y_test.index, X=X_test)
 ```
 
 ```{python}
+y_pred_diff = model.predict(fh=y_test.index, X=X_test)
+
 plot_series(
-    y_train, y_test, y_pred, labels=["Treino", "Teste", "Previsão com ML + Diferença"]
+    y_train, y_test, y_pred_diff, labels=["Treino", "Teste", "Previsão com ML + Diferença"]
 )
+plt.show()
 ```
 
+Aqui, já vemos uma melhora significativa. Mas tem algo que podemos melhorar para realizar a diferenciação? Sim. Lembre que essa série tem um padrão multiplicativo. Então, antes de aplicar a diferenciação, podemos aplicar uma transformação logarítmica para estabilizar a variância:
+
+```{python}
+from sktime.transformations.series.boxcox import LogTransformer
+
+model_log = LogTransformer() * model
+
+model_log.fit(y_train, X=X_train)
+y_pred_log_diff = model_log.predict(fh=y_test.index, X=X_test)
+plot_series(
+    y_train,
+    y_test,
+    y_pred_log_diff,
+    labels=["Treino", "Teste", "Previsão com ML + Log + Diferença"],
+)
+
+```
+
+### Solução 2: Normalização por janela
+
+A diferenciação aumenta o ruído da série, o que pode dificultar o trabalho do modelo de ML. Outra opção é normalizar em cada janela. A classe `ReductionForecaster` tem um parâmetro chamado `normalization_strategy`, que pode ser usado para determinar a estratégia de normalização. Vamos usar a estratégia `divide_mean`, que divide cada janela pelo seu valor médio.
 
 ```{python}
 
-import numpy as np
-from typing import Callable, Tuple
-
-model = GlobalReductionForecaster(
+model = ReductionForecaster(
     regressor,
     window_length=30,
     steps_ahead=1,
@@ -50,23 +187,23 @@ model = GlobalReductionForecaster(
 )
 
 model.fit(y_train, X=X_train)
-y_pred = model.predict(fh=y_test.index, X=X_test)
+y_pred_norm = model.predict(fh=y_test.index, X=X_test)
 
-```
-
-```{python}
 plot_series(
-    y_train, y_test, y_pred, labels=["Treino", "Teste", "Previsão com ML + Diferença + Normalização"]
+    y_train, y_test, y_pred_norm, labels=["Treino", "Teste", "Previsão com ML + Normalização"]
 )
 ```
 
 
+
+### Modelo direto e recursivo
+
+Podemos fazer um conjunto de modelos, um para cada passo à frente. Abaixo, definimos `steps_ahead=12`, o que significa que o modelo vai prever 12 passos à frente diretamente.
+
 ```{python}
-from tsbook.forecasting.global_reduction import GlobalReductionForecaster
-from typing import Optional
 
 
-model = GlobalReductionForecaster(
+model = ReductionForecaster(
     regressor,
     window_length=30,
     steps_ahead=12,
@@ -74,7 +211,7 @@ model = GlobalReductionForecaster(
 )
 
 model.fit(y_train, X=X_train)
-y_pred = model.predict(fh=y_test.index, X=X_test)
+y_pred_norm_direct = model.predict(fh=y_test.index, X=X_test)
 
 ```
 
@@ -82,7 +219,39 @@ y_pred = model.predict(fh=y_test.index, X=X_test)
 plot_series(
     y_train,
     y_test,
-    y_pred,
-    labels=["Treino", "Teste", "Previsão com ML + Diferença + Normalização"],
+    y_pred_norm_direct,
+    labels=["Treino", "Teste", "Previsão com ML + Normalização"],
 )
 ```
+
+Podemos comparar o MAPE de todos os modelos:
+
+```{python}
+from sktime.performance_metrics.forecasting import MeanAbsolutePercentageError
+
+mape = MeanAbsolutePercentageError()
+
+results = {}
+for _y_pred, label in zip(
+    [
+        y_pred,
+        y_pred_diff,
+        y_pred_log_diff,
+        y_pred_norm,
+        y_pred_norm_direct,
+    ],
+    [
+        "ML",
+        "ML + Diferença",
+        "ML + Log + Diferença",
+        "ML + Normalização",
+        "ML + Normalização + Direto",
+    ],
+):
+    results[label] = mape(y_test, _y_pred)
+
+import pandas as pd
+
+results = pd.DataFrame.from_dict(results, orient="index", columns=["MAPE"])
+results.sort_values("MAPE")
+``` 

@@ -1,5 +1,7 @@
-# Preface {.unnumbered}
+# Prefácio {.unnumbered}
 
-This is a Quarto book.
+Esse é um pequeno livro feito para o workshop de sktime na Python Brasil 2025. O objetivo é apresentar os conceitos básicos de séries temporais e como usar o sktime para modelagem e previsão.
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+Esse livro é raso em diversos aspectos, mas pode ser útil como ponto de partida para quem quer aprender mais sobre séries temporais em Python.
+
+Caso queira contribuir para sktime, visite o [repositório oficial no GitHub](https://github.com/sktime/sktime) e participe do nosso [Discord](https://discord.com/invite/54ACzaFsn7).

@@ -1,0 +1,152 @@
+## Modelos de deep learning e zero-shot forecasting
+
+Além de modelos de ML simples, também podemos usar modelos de deep learning para forecasting. Podemos com certeza usar uma rede neural simples como um regressor, assim como fizemos com os modelos de ML tradicionais. No entanto, existem alguns modelos com arquiteturas específicas para forecasting de séries temporais. Por exemplo, o N-BEATS é um modelo de deep learning que pode ser usado para forecasting.
+
+::: {.callout-tip}
+
+Importante notar que esse livro/tutorial tem o objetivo de ser curto e prático, então não entraremos em muitos detalhes sobre deep learning ou sobre todos métodos
+existentes. 
+
+:::
+
+
+```{python}
+# | echo: false
+import warnings
+
+warnings.filterwarnings("ignore")
+```
+
+```{python}
+# | code-fold: true
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sktime.utils.plotting import plot_series
+
+```
+
+```{python}
+# | code-fold: true
+
+from tsbook.datasets.retail import SyntheticRetail
+
+dataset = SyntheticRetail("panel")
+y_train, X_train, y_test, X_test = dataset.load(
+    "y_train", "X_train", "y_test", "X_test"
+)
+
+fh = y_test.index.get_level_values(-1).unique()
+```
+
+## N-Beats
+  
+ N-BEATS é um modelo de séries temporais totalmente baseado em camadas densas (MLP)—nada de RNN/LSTM nem convolução. Ele pega uma janela do passado e entrega diretamente a previsão do futuro, aprendendo padrões como tendência e sazonalidade de forma pura, só com perceptrons.
+
+
+O N-BEATS usa bases para construir sinais interpretáveis:
+
+* Base de tendência: combina funções polinomiais (captura subidas/descidas suaves).
+* Base sazonal: combina senos/cossenos (captura repetições periódicas).
+* Base genérica: aprende formas livres (sem pressupor forma analítica).
+
+Assim, internamente, ele determina os coeficientes das funções base para modelar a série temporal, baseado no histórico observado, fazendo uma espécie de meta-aprendizado interno.
+
+Os blocos são empilhados e executados de forma sucessiva. Pense numa fila de especialistas olhando a mesma janela do passado:
+
+* Cada um explica a sua parte do que viu (remove do passado o que já foi entendido = backcast), e propõe um pedaço da previsão (seu forecast).
+* O que não foi explicado segue para o próximo especialista. No final, a previsão é a soma do que cada um sugeriu.
+
+![](img/nbeats_simplified.png)
+
+
+### Pytorch Forecasting
+
+O Sktime nao é uma biblioteca especializada em deep learning, mas sim uma API
+uniforme que provê acesso aos mais diversos algoritmos.
+
+Logo, também provemos acesso a bibliotecas especializadas em deep learning, como o
+Pytorch Forecasting, que implementa o N-BEATS.
+
+Aqui, temos que definir os hiperparâmetros do modelo, como o número de blocos, o tamanho do contexto (janela de entrada), e o número de coeficientes para as funcões de base.
+
+```{python}
+from sktime.forecasting.pytorchforecasting import PytorchForecastingNBeats
+from pytorch_forecasting.data.encoders import EncoderNormalizer
+
+CONTEXT_LENGTH = 120
+nbeats = PytorchForecastingNBeats(
+    train_to_dataloader_params={"batch_size": 256},
+    trainer_params={"max_epochs": 1},
+    model_params={
+        "stack_types": ["trend", "seasonality"], # One of the following values: “generic”, “seasonality” or “trend”.
+        "num_blocks" : [2,2], # The number of blocks per stack. 
+        "context_length": CONTEXT_LENGTH, # lookback period
+        "expansion_coefficient_lengths" : [2, 5],
+        "learning_rate": 1e-3,
+    },
+    dataset_params={
+
+        "max_encoder_length": CONTEXT_LENGTH,
+        "target_normalizer": EncoderNormalizer()
+    },
+)
+
+nbeats.fit(y_train.astype(float), fh=fh)
+```
+
+```{python}
+y_pred_nbeats = nbeats.predict(fh=fh, X=X_test)
+```
+
+```{python}
+
+from sktime.performance_metrics.forecasting import MeanSquaredScaledError
+
+metric = MeanSquaredScaledError(multilevel="uniform_average_time")
+metric(y_true=y_test, y_pred=y_pred_nbeats, y_train=y_train)
+```
+
+Agora, podemos visualizar o forecast para uma das séries. Vemos que, mesmo
+com poucas épocas de treinamento ou tuning, o N-BEATS já consegue capturar a tendência.
+
+```{python}
+fig, ax = plt.subplots(figsize=(10, 4))
+y_train.loc[10].plot(ax=ax, label="Train")
+y_test.loc[10].plot(ax=ax, label="Test")
+y_pred_nbeats.loc[10].plot(ax=ax, label="N-BEATS")
+fig.show()
+```
+
+## Zero-shot forecasting com N-BEATS
+
+Zero-shot forecasting se refere ao fato de fazer previsão para uma série jamais
+vista pelo modeo, sem utilizar a série para treinar ou ajustar parâmetros dele.
+
+Aqui, para simular esse cenário, vamos criar uma nova série temporal combinando duas séries do conjunto de treino.
+
+```{python}
+new_y_train = (y_train.loc[0]**2 + y_train.loc[20]).astype(float)
+new_y_test = (y_test.loc[0]**2 + y_test.loc[20]).astype(float)
+
+# Plotting the new series
+fig, ax = plt.subplots(figsize=(10, 4))
+new_y_train["sales"].plot.line(ax=ax, label="New Train")
+new_y_test["sales"].plot.line(ax=ax, label="New Test")
+fig.show()
+```
+
+Na interface atual do sktime, usamos o argumento `y` do método `predict` para passar a nova série temporal para o modelo:
+
+```{python}
+y_pred_zeroshot = nbeats.predict(fh=fh, y=new_y_train)
+```
+
+```{python}
+fig, ax = plt.subplots(figsize=(10, 4))
+new_y_train["sales"].plot.line(ax=ax, label="New Train")
+new_y_test["sales"].plot.line(ax=ax, label="New Test")
+y_pred_zeroshot["sales"].plot.line(ax=ax, label="N-BEATS Zero-shot")
+plt.legend()
+plt.show()
+```

@@ -101,8 +101,37 @@ plot_series(
 )
 ```
 
+Um modelo auto-regressivo mais complexo é o ARIMA, que combina autoregressão (AR), média móvel (MA) e diferenciação integrada (I) para lidar com séries temporais não estacionárias. Não vamos estudar o ARIMA aqui pois envolve conceitos mais avançados, mas temos ele disponível no sktime, `sktime.forecasting.arima.ARIMA`.
 
 ## STL: dividir e conquistar
+
+Sabemos que séries temporais podem ser decompostas em componentes de tendência, sazonalidade e resíduos. O modelo STL (Seasonal and Trend decomposition using Loess) é uma técnica que permite fazer essa decomposição de forma robusta.
+
+Temos no sktime o `STLTransformer`, que permite fazer a decomposição STL:
+
+```{python}
+from sktime.transformations.series.detrend import STLTransformer
+
+stl = STLTransformer(sp=365)
+stl.fit(y_train)
+
+```
+
+E agora podemos inspecionar os componentes:
+
+```{python}
+fig, ax = plt.subplots(3, 1, figsize=(10, 8), sharex=True)
+stl.trend_.plot.line(ax=ax[0])
+ax[0].set_title("Tendência")
+stl.seasonal_.plot.line(ax=ax[1])
+ax[1].set_title("Sazonalidade")
+stl.resid_.plot.line(ax=ax[2])
+ax[2].set_title("Resíduos")
+fig.show()
+```
+
+
+Uma possibilidade, uma vez que temos os diferentes componentes, é modelar cada componente separadamente e depois combinar as previsões. O sktime tem o `STLForecaster`, que faz exatamente isso:
 
 ```{python}
 from sktime.forecasting.trend import STLForecaster
@@ -116,6 +145,37 @@ model = STLForecaster(
 )
 
 model.fit(y_train)
+y_pred = model.predict(fh=y_test.index)
+
+plot_series(
+    y_train,
+    y_test,
+    y_pred,
+    labels=["Treino", "Teste", "Previsão STL + AR"],
+)
+
+```
+
+Para fins de demonstração, podemos complicar um pouco mais o modelo, modelando os resíduos com outro `STLForecaster`:
+
+```{python}
+
+model = STLForecaster(
+    forecaster_trend=AutoREG(lags=31),
+    forecaster_seasonal=NaiveForecaster(sp=7),
+    forecaster_resid=STLForecaster(
+        forecaster_trend=AutoREG(lags=31),
+        forecaster_seasonal=NaiveForecaster(sp=365),
+        forecaster_resid=AutoREG(lags=31),
+        sp=365,
+    ),
+    sp=7,
+)
+
+model.fit(y_train)
+```
+
+```{python}
 y_pred = model.predict(fh=y_test.index)
 
 plot_series(
