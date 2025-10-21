@@ -165,7 +165,7 @@ from tsbook.forecasting.reduction import ReductionForecaster
 from lightgbm import LGBMRegressor
 
 global_forecaster1 = ReductionForecaster(
-    LGBMRegressor(n_estimators=100, verbose=-1, objective="tweedie", random_state=42),
+    LGBMRegressor(n_estimators=100, verbose=-1, random_state=42),
     window_length=30,
 )
 
