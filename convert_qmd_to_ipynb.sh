@@ -2,7 +2,9 @@
 
 # Converts every .qmd file under book/content/pt/ into an equivalent .ipynb
 # notebook, preserving the relative folder structure inside the notebooks/
-# directory. Requires Quarto to be installed and available on the PATH.
+# directory. Also copies image assets referenced by the notebooks so inline
+# media continues to work. Requires Quarto to be installed and available on
+# the PATH.
 
 set -euo pipefail
 
@@ -19,6 +21,7 @@ if [ ! -d "$INPUT_ROOT" ]; then
   exit 1
 fi
 
+find "$INPUT_ROOT" -type f -name '*.qmd' -print0 |
 while IFS= read -r -d '' qmd_file; do
   rel_path="${qmd_file#$INPUT_ROOT/}"
   rel_dir="$(dirname "$rel_path")"
@@ -29,4 +32,18 @@ while IFS= read -r -d '' qmd_file; do
   mkdir -p "$target_dir"
   quarto convert "$qmd_file" --output "$target_file"
   echo "Converted $qmd_file -> $target_file"
-done < <(find "$INPUT_ROOT" -type f -name '*.qmd' -print0)
+done
+
+# Copy supporting image assets; extend patterns below if needed.
+find "$INPUT_ROOT" -type f \
+  \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.gif' \
+     -o -iname '*.svg' -o -iname '*.webp' -o -iname '*.bmp' \) -print0 |
+while IFS= read -r -d '' asset_file; do
+  rel_path="${asset_file#$INPUT_ROOT/}"
+  target_path="$OUTPUT_ROOT/$rel_path"
+  target_dir="$(dirname "$target_path")"
+
+  mkdir -p "$target_dir"
+  cp -p "$asset_file" "$target_path"
+  echo "Copied asset $asset_file -> $target_path"
+done

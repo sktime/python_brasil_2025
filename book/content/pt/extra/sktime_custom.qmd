@@ -227,6 +227,7 @@ Abaixo, implementamos o `CustomNaiveForecaster` seguindo as regras do sktime (cl
 from sktime.forecasting.base import BaseForecaster
 import pandas as pd
 
+
 class CustomNaiveForecaster(BaseForecaster):
     """
     A simple naive forecaster
@@ -275,8 +276,17 @@ class CustomNaiveForecaster(BaseForecaster):
             index=index,
             data=[self.value_ for _ in range(len(index))],
         )
+        y_pred.name = self._y.name
 
         return y_pred
+
+    # Veremos mais tarde como usar esse método
+    @classmethod
+    def get_test_params(cls, parameter_set="default"):
+        return [
+            {"n": 1},
+            {"n": 2},
+        ]
 ```
 
 ### Definindo o método `__init__`
@@ -356,3 +366,15 @@ fig, _ = plot_series(
 fig.show()
 ```
 
+## Testes unitários
+
+O sktime também fornece uma funcionalidade que traz testes unitários prontos para validar se o modelo customizado está funcionando corretamente.
+
+Ele usa os hiperparâmetros retornados pelo método `get_test_params` para criar instâncias do modelo e executar uma série de testes.
+
+```{python}
+from sktime.utils.estimator_checks import check_estimator
+
+
+check_estimator(CustomNaiveForecaster, tests_to_exclude=["test_doctest_examples"])
+```
