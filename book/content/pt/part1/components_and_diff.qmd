@@ -28,6 +28,44 @@ Os dados são diários, e vemos que sempre positivos. Também notamos que existe
 Algo que deve chamar a atenção nesse gráfico é que a magnitude da série temporal está aumentando ao longo do tempo. Isso não deve passar desapercebido, pois é um ponto importante para entendermos o que vem a seguir.
 
 
+## Auto-correlação
+
+É interessante entender o quanto de informação o passado de uma série temporal carrega sobre o seu futuro. Uma maneira de capturar essa relação (considerando variações lineares) é através da auto-correlação. A autocorrelação para um determinado lag $k$ é definida como:
+
+$$
+\text{Corr}(Y_t,Y_{t-k})=\frac{\text{Cov}(Y_t,Y_{t-k})}{\sqrt{\text{Var}(Y_t)\text{Var}(Y_{t-k})}} = \frac{E[(Y_t - \mu)(Y_{t-k} - \mu)]}{\sqrt{\text{Var}(Y_t)\text{Var}(Y_{t-k})}}
+$$
+
+Em outras palavras, quando o valor em $k$ observações atrás está acima (ou abaixo) da média, o valor atual também tende a estar acima (ou abaixo) da média?
+
+Com `plot_correlations`, podemos visualizar algumas informações úteis:
+
+1. No plot superior, vemos a série temporal original.
+2. No canto inferior esquerdo, temos o gráfico de autocorrelação (ACF), que mostra a correlação entre a série temporal e suas versões defasadas (lags). Valores próximos de 1 ou -1 indicam uma forte correlação positiva ou negativa, respectivamente.
+3. No canto inferior direito, temos o gráfico de autocorrelação parcial (PACF), que mostra a correlação entre a série temporal e suas versões defasadas, controlando para as correlações intermediárias. É útil para entender o efeito isolado de um lag.
+
+```{python}
+from sktime.utils.plotting import plot_correlations
+
+
+fig, ax = plot_correlations(y_train, lags=60)
+fig.show()
+```
+
+No gráfico de autocorrelação, vemos algumas características interessantes:
+
+1. Valores são extremamente altos, e decaem lentamente ao longo do tempo.
+2. Existem oscilações claras, indicando padrões sazonais na série temporal.
+
+::: {.callout-tip}
+
+
+É um erro comum usar a correlação de lags de uma série para seleção de variáveis (lags). Sempre que possível, devemos eliminar a tendência antes de analisar a autocorrelação.
+
+::: 
+
+Veremos que esses padrões são indicativos de que a série temporal possui componentes importantes, e que valores passados dizem muito sobre valores futuros.
+
 ## Componentes de séries temporais
 
 Séries temporais podem ser decompostas em 3 componentes principais:
@@ -96,19 +134,12 @@ plot_series(y_train_log, labels=["Logaritmo"])
 Ainda que não esteja perfeito, essa transformação estabiliza as variações da série temporal, o que é importante para alguns modelos de previsão.
 
 
-```{python}
-from sktime.utils.plotting import plot_correlations
-
-
-plot_correlations(y_train, lags=60)
-```
-
-
-
 ### Decompondo a série temporal
 
 
-Sktime fornece algumas opções para decompor séries temporais.
+Sktime fornece algumas opções para decompor séries temporais. Aqui, vamos usar o `Detrender` para remover a tendência, e o `Deseasonalizer` para remover a sazonalidade.
+
+#### Tendência
 
 ```{python}
 from sktime.transformations.series.detrend import Detrender, Deseasonalizer
@@ -121,9 +152,20 @@ plot_series(y_train_detrended, labels=["Detrended"])
 
 ```
 
+Vemos uma mudança importante no gráfico de autocorrelação:
+
 ```{python}
-plot_correlations(y_train_detrended, lags=60)
+fig, _ = plot_correlations(y_train_detrended, lags=60)
+fig.show()
+
 ```
+
+O que indica que, ao eliminar a tendencia, a informação que o passado carrega sobre o futuro diminuiu bastante. Na verdade, a existência da tendência - um efeito de longo prazo - faz com que valores passados sejam altamente correlacionados com valores futuros, e pode dar a falsa impressão de que a série é "fácil" de modelar.
+
+
+#### Sazonalidade
+
+Agora, usamos o `Deseasonalizer` para remover a sazonalidade:
 
 ```{python}
 deseasonalizer = LogTransformer() * Deseasonalizer(model="additive", sp=365)
@@ -132,6 +174,8 @@ y_train_deseasonalized = deseasonalizer.transform(y_train)
 plot_series(y_train_log, y_train_deseasonalized, labels=["Log with seasonality", "Deseasonalized"])
 ```
 
+
+Podemos usar o `Detrender` e o `Deseasonalizer` juntos para remover ambos os componentes:
 
 ```{python}
 remove_components = LogTransformer() * Detrender(model="additive") * Deseasonalizer(model="additive", sp=365) 
@@ -142,19 +186,14 @@ plot_series(y_train_log, y_train_removed, labels=["Log with seasonality", "Desea
 
 
 ```{python}
-plot_correlations(y_train_removed, lags=60)
+fig, _ = plot_correlations(y_train_removed, lags=60)
+fig.show()
 ```
 
-```{python}
 
-remove_components = LogTransformer() * Detrender(model="additive") * Deseasonalizer(model="additive", sp=365) * Deseasonalizer(model="additive", sp=7) 
-
-
-remove_components.fit(y_train)
-y_train_removed = remove_components.transform(y_train)
-
-plot_correlations(y_train_removed, lags=60)
-```
+::: {.callout-tip}
+Tente adicionar mais um deseasonalizer para remover a sazonalidade semanal.
+:::
 
 ## Séries estacionárias
 

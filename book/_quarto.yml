@@ -2,7 +2,7 @@ project:
   type: book
 
 book:
-  title: "book"
+  title: "Previsão de Séries temporais com Python: um pequeno guia"
   author: "Felipe Angelim"
   date: "10/11/2025"
   chapters:
@@ -18,14 +18,12 @@ book:
     chapters:
       - content/pt/part2/exog_variables.qmd
       - content/pt/part2/ml_models.qmd
-      #- content/pt/part2/probabilistic_forecasting.qmd
       - content/pt/part2/panel_data.qmd
       - content/pt/part2/hierarchical_forecasting.qmd
       - content/pt/part2/deep_learning.qmd
-      - content/pt/part2/probabilistic_forecasting.qmd
   - part: "Part III: Apêndices"
     chapters:
-      - content/pt/part4/sktime_custom.qmd
+      - content/pt/extra/sktime_custom.qmd
 
 bibliography: references.bib
 
