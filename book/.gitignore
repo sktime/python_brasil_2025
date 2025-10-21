@@ -3,3 +3,4 @@
 _book/
 
 **/lightning_logs/**
+**/*.quarto_ipynb

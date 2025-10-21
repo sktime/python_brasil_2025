@@ -45,8 +45,11 @@ jobs:
           quarto check
 
       - name: Render Quarto site
-        run: |
-          quarto render book
+        uses: quarto-dev/quarto-actions/render@v2
+        with:
+          to: html # If set, it will be equivalent to `quarto render --to html`
+          path: book
+
 
       # Deploy Preview for PRs
       - name: Publish PR Preview
