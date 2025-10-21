@@ -165,7 +165,7 @@ from tsbook.forecasting.reduction import ReductionForecaster
 from lightgbm import LGBMRegressor
 
 global_forecaster1 = ReductionForecaster(
-    LGBMRegressor(n_estimators=100, verbose=-1),
+    LGBMRegressor(n_estimators=100, verbose=-1, random_state=42),
     window_length=30,
 )
 
@@ -219,7 +219,6 @@ Sabemos como preprocessar séries temporais univariadas para melhorar o desempen
 ```{python}
 from sktime.transformations.series.difference import Differencer
 
-
 global_forecaster2 = Differencer() * global_forecaster1
 global_forecaster2.fit(y_train, X_train)
 ```
@@ -249,7 +248,7 @@ errors["Local (2)"] = metric_local2
 errors
 ```
 
-Note como já superamos o modelo global incial, e o modelo local. Isso é para
+Note como já superamos o modelo global incial. Isso é para
 destacar que é **essencial** realizar um bom preprocessamento e engenharia de features para que modelos de Machine Learning tenham bom desempenho em dados em painel.
 
 ### Normalização por janela

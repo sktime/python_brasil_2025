@@ -109,10 +109,10 @@ Primeiro, vamos import `ReductionForecaster`, que é a classe que implementa a a
 
 ```{python}
 from tsbook.forecasting.reduction import ReductionForecaster
-from sklearn.ensemble import RandomForestRegressor
+from lightgbm import LGBMRegressor
 
 model = ReductionForecaster(
-    RandomForestRegressor(n_estimators=100, random_state=42),
+    LGBMRegressor(n_estimators=100, random_state=42),
     window_length=30,
 )
 
@@ -135,7 +135,7 @@ Uma solução é usar a diferenciação para remover a tendência da série.
 ```{python}
 from sktime.transformations.series.difference import Differencer
 
-regressor = RandomForestRegressor(n_estimators=100, random_state=42)
+regressor = LGBMRegressor(n_estimators=100, random_state=42)
 
 model = Differencer() * ReductionForecaster(
     regressor,
