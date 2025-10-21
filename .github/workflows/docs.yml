@@ -16,7 +16,7 @@ permissions:
   contents: write  # needed for gh-pages
 
 jobs:
-  build-docs:
+  build-book:
     name: Build and Deploy Documentation
     runs-on: ubuntu-latest
 
@@ -57,7 +57,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/_site
+          publish_dir: ./book/_site
           destination_dir: previews/PR${{ github.event.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -68,7 +68,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/_site
+          publish_dir: ./book/_site
           destination_dir: dev
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -79,7 +79,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/_site
+          publish_dir: ./book/_site
           destination_dir: ${{ github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -90,7 +90,7 @@ jobs:
           version="${GITHUB_REF#refs/tags/}"
           echo "Detected version: $version"
           mkdir -p ./latest
-          cp -r ./docs/_site/* ./latest/
+          cp -r ./book/_site/* ./latest/
       
       - name: Publish stable release to 'latest'
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && !contains(github.ref_name, '-')
