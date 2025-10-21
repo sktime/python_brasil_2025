@@ -9,7 +9,6 @@ book:
   search: true
   repo-url: https://github.com/sktime/python_brasil_2025/
   repo-actions: [edit]
-  downloads: [pdf, epub]
   sharing: [twitter, facebook]
   cover-image: "logo.jpeg"
   cover-image-alt: "Uma ilustração de séries temporais"
