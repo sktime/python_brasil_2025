@@ -360,7 +360,7 @@ window.Quarto = {
 <li><strong>Previsão direta</strong>: em vez de prever um passo de cada vez, podemos treinar o modelo para prever todos os <span class="math inline">\(h\)</span> passos à frente de uma vez. Isso pode ser feito usando um modelo para cada <span class="math inline">\(h\)</span> ou usando um modelo que prevê um vetor de <span class="math inline">\(h\)</span> valores.</li>
 </ol>
 <p>A verdade é que as duas abordagens podem ser vistas como uma: a previsão recursiva pode ser vista como uma previsão direta para <span class="math inline">\(h=1\)</span>.</p>
-<div id="627b8905" class="cell" data-execution_count="2">
+<div id="3a155dee" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tsbook.datasets.retail <span class="im">import</span> SyntheticRetail</span>
@@ -376,7 +376,7 @@ window.Quarto = {
 <section id="o-problema-da-tendência" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="o-problema-da-tendência"><span class="header-section-number">7.1</span> O problema da tendência</h2>
 <p>A tendência em séries temporais é como um constante problema de data drift:</p>
-<div id="49df0b13" class="cell" data-execution_count="3">
+<div id="db50810b" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>_X <span class="op">=</span> [y_train.iloc[i : i <span class="op">+</span> <span class="dv">7</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">700</span>)]</span>
@@ -421,7 +421,7 @@ window.Quarto = {
 </div>
 <p>Quando criamos nossas janelas e olhamos treine e teste, esse problema fica claro. A informação de uma série em treino não é util para prever a série de teste, pois elas estão em magnitudes diferentes.</p>
 <p>Uma possível solução para isso é normalizar cada janela, dividindo pelo valor médio da janela. Assim, todas as janelas ficam na mesma escala:</p>
-<div id="758bcb28" class="cell" data-execution_count="4">
+<div id="413ee9ab" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>_X <span class="op">=</span> [x <span class="op">/</span> x.mean() <span class="cf">for</span> x <span class="kw">in</span> _X]</span>
@@ -451,7 +451,7 @@ window.Quarto = {
 <section id="usando-modelos-de-ml-com-sktime" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="usando-modelos-de-ml-com-sktime"><span class="header-section-number">7.2</span> Usando modelos de ML com sktime</h2>
 <p>Primeiro, vamos import <code>ReductionForecaster</code>, que é a classe que implementa a abordagem de janelas deslizantes para usar modelos de ML em séries temporais. Vamos testar um primeiro caso sem nenhum tipo de preprocessamento, apenas criando as janelas:</p>
-<div id="f5a5fe63" class="cell" data-execution_count="5">
+<div id="55903949" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tsbook.forecasting.reduction <span class="im">import</span> ReductionForecaster</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lightgbm <span class="im">import</span> LGBMRegressor</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -462,14 +462,15 @@ window.Quarto = {
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>model.fit(y_train, X<span class="op">=</span>X_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000273 seconds.
-You can set `force_col_wise=true` to remove the overhead.
+<pre><code>[LightGBM] [Info] Auto-choosing row-wise multi-threading, the overhead of testing was 0.000118 seconds.
+You can set `force_row_wise=true` to remove the overhead.
+And if memory is not enough, you can set `force_col_wise=true`.
 [LightGBM] [Info] Total Bins 7652
 [LightGBM] [Info] Number of data points in the train set: 1618, number of used features: 31
 [LightGBM] [Info] Start training from score 580.323857</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="5">
-<style>#sk-608319e6-f941-43e8-ab06-c339a299aada {
+<style>#sk-65157d41-d33b-43de-9bfe-63efabdc444b {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -494,15 +495,15 @@ You can set `force_col_wise=true` to remove the overhead.
     }
   }
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b {
     color: var(--sklearn-color-text);
   }
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada pre {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b pre {
     padding: 0;
   }
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada input.sk-hidden--visually {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -514,7 +515,7 @@ You can set `force_col_wise=true` to remove the overhead.
     width: 1px;
   }
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-dashed-wrapped {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -522,7 +523,7 @@ You can set `force_col_wise=true` to remove the overhead.
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-container {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -532,7 +533,7 @@ You can set `force_col_wise=true` to remove the overhead.
     position: relative;
   }
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-text-repr-fallback {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -548,14 +549,14 @@ You can set `force_col_wise=true` to remove the overhead.
 
   /* Parallel-specific style estimator block */
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-parallel-item::after {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-parallel {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -563,28 +564,28 @@ You can set `force_col_wise=true` to remove the overhead.
     position: relative;
   }
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-parallel-item {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-parallel-item:first-child::after {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-parallel-item:last-child::after {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-parallel-item:only-child::after {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-serial {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -602,14 +603,14 @@ You can set `force_col_wise=true` to remove the overhead.
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-toggleable {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-608319e6-f941-43e8-ab06-c339a299aada label.sk-toggleable__label {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -619,7 +620,7 @@ You can set `force_col_wise=true` to remove the overhead.
     text-align: center;
   }
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada label.sk-toggleable__label-arrow:before {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -627,13 +628,13 @@ You can set `force_col_wise=true` to remove the overhead.
     color: var(--sklearn-color-icon);
   }
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada label.sk-toggleable__label-arrow:hover:before {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-toggleable__content {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -641,27 +642,27 @@ You can set `force_col_wise=true` to remove the overhead.
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-toggleable__content pre {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -669,38 +670,38 @@ You can set `force_col_wise=true` to remove the overhead.
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-label label.sk-toggleable__label,
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-label label {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-label label.sk-toggleable__label,
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-label:hover label.sk-toggleable__label {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-label label {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-label-container {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-estimator {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -710,7 +711,7 @@ You can set `force_col_wise=true` to remove the overhead.
   }
 
   /* on hover */
-  #sk-608319e6-f941-43e8-ab06-c339a299aada div.sk-estimator:hover {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -767,7 +768,7 @@ You can set `force_col_wise=true` to remove the overhead.
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-608319e6-f941-43e8-ab06-c339a299aada a.estimator_doc_link {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -782,15 +783,15 @@ You can set `force_col_wise=true` to remove the overhead.
   }
 
   /* On hover */
-  #sk-608319e6-f941-43e8-ab06-c339a299aada a.estimator_doc_link:hover {
+  #sk-65157d41-d33b-43de-9bfe-63efabdc444b a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-608319e6-f941-43e8-ab06-c339a299aada" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42), window_length=30)</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('1f2aee02-685a-4bc7-9e28-b827d07d7f15')" type="checkbox"><label for="UUID('1f2aee02-685a-4bc7-9e28-b827d07d7f15')" class="sk-toggleable__label sk-toggleable__label-arrow">ReductionForecaster</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42), window_length=30)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('b4f81302-3255-4e55-bcd1-8b3662221ad0')" type="checkbox"><label for="UUID('b4f81302-3255-4e55-bcd1-8b3662221ad0')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('74bf3e91-55fe-4f3f-a288-ecf8f281f459')" type="checkbox"><label for="UUID('74bf3e91-55fe-4f3f-a288-ecf8f281f459')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42)</pre></div></div></div></div></div></div></div></div></div></div>
+</style><div id="sk-65157d41-d33b-43de-9bfe-63efabdc444b" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42), window_length=30)</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('ccd98386-30f4-4654-a37b-9475e4844841')" type="checkbox"><label for="UUID('ccd98386-30f4-4654-a37b-9475e4844841')" class="sk-toggleable__label sk-toggleable__label-arrow">ReductionForecaster</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42), window_length=30)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('1f420ae7-637e-4ad1-a385-c5c1d93889d1')" type="checkbox"><label for="UUID('1f420ae7-637e-4ad1-a385-c5c1d93889d1')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('0482f556-8e91-4e7b-a53c-1a5e591bfcfe')" type="checkbox"><label for="UUID('0482f556-8e91-4e7b-a53c-1a5e591bfcfe')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42)</pre></div></div></div></div></div></div></div></div></div></div>
 </div>
 </div>
-<div id="e173571f" class="cell" data-execution_count="6">
+<div id="b67743bb" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> model.predict(fh<span class="op">=</span>y_test.index, X<span class="op">=</span>X_test)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>plot_series(y_train, y_test, y_pred, labels<span class="op">=</span>[<span class="st">"Treino"</span>, <span class="st">"Teste"</span>, <span class="st">"Previsão com ML"</span>])</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -806,7 +807,7 @@ You can set `force_col_wise=true` to remove the overhead.
 <section id="solução-1-diferenciação" class="level3" data-number="7.2.1">
 <h3 data-number="7.2.1" class="anchored" data-anchor-id="solução-1-diferenciação"><span class="header-section-number">7.2.1</span> Solução 1: Diferenciação</h3>
 <p>Uma solução é usar a diferenciação para remover a tendência da série.</p>
-<div id="80111050" class="cell" data-execution_count="7">
+<div id="0af28d6b" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.series.difference <span class="im">import</span> Differencer</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>regressor <span class="op">=</span> LGBMRegressor(n_estimators<span class="op">=</span><span class="dv">100</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
@@ -819,14 +820,14 @@ You can set `force_col_wise=true` to remove the overhead.
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>model.fit(y_train, X<span class="op">=</span>X_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000270 seconds.
+<pre><code>[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000252 seconds.
 You can set `force_col_wise=true` to remove the overhead.
 [LightGBM] [Info] Total Bins 7638
 [LightGBM] [Info] Number of data points in the train set: 1618, number of used features: 31
 [LightGBM] [Info] Start training from score 1.496292</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="7">
-<style>#sk-39361dc0-9943-448b-a6d6-f96e8373dadf {
+<style>#sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -851,15 +852,15 @@ You can set `force_col_wise=true` to remove the overhead.
     }
   }
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 {
     color: var(--sklearn-color-text);
   }
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf pre {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 pre {
     padding: 0;
   }
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf input.sk-hidden--visually {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -871,7 +872,7 @@ You can set `force_col_wise=true` to remove the overhead.
     width: 1px;
   }
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-dashed-wrapped {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -879,7 +880,7 @@ You can set `force_col_wise=true` to remove the overhead.
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-container {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -889,7 +890,7 @@ You can set `force_col_wise=true` to remove the overhead.
     position: relative;
   }
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-text-repr-fallback {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -905,14 +906,14 @@ You can set `force_col_wise=true` to remove the overhead.
 
   /* Parallel-specific style estimator block */
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-parallel-item::after {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-parallel {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -920,28 +921,28 @@ You can set `force_col_wise=true` to remove the overhead.
     position: relative;
   }
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-parallel-item {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-parallel-item:first-child::after {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-parallel-item:last-child::after {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-parallel-item:only-child::after {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-serial {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -959,14 +960,14 @@ You can set `force_col_wise=true` to remove the overhead.
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-toggleable {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf label.sk-toggleable__label {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -976,7 +977,7 @@ You can set `force_col_wise=true` to remove the overhead.
     text-align: center;
   }
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf label.sk-toggleable__label-arrow:before {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -984,13 +985,13 @@ You can set `force_col_wise=true` to remove the overhead.
     color: var(--sklearn-color-icon);
   }
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf label.sk-toggleable__label-arrow:hover:before {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-toggleable__content {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -998,27 +999,27 @@ You can set `force_col_wise=true` to remove the overhead.
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-toggleable__content pre {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -1026,38 +1027,38 @@ You can set `force_col_wise=true` to remove the overhead.
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-label label.sk-toggleable__label,
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-label label {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-label label.sk-toggleable__label,
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-label:hover label.sk-toggleable__label {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-label label {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-label-container {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-estimator {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -1067,7 +1068,7 @@ You can set `force_col_wise=true` to remove the overhead.
   }
 
   /* on hover */
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf div.sk-estimator:hover {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -1124,7 +1125,7 @@ You can set `force_col_wise=true` to remove the overhead.
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf a.estimator_doc_link {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -1139,19 +1140,19 @@ You can set `force_col_wise=true` to remove the overhead.
   }
 
   /* On hover */
-  #sk-39361dc0-9943-448b-a6d6-f96e8373dadf a.estimator_doc_link:hover {
+  #sk-56bc63b0-02dc-466f-b557-0836aa0e61d4 a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-39361dc0-9943-448b-a6d6-f96e8373dadf" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>TransformedTargetForecaster(steps=[Differencer(),
+</style><div id="sk-56bc63b0-02dc-466f-b557-0836aa0e61d4" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>TransformedTargetForecaster(steps=[Differencer(),
                                    ReductionForecaster(estimator=LGBMRegressor(random_state=42),
-                                                       window_length=30)])</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('8aaf8851-93db-4786-b705-509e2fdf6122')" type="checkbox"><label for="UUID('8aaf8851-93db-4786-b705-509e2fdf6122')" class="sk-toggleable__label sk-toggleable__label-arrow">TransformedTargetForecaster<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.compose.TransformedTargetForecaster.html">?<span>Documentation for TransformedTargetForecaster</span></a></label><div class="sk-toggleable__content"><pre>TransformedTargetForecaster(steps=[Differencer(),
+                                                       window_length=30)])</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('5488f46d-1a82-47cb-9992-3dfd9c80fc8e')" type="checkbox"><label for="UUID('5488f46d-1a82-47cb-9992-3dfd9c80fc8e')" class="sk-toggleable__label sk-toggleable__label-arrow">TransformedTargetForecaster<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.compose.TransformedTargetForecaster.html">?<span>Documentation for TransformedTargetForecaster</span></a></label><div class="sk-toggleable__content"><pre>TransformedTargetForecaster(steps=[Differencer(),
                                    ReductionForecaster(estimator=LGBMRegressor(random_state=42),
-                                                       window_length=30)])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('53108232-801a-41d5-a714-ce788cb0494f')" type="checkbox"><label for="UUID('53108232-801a-41d5-a714-ce788cb0494f')" class="sk-toggleable__label sk-toggleable__label-arrow">Differencer<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.difference.Differencer.html">?<span>Documentation for Differencer</span></a></label><div class="sk-toggleable__content"><pre>Differencer()</pre></div></div></div><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('7c7ecc2d-24f6-4f5f-acea-e3ca04d603af')" type="checkbox"><label for="UUID('7c7ecc2d-24f6-4f5f-acea-e3ca04d603af')" class="sk-toggleable__label sk-toggleable__label-arrow">ReductionForecaster</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42), window_length=30)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('93664446-b9c5-4b32-b607-e2817edf2c56')" type="checkbox"><label for="UUID('93664446-b9c5-4b32-b607-e2817edf2c56')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('d178e5ff-fd4d-45a4-9e38-51a6bfe4a35c')" type="checkbox"><label for="UUID('d178e5ff-fd4d-45a4-9e38-51a6bfe4a35c')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42)</pre></div></div></div></div></div></div></div></div></div></div></div></div>
+                                                       window_length=30)])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('e6b46213-82c2-4856-966f-068630be0d01')" type="checkbox"><label for="UUID('e6b46213-82c2-4856-966f-068630be0d01')" class="sk-toggleable__label sk-toggleable__label-arrow">Differencer<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.difference.Differencer.html">?<span>Documentation for Differencer</span></a></label><div class="sk-toggleable__content"><pre>Differencer()</pre></div></div></div><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('87660b9f-301b-4e41-af62-871668d22773')" type="checkbox"><label for="UUID('87660b9f-301b-4e41-af62-871668d22773')" class="sk-toggleable__label sk-toggleable__label-arrow">ReductionForecaster</label><div class="sk-toggleable__content"><pre>ReductionForecaster(estimator=LGBMRegressor(random_state=42), window_length=30)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('10ec0c38-5244-4020-8620-5b7bb53eae34')" type="checkbox"><label for="UUID('10ec0c38-5244-4020-8620-5b7bb53eae34')" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('8d0c62d0-3b1f-4334-814a-c2408ca2df02')" type="checkbox"><label for="UUID('8d0c62d0-3b1f-4334-814a-c2408ca2df02')" class="sk-toggleable__label sk-toggleable__label-arrow">LGBMRegressor</label><div class="sk-toggleable__content"><pre>LGBMRegressor(random_state=42)</pre></div></div></div></div></div></div></div></div></div></div></div></div>
 </div>
 </div>
-<div id="929acbfd" class="cell" data-execution_count="8">
+<div id="05ea3675" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>y_pred_diff <span class="op">=</span> model.predict(fh<span class="op">=</span>y_test.index, X<span class="op">=</span>X_test)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>plot_series(</span>
@@ -1167,7 +1168,7 @@ You can set `force_col_wise=true` to remove the overhead.
 </div>
 </div>
 <p>Aqui, já vemos uma melhora significativa. Mas tem algo que podemos melhorar para realizar a diferenciação? Sim. Lembre que essa série tem um padrão multiplicativo. Então, antes de aplicar a diferenciação, podemos aplicar uma transformação logarítmica para estabilizar a variância:</p>
-<div id="85eb8dcc" class="cell" data-execution_count="9">
+<div id="f1f3c006" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.series.boxcox <span class="im">import</span> LogTransformer</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>model_log <span class="op">=</span> LogTransformer() <span class="op">*</span> model</span>
@@ -1181,7 +1182,7 @@ You can set `force_col_wise=true` to remove the overhead.
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    labels<span class="op">=</span>[<span class="st">"Treino"</span>, <span class="st">"Teste"</span>, <span class="st">"Previsão com ML + Log + Diferença"</span>],</span>
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000403 seconds.
+<pre><code>[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000251 seconds.
 You can set `force_col_wise=true` to remove the overhead.
 [LightGBM] [Info] Total Bins 7652
 [LightGBM] [Info] Number of data points in the train set: 1618, number of used features: 31
@@ -1199,7 +1200,7 @@ You can set `force_col_wise=true` to remove the overhead.
 <section id="solução-2-normalização-por-janela" class="level3" data-number="7.2.2">
 <h3 data-number="7.2.2" class="anchored" data-anchor-id="solução-2-normalização-por-janela"><span class="header-section-number">7.2.2</span> Solução 2: Normalização por janela</h3>
 <p>A diferenciação aumenta o ruído da série, o que pode dificultar o trabalho do modelo de ML. Outra opção é normalizar em cada janela. A classe <code>ReductionForecaster</code> tem um parâmetro chamado <code>normalization_strategy</code>, que pode ser usado para determinar a estratégia de normalização. Vamos usar a estratégia <code>divide_mean</code>, que divide cada janela pelo seu valor médio.</p>
-<div id="0c0d6363" class="cell" data-execution_count="10">
+<div id="e5e54cea" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> ReductionForecaster(</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    regressor,</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    window_length<span class="op">=</span><span class="dv">30</span>,</span>
@@ -1214,7 +1215,7 @@ You can set `force_col_wise=true` to remove the overhead.
 <span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    y_train, y_test, y_pred_norm, labels<span class="op">=</span>[<span class="st">"Treino"</span>, <span class="st">"Teste"</span>, <span class="st">"Previsão com ML + Normalização"</span>]</span>
 <span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000379 seconds.
+<pre><code>[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000217 seconds.
 You can set `force_col_wise=true` to remove the overhead.
 [LightGBM] [Info] Total Bins 7652
 [LightGBM] [Info] Number of data points in the train set: 1618, number of used features: 31
@@ -1232,7 +1233,7 @@ You can set `force_col_wise=true` to remove the overhead.
 <section id="modelo-direto-e-recursivo" class="level3" data-number="7.2.3">
 <h3 data-number="7.2.3" class="anchored" data-anchor-id="modelo-direto-e-recursivo"><span class="header-section-number">7.2.3</span> Modelo direto e recursivo</h3>
 <p>Podemos fazer um conjunto de modelos, um para cada passo à frente. Abaixo, definimos <code>steps_ahead=12</code>, o que significa que o modelo vai prever 12 passos à frente diretamente.</p>
-<div id="9ee3f3c5" class="cell" data-execution_count="11">
+<div id="b201f50a" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> ReductionForecaster(</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    regressor,</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    window_length<span class="op">=</span><span class="dv">30</span>,</span>
@@ -1243,69 +1244,69 @@ You can set `force_col_wise=true` to remove the overhead.
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>model.fit(y_train, X<span class="op">=</span>X_train)</span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>y_pred_norm_direct <span class="op">=</span> model.predict(fh<span class="op">=</span>y_test.index, X<span class="op">=</span>X_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000217 seconds.
+<pre><code>[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000384 seconds.
 You can set `force_col_wise=true` to remove the overhead.
 [LightGBM] [Info] Total Bins 7652
 [LightGBM] [Info] Number of data points in the train set: 1618, number of used features: 31
 [LightGBM] [Info] Start training from score 1.043527
-[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000247 seconds.
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000203 seconds.
 You can set `force_col_wise=true` to remove the overhead.
 [LightGBM] [Info] Total Bins 7652
 [LightGBM] [Info] Number of data points in the train set: 1617, number of used features: 31
 [LightGBM] [Info] Start training from score 1.047267
-[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000260 seconds.
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000298 seconds.
 You can set `force_col_wise=true` to remove the overhead.
 [LightGBM] [Info] Total Bins 7652
 [LightGBM] [Info] Number of data points in the train set: 1616, number of used features: 31
 [LightGBM] [Info] Start training from score 1.050587
-[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000249 seconds.
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000246 seconds.
 You can set `force_col_wise=true` to remove the overhead.
 [LightGBM] [Info] Total Bins 7652
 [LightGBM] [Info] Number of data points in the train set: 1615, number of used features: 31
 [LightGBM] [Info] Start training from score 1.053028
-[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000263 seconds.
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000247 seconds.
 You can set `force_col_wise=true` to remove the overhead.
 [LightGBM] [Info] Total Bins 7652
 [LightGBM] [Info] Number of data points in the train set: 1614, number of used features: 31
 [LightGBM] [Info] Start training from score 1.055194
-[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000263 seconds.
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000266 seconds.
 You can set `force_col_wise=true` to remove the overhead.
 [LightGBM] [Info] Total Bins 7652
 [LightGBM] [Info] Number of data points in the train set: 1613, number of used features: 31
 [LightGBM] [Info] Start training from score 1.057457
-[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000230 seconds.
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000242 seconds.
 You can set `force_col_wise=true` to remove the overhead.
 [LightGBM] [Info] Total Bins 7652
 [LightGBM] [Info] Number of data points in the train set: 1612, number of used features: 31
 [LightGBM] [Info] Start training from score 1.060191
-[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000264 seconds.
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000221 seconds.
 You can set `force_col_wise=true` to remove the overhead.
 [LightGBM] [Info] Total Bins 7652
 [LightGBM] [Info] Number of data points in the train set: 1611, number of used features: 31
 [LightGBM] [Info] Start training from score 1.063314
-[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000215 seconds.
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000203 seconds.
 You can set `force_col_wise=true` to remove the overhead.
 [LightGBM] [Info] Total Bins 7652
 [LightGBM] [Info] Number of data points in the train set: 1610, number of used features: 31
 [LightGBM] [Info] Start training from score 1.066550
-[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000216 seconds.
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000209 seconds.
 You can set `force_col_wise=true` to remove the overhead.
 [LightGBM] [Info] Total Bins 7652
 [LightGBM] [Info] Number of data points in the train set: 1609, number of used features: 31
 [LightGBM] [Info] Start training from score 1.069536
-[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000221 seconds.
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000215 seconds.
 You can set `force_col_wise=true` to remove the overhead.
 [LightGBM] [Info] Total Bins 7652
 [LightGBM] [Info] Number of data points in the train set: 1608, number of used features: 31
 [LightGBM] [Info] Start training from score 1.072317
-[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000253 seconds.
+[LightGBM] [Info] Auto-choosing col-wise multi-threading, the overhead of testing was 0.000226 seconds.
 You can set `force_col_wise=true` to remove the overhead.
 [LightGBM] [Info] Total Bins 7652
 [LightGBM] [Info] Number of data points in the train set: 1607, number of used features: 31
 [LightGBM] [Info] Start training from score 1.074787</code></pre>
 </div>
 </div>
-<div id="00df7a32" class="cell" data-execution_count="12">
+<div id="114082aa" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>plot_series(</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    y_train,</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    y_test,</span>
@@ -1321,7 +1322,7 @@ You can set `force_col_wise=true` to remove the overhead.
 </div>
 </div>
 <p>Podemos comparar o MAPE de todos os modelos:</p>
-<div id="9805ba22" class="cell" data-execution_count="13">
+<div id="9a1616a5" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.performance_metrics.forecasting <span class="im">import</span> MeanAbsolutePercentageError</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>mape <span class="op">=</span> MeanAbsolutePercentageError()</span>

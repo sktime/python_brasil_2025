@@ -345,7 +345,7 @@ window.Quarto = {
 <section id="métricas" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="métricas"><span class="header-section-number">5.1</span> Métricas</h2>
 <p>Primeiro vamos baixar os dados e criar um modelo simples.</p>
-<div id="63f1ec7d" class="cell" data-execution_count="1">
+<div id="47c0d74c" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tsbook.datasets.retail <span class="im">import</span> SyntheticRetail</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.utils.plotting <span class="im">import</span> plot_series</span>
@@ -366,7 +366,7 @@ window.Quarto = {
 MAE = \frac{1}{h} \sum_{t=T+1}^{T+h} |y_t - \hat{y}_t|
 \]</span></li>
 </ul>
-<div id="548d26f4" class="cell" data-execution_count="2">
+<div id="45b0511f" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.performance_metrics.forecasting <span class="im">import</span> MeanAbsoluteError</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>metric <span class="op">=</span> MeanAbsoluteError()</span>
@@ -381,7 +381,7 @@ MAE = \frac{1}{h} \sum_{t=T+1}^{T+h} |y_t - \hat{y}_t|
 <p><span class="math display">\[
 MSE = \frac{1}{h} \sum_{t=T+1}^{T+h} (y_t - \hat{y}_t)^2
 \]</span></p>
-<div id="f5fbee09" class="cell" data-execution_count="3">
+<div id="58376f38" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.performance_metrics.forecasting <span class="im">import</span> MeanSquaredError</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>metric <span class="op">=</span> MeanSquaredError()</span>
@@ -398,7 +398,7 @@ MSE = \frac{1}{h} \sum_{t=T+1}^{T+h} (y_t - \hat{y}_t)^2
 <p><span class="math display">\[
 MAPE = \frac{1}{h} \sum_{t=T+1}^{T+h} \left| \frac{y_t - \hat{y}_t}{y_t} \right|
 \]</span></p>
-<div id="d7a598dc" class="cell" data-execution_count="4">
+<div id="35f589de" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.performance_metrics.forecasting <span class="im">import</span> MeanAbsolutePercentageError</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>metric <span class="op">=</span> MeanAbsolutePercentageError()</span>
@@ -410,7 +410,7 @@ MAPE = \frac{1}{h} \sum_{t=T+1}^{T+h} \left| \frac{y_t - \hat{y}_t}{y_t} \right|
 <ul>
 <li><strong>Symmetric Mean Absolute Percentage Error (sMAPE)</strong>: Média dos erros percentuais absolutos simétricos entre as previsões e os valores reais.</li>
 </ul>
-<div id="c360511e" class="cell" data-execution_count="5">
+<div id="1dc5fc45" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>metric <span class="op">=</span> MeanAbsolutePercentageError(symmetric<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>metric(y_true<span class="op">=</span>y_test, y_pred<span class="op">=</span>y_pred)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
@@ -432,7 +432,7 @@ e_{naive} = \frac{1}{T-1} \sum_{t=2}^{T} |y_t - y_{t-1}|
 <p><span class="math display">\[
 MASE = \frac{1}{h} \sum_{t=T+1}^{T+h} \frac{|y_t - \hat{y}_t|}{e_{naive}}
 \]</span></p>
-<div id="5e6f90a6" class="cell" data-execution_count="6">
+<div id="f66d4895" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.performance_metrics.forecasting <span class="im">import</span> MeanAbsoluteScaledError</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>metric <span class="op">=</span> MeanAbsoluteScaledError()</span>
@@ -447,7 +447,7 @@ MASE = \frac{1}{h} \sum_{t=T+1}^{T+h} \frac{|y_t - \hat{y}_t|}{e_{naive}}
 <p><span class="math display">\[
 MSSE = \frac{1}{h} \sum_{t=T+1}^{T+h} \frac{(y_t - \hat{y}_t)^2}{e_{naive}^2}
 \]</span></p>
-<div id="c629de8c" class="cell" data-execution_count="7">
+<div id="24f7f974" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.performance_metrics.forecasting <span class="im">import</span> MeanSquaredScaledError</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>metric <span class="op">=</span> MeanSquaredScaledError()</span>
@@ -468,7 +468,7 @@ MSSE = \frac{1}{h} \sum_{t=T+1}^{T+h} \frac{(y_t - \hat{y}_t)^2}{e_{naive}^2}
 <ul>
 <li><strong>Sliding window</strong>: a janela de treino tem tamanho fixo, e “desliza” ao longo do tempo. A cada passo, o modelo é re-treinado com os dados mais recentes.</li>
 </ul>
-<div id="5467a995" class="cell" data-execution_count="8">
+<div id="cdf1471c" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.utils.plotting <span class="im">import</span> plot_windows</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.split <span class="im">import</span> SlidingWindowSplitter</span>
@@ -489,7 +489,7 @@ MSSE = \frac{1}{h} \sum_{t=T+1}^{T+h} \frac{(y_t - \hat{y}_t)^2}{e_{naive}^2}
 <ul>
 <li><strong>Expanding window</strong>: a janela de treino começa com um tamanho mínimo, e vai aumentando ao longo do tempo, incluindo todos os dados anteriores. A cada passo, o modelo é re-treinado com todos os dados disponíveis até aquele ponto.</li>
 </ul>
-<div id="4de3aa46" class="cell" data-execution_count="9">
+<div id="1710b682" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.split <span class="im">import</span> ExpandingWindowSplitter</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -514,7 +514,7 @@ MSSE = \frac{1}{h} \sum_{t=T+1}^{T+h} \frac{(y_t - \hat{y}_t)^2}{e_{naive}^2}
 <section id="executando-o-cross-validation" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="executando-o-cross-validation"><span class="header-section-number">5.3</span> Executando o cross-validation</h2>
 <p>Para executar cross-validation, usamos a função <code>evaluate</code>, que recebe o modelo, o esquema de cross-validation, os dados, e a métrica a ser usada.</p>
-<div id="68ca8219" class="cell" data-execution_count="10">
+<div id="ff914902" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.forecasting.model_evaluation <span class="im">import</span> evaluate</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.performance_metrics.forecasting <span class="im">import</span> MeanAbsoluteScaledError</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.forecasting.naive <span class="im">import</span> NaiveForecaster</span>
@@ -552,8 +552,8 @@ MSSE = \frac{1}{h} \sum_{t=T+1}^{T+h} \frac{(y_t - \hat{y}_t)^2}{e_{naive}^2}
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
 <td>12.834619</td>
-<td>0.004435</td>
-<td>0.010634</td>
+<td>0.004345</td>
+<td>0.010120</td>
 <td>1095</td>
 <td>2022-12-30</td>
 <td>sales date 2020-01-01...</td>
@@ -563,8 +563,8 @@ MSSE = \frac{1}{h} \sum_{t=T+1}^{T+h} \frac{(y_t - \hat{y}_t)^2}{e_{naive}^2}
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
 <td>3.808715</td>
-<td>0.004095</td>
-<td>0.010111</td>
+<td>0.003967</td>
+<td>0.009625</td>
 <td>1195</td>
 <td>2023-04-09</td>
 <td>sales date 2020-01-01...</td>
@@ -574,8 +574,8 @@ MSSE = \frac{1}{h} \sum_{t=T+1}^{T+h} \frac{(y_t - \hat{y}_t)^2}{e_{naive}^2}
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
 <td>8.057811</td>
-<td>0.004032</td>
-<td>0.009977</td>
+<td>0.004040</td>
+<td>0.009489</td>
 <td>1295</td>
 <td>2023-07-18</td>
 <td>sales date 2020-01-01...</td>
@@ -585,8 +585,8 @@ MSSE = \frac{1}{h} \sum_{t=T+1}^{T+h} \frac{(y_t - \hat{y}_t)^2}{e_{naive}^2}
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
 <td>7.854351</td>
-<td>0.004073</td>
-<td>0.009950</td>
+<td>0.003864</td>
+<td>0.009340</td>
 <td>1395</td>
 <td>2023-10-26</td>
 <td>sales date 2020-01-01...</td>
@@ -596,8 +596,8 @@ MSSE = \frac{1}{h} \sum_{t=T+1}^{T+h} \frac{(y_t - \hat{y}_t)^2}{e_{naive}^2}
 <tr class="odd">
 <th data-quarto-table-cell-role="th">4</th>
 <td>5.956618</td>
-<td>0.004037</td>
-<td>0.009993</td>
+<td>0.003974</td>
+<td>0.009426</td>
 <td>1495</td>
 <td>2024-02-03</td>
 <td>sales date 2020-01-01...</td>

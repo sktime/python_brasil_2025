@@ -322,7 +322,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Agora, vamos ver como usar variáveis exógenas em modelos de séries temporais com sktime, as famosas “features”.</p>
 <p>A interface é sempre a mesma, vamos ver que a diferença é o uso do parâmetro <code>X</code> nos métodos <code>fit</code> e <code>predict</code>.</p>
 <p>Usaremos os mesmos dados de varejo sintético dos exemplos anteriores. Agora, teremos também <code>X_train</code> e <code>X_test</code>, que são as variáveis exógenas.</p>
-<div id="74420672" class="cell" data-execution_count="1">
+<div id="faa26c5b" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tsbook.datasets.retail <span class="im">import</span> SyntheticRetail</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.utils.plotting <span class="im">import</span> plot_series</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.forecasting.naive <span class="im">import</span> NaiveForecaster</span>
@@ -382,7 +382,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="727787d1" class="cell" data-execution_count="2">
+<div id="7987bb1b" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>X_train.plot.line()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -394,7 +394,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="566366e7" class="cell" data-execution_count="3">
+<div id="bb59aacb" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots( figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>y_train.plot(ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"y"</span>)</span>
@@ -408,7 +408,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Nem todos modelos suportam variáveis exógenas. Para ver uma lista de possibilidades, podemos usar a função <code>all_estimators</code> do sktime.</p>
-<div id="a9cd9ed7" class="cell" data-execution_count="4">
+<div id="fa2cb1ff" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.registry <span class="im">import</span> all_estimators</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>all_estimators(</span>
@@ -501,14 +501,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="usando-variáveis-exógenas-com-sktime" class="level2" data-number="6.2">
 <h2 data-number="6.2" class="anchored" data-anchor-id="usando-variáveis-exógenas-com-sktime"><span class="header-section-number">6.2</span> Usando variáveis exógenas com sktime</h2>
 <p>Vamos usar <code>AutoREG</code> como modelo base para nosso exemplo de vairáveis exógenas. Primeiramente, vamos supor que conhecemos a variável <code>macro_trend</code> no futuro</p>
-<div id="748af6dc" class="cell" data-execution_count="5">
+<div id="6c5a6da0" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.forecasting.auto_reg <span class="im">import</span> AutoREG</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> AutoREG(lags<span class="op">=</span><span class="dv">30</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>model.fit(y_train, X<span class="op">=</span>X_train)</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> model.predict(fh<span class="op">=</span>y_test.index, X<span class="op">=</span>X_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="75821256" class="cell" data-execution_count="6">
+<div id="6a3c1c3b" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>plot_series(y_train, y_test, y_pred, labels<span class="op">=</span>[<span class="st">"Treino"</span>, <span class="st">"Teste"</span>, <span class="st">"Previsão com Exógenas"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -524,7 +524,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="variável-observada-mas-desconhecida-no-futuro" class="level2" data-number="6.3">
 <h2 data-number="6.3" class="anchored" data-anchor-id="variável-observada-mas-desconhecida-no-futuro"><span class="header-section-number">6.3</span> Variável observada, mas desconhecida no futuro</h2>
 <p>Vamos eliminar a variável <code>macro_trend</code> do conjunto de teste, para simular o cenário onde não conhecemos o valor futuro dessa variável.</p>
-<div id="57ecb998" class="cell" data-execution_count="7">
+<div id="26f24b5a" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>X_test_missing <span class="op">=</span> X_test.copy()</span>
@@ -535,7 +535,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Agora, vamos supor que não sabemos o valor futuro de <code>macro_trend</code>. Nesse caso, podemos criar um modelo separado para prever <code>macro_trend</code> e usar essa previsão como entrada para o modelo principal.</p>
 <p>Sktime possui uma funcionalidade pronta para isso: um forecaster chamado <code>ForecastX</code>. Ele é composto de dois modelos, um para a variável exógena, e outro para o alvo principal.</p>
 <p>Aqui, o forecaster necessita que o horizonte de previsão (<code>fh</code>) seja passado já na etapa de <code>fit</code>.</p>
-<div id="1a8fbfbc" class="cell" data-execution_count="8">
+<div id="11715f7e" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.forecasting.compose <span class="im">import</span> ForecastX</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> ForecastX(</span>
@@ -548,7 +548,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>y_pred_case1 <span class="op">=</span> model.predict(X<span class="op">=</span>X_test_missing)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="034f80b1" class="cell" data-execution_count="9">
+<div id="28f535bd" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>plot_series(y_train, y_test, y_pred_case1, labels<span class="op">=</span>[<span class="st">"Treino"</span>, <span class="st">"Teste"</span>, <span class="st">"Previsão com Exógenas Previstas"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -562,7 +562,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="solução-2-usar-valor-de-preenchimento-imputação" class="level3" data-number="6.3.2">
 <h3 data-number="6.3.2" class="anchored" data-anchor-id="solução-2-usar-valor-de-preenchimento-imputação"><span class="header-section-number">6.3.2</span> Solução 2: Usar valor de preenchimento (imputação)</h3>
 <p>Para essa solução, vamos usar transformadores para preencher os valores faltantes na variável exógena. Aqui, usaremos o <code>Imputer</code> do sktime, que suporta variáveis exógenas.</p>
-<div id="22048c44" class="cell" data-execution_count="10">
+<div id="8aa57ceb" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.series.impute <span class="im">import</span> Imputer</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>imputer <span class="op">=</span> Imputer(method<span class="op">=</span><span class="st">"mean"</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>imputer.fit(X_train)</span>
@@ -620,7 +620,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Para usar preprocessamento de exógenas + forecasting, podemos usar a composição <code>ForecastingPipeline</code>.</p>
-<div id="77bbdc08" class="cell" data-execution_count="11">
+<div id="6e0beaa9" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.forecasting.compose <span class="im">import</span> ForecastingPipeline</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.series.difference <span class="im">import</span> Differencer</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -630,7 +630,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>model.fit(y_train, X<span class="op">=</span>X_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
-<style>#sk-12edc1b8-8929-4d73-ad58-f653105dc46c {
+<style>#sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -655,15 +655,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
   }
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 {
     color: var(--sklearn-color-text);
   }
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c pre {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 pre {
     padding: 0;
   }
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c input.sk-hidden--visually {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -675,7 +675,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     width: 1px;
   }
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-dashed-wrapped {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -683,7 +683,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-container {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -693,7 +693,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     position: relative;
   }
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-text-repr-fallback {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -709,14 +709,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
   /* Parallel-specific style estimator block */
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-parallel-item::after {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-parallel {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -724,28 +724,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     position: relative;
   }
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-parallel-item {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-parallel-item:first-child::after {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-parallel-item:last-child::after {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-parallel-item:only-child::after {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-serial {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -763,14 +763,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-toggleable {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c label.sk-toggleable__label {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -780,7 +780,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     text-align: center;
   }
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c label.sk-toggleable__label-arrow:before {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -788,13 +788,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     color: var(--sklearn-color-icon);
   }
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c label.sk-toggleable__label-arrow:hover:before {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-toggleable__content {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -802,27 +802,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-toggleable__content pre {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -830,38 +830,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-label label.sk-toggleable__label,
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-label label {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-label label.sk-toggleable__label,
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-label:hover label.sk-toggleable__label {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-label label {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-label-container {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-estimator {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -871,7 +871,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 
   /* on hover */
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c div.sk-estimator:hover {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -928,7 +928,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c a.estimator_doc_link {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -943,17 +943,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 
   /* On hover */
-  #sk-12edc1b8-8929-4d73-ad58-f653105dc46c a.estimator_doc_link:hover {
+  #sk-81d7b823-be3f-4655-b7ad-124dc668b8e8 a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-12edc1b8-8929-4d73-ad58-f653105dc46c" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ForecastingPipeline(steps=[('imputer', Imputer(method='mean')),
-                           ('forecaster', AutoREG(lags=30))])</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('ededa2ed-c0ff-4ecf-9e2b-f932f9f5ab28')" type="checkbox"><label for="UUID('ededa2ed-c0ff-4ecf-9e2b-f932f9f5ab28')" class="sk-toggleable__label sk-toggleable__label-arrow">ForecastingPipeline<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.compose.ForecastingPipeline.html">?<span>Documentation for ForecastingPipeline</span></a></label><div class="sk-toggleable__content"><pre>ForecastingPipeline(steps=[('imputer', Imputer(method='mean')),
-                           ('forecaster', AutoREG(lags=30))])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('de411865-7200-4bec-9739-528acb3a3b1f')" type="checkbox"><label for="UUID('de411865-7200-4bec-9739-528acb3a3b1f')" class="sk-toggleable__label sk-toggleable__label-arrow">Imputer<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.impute.Imputer.html">?<span>Documentation for Imputer</span></a></label><div class="sk-toggleable__content"><pre>Imputer(method='mean')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('63a7fa58-fa03-4987-8b8f-a9b72582c5be')" type="checkbox"><label for="UUID('63a7fa58-fa03-4987-8b8f-a9b72582c5be')" class="sk-toggleable__label sk-toggleable__label-arrow">AutoREG<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.auto_reg.AutoREG.html">?<span>Documentation for AutoREG</span></a></label><div class="sk-toggleable__content"><pre>AutoREG(lags=30)</pre></div></div></div></div></div></div></div>
+</style><div id="sk-81d7b823-be3f-4655-b7ad-124dc668b8e8" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ForecastingPipeline(steps=[('imputer', Imputer(method='mean')),
+                           ('forecaster', AutoREG(lags=30))])</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('e0c11817-5f22-493a-bc8e-40f9d03de4e4')" type="checkbox"><label for="UUID('e0c11817-5f22-493a-bc8e-40f9d03de4e4')" class="sk-toggleable__label sk-toggleable__label-arrow">ForecastingPipeline<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.compose.ForecastingPipeline.html">?<span>Documentation for ForecastingPipeline</span></a></label><div class="sk-toggleable__content"><pre>ForecastingPipeline(steps=[('imputer', Imputer(method='mean')),
+                           ('forecaster', AutoREG(lags=30))])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('1a2765c1-6aa8-40a3-9d66-f9850d0794f7')" type="checkbox"><label for="UUID('1a2765c1-6aa8-40a3-9d66-f9850d0794f7')" class="sk-toggleable__label sk-toggleable__label-arrow">Imputer<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.impute.Imputer.html">?<span>Documentation for Imputer</span></a></label><div class="sk-toggleable__content"><pre>Imputer(method='mean')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('68270a09-d08a-41f1-a851-a8a12b8a0920')" type="checkbox"><label for="UUID('68270a09-d08a-41f1-a851-a8a12b8a0920')" class="sk-toggleable__label sk-toggleable__label-arrow">AutoREG<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.auto_reg.AutoREG.html">?<span>Documentation for AutoREG</span></a></label><div class="sk-toggleable__content"><pre>AutoREG(lags=30)</pre></div></div></div></div></div></div></div>
 </div>
 </div>
-<div id="cbf95e57" class="cell" data-execution_count="12">
+<div id="b4589fb4" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>y_pred_case2 <span class="op">=</span> model.predict(fh<span class="op">=</span>y_test.index, X<span class="op">=</span>X_test_missing)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>plot_series(y_train, y_test, y_pred_case2, labels<span class="op">=</span>[<span class="st">"Treino"</span>, <span class="st">"Teste"</span>, <span class="st">"Previsão com Exógenas Imputadas"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
@@ -996,7 +996,7 @@ Tip
 <li>Defasagem: aplica o transformador Lag para criar versões defasadas das variáveis exógenas.</li>
 <li>Imputação: usa o transformador Imputer para preencher os valores NaN criados pelo processo de defasagem. Neste caso, é usado o método backfill (preenchimento a partir de valores posteriores).</li>
 </ul>
-<div id="021c7ec1" class="cell" data-execution_count="13">
+<div id="65c20f50" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.compose <span class="im">import</span> TransformerPipeline</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.series.feature_selection <span class="im">import</span> FeatureSelection</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.transformations.series.impute <span class="im">import</span> Imputer</span>
@@ -1013,7 +1013,7 @@ Tip
 <span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    ]</span>
 <span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="7de1c10d" class="cell" data-execution_count="14">
+<div id="27a1f24d" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>transformer_pipeline.fit(X<span class="op">=</span>X_train, y<span class="op">=</span>y_train)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>X_test_transformed <span class="op">=</span> transformer_pipeline.transform(X<span class="op">=</span>X_test_missing)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1028,25 +1028,25 @@ Tip
 <th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th">lag_98__macro_trend</th>
 <th data-quarto-table-cell-role="th">lag_34__macro_trend</th>
-<th data-quarto-table-cell-role="th">lag_65__macro_trend</th>
 <th data-quarto-table-cell-role="th">lag_35__macro_trend</th>
-<th data-quarto-table-cell-role="th">lag_104__macro_trend</th>
 <th data-quarto-table-cell-role="th">lag_85__macro_trend</th>
+<th data-quarto-table-cell-role="th">lag_53__macro_trend</th>
+<th data-quarto-table-cell-role="th">lag_104__macro_trend</th>
 <th data-quarto-table-cell-role="th">lag_6__macro_trend</th>
+<th data-quarto-table-cell-role="th">lag_79__macro_trend</th>
 <th data-quarto-table-cell-role="th">lag_67__macro_trend</th>
-<th data-quarto-table-cell-role="th">lag_15__macro_trend</th>
-<th data-quarto-table-cell-role="th">lag_92__macro_trend</th>
+<th data-quarto-table-cell-role="th">lag_89__macro_trend</th>
 <th data-quarto-table-cell-role="th">...</th>
-<th data-quarto-table-cell-role="th">lag_53__promo</th>
-<th data-quarto-table-cell-role="th">lag_100__macro_trend</th>
-<th data-quarto-table-cell-role="th">lag_159__macro_trend</th>
+<th data-quarto-table-cell-role="th">lag_75__promo</th>
+<th data-quarto-table-cell-role="th">lag_50__macro_trend</th>
+<th data-quarto-table-cell-role="th">lag_105__promo</th>
 <th data-quarto-table-cell-role="th">lag_150__promo</th>
-<th data-quarto-table-cell-role="th">lag_145__promo</th>
+<th data-quarto-table-cell-role="th">lag_91__macro_trend</th>
 <th data-quarto-table-cell-role="th">lag_166__promo</th>
 <th data-quarto-table-cell-role="th">lag_66__promo</th>
-<th data-quarto-table-cell-role="th">lag_86__macro_trend</th>
-<th data-quarto-table-cell-role="th">lag_161__promo</th>
-<th data-quarto-table-cell-role="th">lag_75__promo</th>
+<th data-quarto-table-cell-role="th">lag_145__promo</th>
+<th data-quarto-table-cell-role="th">lag_158__macro_trend</th>
+<th data-quarto-table-cell-role="th">lag_117__promo</th>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">date</th>
@@ -1078,120 +1078,120 @@ Tip
 <th data-quarto-table-cell-role="th">2024-07-06</th>
 <td>82.242222</td>
 <td>81.715111</td>
-<td>82.067556</td>
 <td>82.046222</td>
-<td>81.645333</td>
 <td>82.696889</td>
+<td>82.467556</td>
+<td>81.645333</td>
 <td>82.914667</td>
+<td>82.837778</td>
 <td>81.768000</td>
-<td>82.164889</td>
-<td>82.606222</td>
+<td>82.435556</td>
 <td>...</td>
 <td>0.0</td>
-<td>82.095111</td>
-<td>71.114667</td>
+<td>82.733333</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>82.636444</td>
 <td>0.0</td>
 <td>0.0</td>
 <td>0.0</td>
-<td>0.0</td>
-<td>82.467111</td>
-<td>0.0</td>
+<td>71.546222</td>
 <td>0.0</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">2024-07-07</th>
 <td>82.296444</td>
 <td>81.827556</td>
-<td>82.179111</td>
 <td>81.715111</td>
-<td>81.672000</td>
 <td>82.895111</td>
+<td>82.515111</td>
+<td>81.672000</td>
 <td>83.159111</td>
+<td>82.793333</td>
 <td>81.884889</td>
-<td>82.294222</td>
-<td>82.636444</td>
+<td>82.302222</td>
 <td>...</td>
 <td>0.0</td>
-<td>82.208444</td>
-<td>71.546222</td>
+<td>82.888444</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>82.547111</td>
 <td>0.0</td>
 <td>0.0</td>
 <td>0.0</td>
-<td>0.0</td>
-<td>82.696889</td>
-<td>0.0</td>
+<td>71.872444</td>
 <td>0.0</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2024-07-08</th>
 <td>82.327556</td>
 <td>82.088000</td>
-<td>82.292889</td>
 <td>81.827556</td>
-<td>81.734222</td>
 <td>82.973333</td>
+<td>82.639556</td>
+<td>81.734222</td>
 <td>83.445778</td>
+<td>82.500444</td>
 <td>82.067556</td>
-<td>82.149333</td>
-<td>82.547111</td>
+<td>82.296444</td>
 <td>...</td>
 <td>0.0</td>
-<td>82.242222</td>
-<td>71.872444</td>
+<td>82.800000</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>82.435556</td>
 <td>0.0</td>
 <td>0.0</td>
 <td>0.0</td>
-<td>0.0</td>
-<td>82.895111</td>
-<td>0.0</td>
+<td>72.169333</td>
 <td>0.0</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">2024-07-09</th>
 <td>82.401778</td>
 <td>82.558667</td>
-<td>82.407111</td>
 <td>82.088000</td>
-<td>81.885333</td>
 <td>82.860444</td>
+<td>82.733333</td>
+<td>81.885333</td>
 <td>83.599556</td>
+<td>82.027111</td>
 <td>82.179111</td>
-<td>82.017778</td>
-<td>82.435556</td>
+<td>82.467111</td>
 <td>...</td>
 <td>0.0</td>
-<td>82.296444</td>
-<td>72.169333</td>
+<td>82.740444</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>82.302222</td>
 <td>0.0</td>
 <td>0.0</td>
 <td>0.0</td>
-<td>0.0</td>
-<td>82.973333</td>
-<td>0.0</td>
+<td>72.259556</td>
 <td>0.0</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2024-07-10</th>
 <td>82.391556</td>
 <td>82.660444</td>
-<td>82.366667</td>
 <td>82.558667</td>
-<td>82.095111</td>
 <td>82.744000</td>
+<td>82.888444</td>
+<td>82.095111</td>
 <td>83.727111</td>
+<td>81.541333</td>
 <td>82.292889</td>
-<td>81.919111</td>
-<td>82.302222</td>
+<td>82.696889</td>
 <td>...</td>
 <td>0.0</td>
-<td>82.327556</td>
-<td>72.259556</td>
+<td>82.797333</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>82.296444</td>
 <td>0.0</td>
 <td>0.0</td>
 <td>0.0</td>
-<td>0.0</td>
-<td>82.860444</td>
-<td>0.0</td>
+<td>72.433778</td>
 <td>0.0</td>
 </tr>
 </tbody>
@@ -1201,7 +1201,7 @@ Tip
 </div>
 </div>
 </div>
-<div id="107ca7df" class="cell" data-execution_count="15">
+<div id="aac9e68c" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> ForecastingPipeline(</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    steps<span class="op">=</span>[</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>        (<span class="st">"preprocessing"</span>, transformer_pipeline),</span>
@@ -1212,7 +1212,7 @@ Tip
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>model</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
-<style>#sk-18cccc1c-ecb7-4510-a471-48933921c5e3 {
+<style>#sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e {
     /* Definition of color scheme common for light and dark mode */
     --sklearn-color-text: black;
     --sklearn-color-line: gray;
@@ -1237,15 +1237,15 @@ Tip
     }
   }
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e {
     color: var(--sklearn-color-text);
   }
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 pre {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e pre {
     padding: 0;
   }
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 input.sk-hidden--visually {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e input.sk-hidden--visually {
     border: 0;
     clip: rect(1px 1px 1px 1px);
     clip: rect(1px, 1px, 1px, 1px);
@@ -1257,7 +1257,7 @@ Tip
     width: 1px;
   }
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-dashed-wrapped {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-dashed-wrapped {
     border: 1px dashed var(--sklearn-color-line);
     margin: 0 0.4em 0.5em 0.4em;
     box-sizing: border-box;
@@ -1265,7 +1265,7 @@ Tip
     background-color: var(--sklearn-color-background);
   }
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-container {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-container {
     /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
        but bootstrap.min.css set `[hidden] { display: none !important; }`
        so we also need the `!important` here to be able to override the
@@ -1275,7 +1275,7 @@ Tip
     position: relative;
   }
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-text-repr-fallback {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-text-repr-fallback {
     display: none;
   }
 
@@ -1291,14 +1291,14 @@ Tip
 
   /* Parallel-specific style estimator block */
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-parallel-item::after {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-parallel-item::after {
     content: "";
     width: 100%;
     border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
     flex-grow: 1;
   }
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-parallel {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-parallel {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -1306,28 +1306,28 @@ Tip
     position: relative;
   }
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-parallel-item {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-parallel-item {
     display: flex;
     flex-direction: column;
   }
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-parallel-item:first-child::after {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-parallel-item:first-child::after {
     align-self: flex-end;
     width: 50%;
   }
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-parallel-item:last-child::after {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-parallel-item:last-child::after {
     align-self: flex-start;
     width: 50%;
   }
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-parallel-item:only-child::after {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-parallel-item:only-child::after {
     width: 0;
   }
 
   /* Serial-specific style estimator block */
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-serial {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-serial {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1345,14 +1345,14 @@ Tip
 
   /* Pipeline and ColumnTransformer style (default) */
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-toggleable {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-toggleable {
     /* Default theme specific background. It is overwritten whether we have a
     specific estimator or a Pipeline/ColumnTransformer */
     background-color: var(--sklearn-color-background);
   }
 
   /* Toggleable label */
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 label.sk-toggleable__label {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e label.sk-toggleable__label {
     cursor: pointer;
     display: block;
     width: 100%;
@@ -1362,7 +1362,7 @@ Tip
     text-align: center;
   }
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 label.sk-toggleable__label-arrow:before {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e label.sk-toggleable__label-arrow:before {
     /* Arrow on the left of the label */
     content: "▸";
     float: left;
@@ -1370,13 +1370,13 @@ Tip
     color: var(--sklearn-color-icon);
   }
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 label.sk-toggleable__label-arrow:hover:before {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e label.sk-toggleable__label-arrow:hover:before {
     color: var(--sklearn-color-text);
   }
 
   /* Toggleable content - dropdown */
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-toggleable__content {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-toggleable__content {
     max-height: 0;
     max-width: 0;
     overflow: hidden;
@@ -1384,27 +1384,27 @@ Tip
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-toggleable__content pre {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-toggleable__content pre {
     margin: 0.2em;
     border-radius: 0.25em;
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-0);
   }
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e input.sk-toggleable__control:checked~div.sk-toggleable__content {
     /* Expand drop-down */
     max-height: 200px;
     max-width: 100%;
     overflow: auto;
   }
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
     content: "▾";
   }
 
   /* Pipeline/ColumnTransformer-specific style */
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
@@ -1412,38 +1412,38 @@ Tip
   /* Estimator-specific style */
 
   /* Colorize estimator box */
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
     /* unfitted */
     background-color: var(--sklearn-color-level-2);
   }
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-label label.sk-toggleable__label,
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-label label {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-label label.sk-toggleable__label,
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-label label {
     /* The background is the default theme color */
     color: var(--sklearn-color-text-on-default-background);
   }
 
   /* On hover, darken the color of the background */
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-label:hover label.sk-toggleable__label {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-label:hover label.sk-toggleable__label {
     color: var(--sklearn-color-text);
     background-color: var(--sklearn-color-level-2);
   }
 
   /* Estimator label */
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-label label {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-label label {
     font-family: monospace;
     font-weight: bold;
     display: inline-block;
     line-height: 1.2em;
   }
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-label-container {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-label-container {
     text-align: center;
   }
 
   /* Estimator-specific */
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-estimator {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-estimator {
     font-family: monospace;
     border: 1px dotted var(--sklearn-color-border-box);
     border-radius: 0.25em;
@@ -1453,7 +1453,7 @@ Tip
   }
 
   /* on hover */
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 div.sk-estimator:hover {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e div.sk-estimator:hover {
     background-color: var(--sklearn-color-level-2);
   }
 
@@ -1510,7 +1510,7 @@ Tip
 
   /* "?"-specific style due to the `<a>` HTML tag */
 
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 a.estimator_doc_link {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e a.estimator_doc_link {
     float: right;
     font-size: 1rem;
     line-height: 1em;
@@ -1525,12 +1525,12 @@ Tip
   }
 
   /* On hover */
-  #sk-18cccc1c-ecb7-4510-a471-48933921c5e3 a.estimator_doc_link:hover {
+  #sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e a.estimator_doc_link:hover {
     background-color: var(--sklearn-color-level-3);
     color: var(--sklearn-color-background);
     text-decoration: none;
   }
-</style><div id="sk-18cccc1c-ecb7-4510-a471-48933921c5e3" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ForecastingPipeline(steps=[('preprocessing',
+</style><div id="sk-b115a0fd-0f8a-414a-bada-fdd9ccc5884e" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ForecastingPipeline(steps=[('preprocessing',
                             TransformerPipeline(steps=[('lag',
                                                         Lag(lags=[1, 2, 3, 4, 5,
                                                                   6, 7, 8, 9,
@@ -1548,7 +1548,7 @@ Tip
                                                                 value=0)),
                                                        ('feature_selection',
                                                         FeatureSelection())])),
-                           ('forecaster', AutoREG(lags=30))])</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('05135c05-4d50-4831-85cb-1d91722f5cdb')" type="checkbox"><label for="UUID('05135c05-4d50-4831-85cb-1d91722f5cdb')" class="sk-toggleable__label sk-toggleable__label-arrow">ForecastingPipeline<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.compose.ForecastingPipeline.html">?<span>Documentation for ForecastingPipeline</span></a></label><div class="sk-toggleable__content"><pre>ForecastingPipeline(steps=[('preprocessing',
+                           ('forecaster', AutoREG(lags=30))])</pre><b>Please rerun this cell to show the HTML repr or trust the notebook.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('16050ffe-0ace-4e34-a323-baaaccd54392')" type="checkbox"><label for="UUID('16050ffe-0ace-4e34-a323-baaaccd54392')" class="sk-toggleable__label sk-toggleable__label-arrow">ForecastingPipeline<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.compose.ForecastingPipeline.html">?<span>Documentation for ForecastingPipeline</span></a></label><div class="sk-toggleable__content"><pre>ForecastingPipeline(steps=[('preprocessing',
                             TransformerPipeline(steps=[('lag',
                                                         Lag(lags=[1, 2, 3, 4, 5,
                                                                   6, 7, 8, 9,
@@ -1566,17 +1566,17 @@ Tip
                                                                 value=0)),
                                                        ('feature_selection',
                                                         FeatureSelection())])),
-                           ('forecaster', AutoREG(lags=30))])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('2d8c0d86-b214-4d25-987f-d8aadae2a3d5')" type="checkbox"><label for="UUID('2d8c0d86-b214-4d25-987f-d8aadae2a3d5')" class="sk-toggleable__label sk-toggleable__label-arrow">preprocessing<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.compose.TransformerPipeline.html">?<span>Documentation for preprocessing</span></a></label><div class="sk-toggleable__content"><pre>TransformerPipeline(steps=[('lag',
+                           ('forecaster', AutoREG(lags=30))])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('44a75923-78be-4f63-9d71-70d22b621fa9')" type="checkbox"><label for="UUID('44a75923-78be-4f63-9d71-70d22b621fa9')" class="sk-toggleable__label sk-toggleable__label-arrow">preprocessing<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.compose.TransformerPipeline.html">?<span>Documentation for preprocessing</span></a></label><div class="sk-toggleable__content"><pre>TransformerPipeline(steps=[('lag',
                             Lag(lags=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
                                       14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
                                       24, 25, 26, 27, 28, 29, 30, ...])),
                            ('subset', IndexSubset()),
                            ('impute', Imputer(method='backfill', value=0)),
-                           ('feature_selection', FeatureSelection())])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('878dcc30-7da9-43d3-927d-0b8486eafe88')" type="checkbox"><label for="UUID('878dcc30-7da9-43d3-927d-0b8486eafe88')" class="sk-toggleable__label sk-toggleable__label-arrow">Lag<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.lag.Lag.html">?<span>Documentation for Lag</span></a></label><div class="sk-toggleable__content"><pre>Lag(lags=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-          21, 22, 23, 24, 25, 26, 27, 28, 29, 30, ...])</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('e993fdfc-4bc3-4fee-9b62-5a5856d2a098')" type="checkbox"><label for="UUID('e993fdfc-4bc3-4fee-9b62-5a5856d2a098')" class="sk-toggleable__label sk-toggleable__label-arrow">IndexSubset<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.subset.IndexSubset.html">?<span>Documentation for IndexSubset</span></a></label><div class="sk-toggleable__content"><pre>IndexSubset()</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('e91d1c36-501f-4dd4-a584-43d9294e4d03')" type="checkbox"><label for="UUID('e91d1c36-501f-4dd4-a584-43d9294e4d03')" class="sk-toggleable__label sk-toggleable__label-arrow">Imputer<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.impute.Imputer.html">?<span>Documentation for Imputer</span></a></label><div class="sk-toggleable__content"><pre>Imputer(method='backfill', value=0)</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('44aa8821-d20c-40ee-92c3-0d5ee9b508db')" type="checkbox"><label for="UUID('44aa8821-d20c-40ee-92c3-0d5ee9b508db')" class="sk-toggleable__label sk-toggleable__label-arrow">FeatureSelection<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.feature_selection.FeatureSelection.html">?<span>Documentation for FeatureSelection</span></a></label><div class="sk-toggleable__content"><pre>FeatureSelection()</pre></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('e776ab89-b83a-498a-9e66-309fc2f91023')" type="checkbox"><label for="UUID('e776ab89-b83a-498a-9e66-309fc2f91023')" class="sk-toggleable__label sk-toggleable__label-arrow">AutoREG<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.auto_reg.AutoREG.html">?<span>Documentation for AutoREG</span></a></label><div class="sk-toggleable__content"><pre>AutoREG(lags=30)</pre></div></div></div></div></div></div></div>
+                           ('feature_selection', FeatureSelection())])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('37ba787f-be02-44d5-bb7c-cf9231d289bb')" type="checkbox"><label for="UUID('37ba787f-be02-44d5-bb7c-cf9231d289bb')" class="sk-toggleable__label sk-toggleable__label-arrow">Lag<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.lag.Lag.html">?<span>Documentation for Lag</span></a></label><div class="sk-toggleable__content"><pre>Lag(lags=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+          21, 22, 23, 24, 25, 26, 27, 28, 29, 30, ...])</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('5d3abe86-a195-486e-9b50-d930c191d3f3')" type="checkbox"><label for="UUID('5d3abe86-a195-486e-9b50-d930c191d3f3')" class="sk-toggleable__label sk-toggleable__label-arrow">IndexSubset<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.subset.IndexSubset.html">?<span>Documentation for IndexSubset</span></a></label><div class="sk-toggleable__content"><pre>IndexSubset()</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('b615f1ff-260d-4aab-bf91-3da310c6bab1')" type="checkbox"><label for="UUID('b615f1ff-260d-4aab-bf91-3da310c6bab1')" class="sk-toggleable__label sk-toggleable__label-arrow">Imputer<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.impute.Imputer.html">?<span>Documentation for Imputer</span></a></label><div class="sk-toggleable__content"><pre>Imputer(method='backfill', value=0)</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('139f1740-80b3-4e2e-bb97-04152b503929')" type="checkbox"><label for="UUID('139f1740-80b3-4e2e-bb97-04152b503929')" class="sk-toggleable__label sk-toggleable__label-arrow">FeatureSelection<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.transformations.series.feature_selection.FeatureSelection.html">?<span>Documentation for FeatureSelection</span></a></label><div class="sk-toggleable__content"><pre>FeatureSelection()</pre></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="UUID('a933b3d8-7038-41be-bd17-d3bba9270065')" type="checkbox"><label for="UUID('a933b3d8-7038-41be-bd17-d3bba9270065')" class="sk-toggleable__label sk-toggleable__label-arrow">AutoREG<a class="sk-estimator-doc-link" rel="noreferrer" target="_blank" href="https://www.sktime.net/en/v0.39.0/api_reference/auto_generated/sktime.forecasting.auto_reg.AutoREG.html">?<span>Documentation for AutoREG</span></a></label><div class="sk-toggleable__content"><pre>AutoREG(lags=30)</pre></div></div></div></div></div></div></div>
 </div>
 </div>
-<div id="ce92741e" class="cell" data-execution_count="16">
+<div id="edc74c6e" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>y_pred_case3 <span class="op">=</span> model.predict(fh<span class="op">=</span>y_test.index, X<span class="op">=</span>X_test_missing)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>plot_series(y_train, y_test, y_pred_case3, labels<span class="op">=</span>[<span class="st">"Treino"</span>, <span class="st">"Teste"</span>, <span class="st">"Previsão com Exógenas Lag"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
