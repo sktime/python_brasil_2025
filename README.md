@@ -1,5 +1,7 @@
 # Python Brasil 2025 Workshop
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sktime/python_brasil_2025/main?urlpath=%2Fdoc%2Ftree%2Fnotebooks%2F)
+
 Repositório com notebooks para Python Brasil 2025
 
 ## Setup
