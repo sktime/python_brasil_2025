@@ -4,7 +4,10 @@ __pycache__/
 *$py.class
 
 
+book/**/*.html
 **/lightning_logs/**
+**/*files/
+book/site_libs
 
 # C extensions
 *.so

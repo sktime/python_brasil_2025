@@ -31,22 +31,3 @@ Considerando que cada observação é indexada por uma variável temporal, podem
 * Clima: temperatura diária, precipitação mensal
 
 Esse livro é uma introdução prática a modelos de séries temporais, com objetivo de dar contexto das ferramentas mais relevantes em 3h de leitura.
-
-O conteúdo está organizado nas seguintes seções:
-
-1. **Introdução a séries temporais**: 
-   1. Modelo Naive, Modelo Naive sazonal
-   2. Séries integradas, diferenciação e estacionariedade
-   3. Modelo de Suavização Exponencial (Exponential Smoothing)
-   4. Modelos autoregressivos (AR)
-   5. Métricas de avaliação de modelos de séries temporais
-   6. Engenharia de features para séries temporais
-2. **Modelos avançados e caso de uso**
-   1. Forecast com modelos de Machine Learning
-   2. Forecast com modelos fundacionais
-   3. Previsão de vendas totais agregadas
-   4. Previsão de vendas por região e modelos globais
-   5. Previsão hierárquica e reconciliação
-3. **Customização de modelos com sktime**
-   1. Como customizar e criar modelos em sktime
-   2. Criando um wrapper de biblioteca externa

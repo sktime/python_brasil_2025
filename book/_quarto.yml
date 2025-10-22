@@ -15,18 +15,18 @@ book:
   - index.qmd
   - part: "Part I: Básico"
     chapters:
-      - content/pt/part1/index.qmd
-      - content/pt/part1/naive.qmd
-      - content/pt/part1/components_and_diff.qmd
-      - content/pt/part1/ets_and_ar.qmd
-      - content/pt/part1/metricas.qmd
+      - content/pt/part1/00_intro.qmd
+      - content/pt/part1/01_naive.qmd
+      - content/pt/part1/02_components_and_diff.qmd
+      - content/pt/part1/03_ets_and_ar.qmd
+      - content/pt/part1/04_metricas.qmd
   - part: "Part II: Intermediário"
     chapters:
-      - content/pt/part2/exog_variables.qmd
-      - content/pt/part2/ml_models.qmd
-      - content/pt/part2/panel_data.qmd
-      - content/pt/part2/hierarchical_forecasting.qmd
-      - content/pt/part2/deep_learning.qmd
+      - content/pt/part2/01_exog_variables.qmd
+      - content/pt/part2/02_ml_models.qmd
+      - content/pt/part2/03_panel_data.qmd
+      - content/pt/part2/04_hierarchical_forecasting.qmd
+      - content/pt/part2/05_deep_learning.qmd
   - part: "Part III: Apêndices"
     chapters:
       - content/pt/extra/sktime_custom.qmd

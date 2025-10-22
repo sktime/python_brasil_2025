@@ -1,27 +1,27 @@
-# littlebooktimeseries
+# Python Brasil 2025 Workshop
 
-Timeseries in 3 hours
+Repositório com notebooks para Python Brasil 2025
 
-## Environment setup
+## Setup
 
-Choose one of the options below to get the workshop notebooks ready.
+Escolha seu método preferido para configurar o ambiente de desenvolvimento:
 
 ### Poetry
-- Install Poetry: `curl -sSL https://install.python-poetry.org | python3 -`
-- Install dependencies: `poetry install`
-- Start the shell: `poetry shell`
-- Launch Jupyter: `jupyter lab`
+- Instale o Poetry: `curl -sSL https://install.python-poetry.org | python3 -`
+- Instale as dependências: `poetry install`
+- Inicie o shell: `poetry shell`
+- Inicie o Jupyter: `jupyter lab`
 
 ### pip
-- Create a virtual environment: `python3 -m venv .venv`
-- Activate it: `source .venv/bin/activate`
-- Install dependencies: `pip install -r requirements.txt`
-- Launch Jupyter: `jupyter lab`
+- Crie um ambiente virtual: `python3 -m venv .venv`
+- Ative-o: `source .venv/bin/activate`
+- Instale as dependências: `pip install -r requirements.txt`
+- Inicie o Jupyter: `jupyter lab`
 
 ### uv
-- Install uv: `pip install uv`
-- Sync dependencies: `uv sync`
-- Activate the environment: `source .venv/bin/activate`
-- Launch Jupyter: `jupyter lab`
+- Instale o uv: `pip install uv`
+- Sincronize as dependências: `uv sync`
+- Ative o ambiente: `source .venv/bin/activate`
+- Inicie o Jupyter: `jupyter lab`
 
-> All options require Python 3.11 or 3.12. The notebooks live under `notebooks/`; open them in Jupyter Lab during the session.
+> Todas as opções requerem Python 3.11 ou 3.12. Os notebooks estão na pasta `notebooks/`; abra-os no Jupyter Lab durante a sessão.
